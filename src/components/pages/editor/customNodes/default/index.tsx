@@ -8,7 +8,6 @@ import {
 } from "react-flow-renderer";
 import styles from "./index.module.css";
 import { getFileFromEvent } from "helpers/file";
-import { Icons } from "assets/icons";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { NodeToolButton } from "components/ui/NodeToolButton";
 import { UiElementContainer } from "components/ui/UiContainer";
@@ -27,7 +26,6 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   const { setElements } = useFlowContext();
   const [nodeText, setNodeText] = useState(data.text);
   const [isEditingText, setIsEditingText] = useState(false);
-  const upd = useUpdateNodeInternals();
 
   const changeElementHandler = (fn: (value: FlowElement) => FlowElement) => {
     if (setElements) {
@@ -42,7 +40,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       getFileFromEvent(e).then((file) => {
         changeElementHandler((value) => ({
           ...value,
-          data: { img: file.value },
+          data: { ...value.data, img: file.value },
         }));
       });
     },

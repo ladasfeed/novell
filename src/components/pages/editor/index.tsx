@@ -16,7 +16,7 @@ type EdgeUnionType = Edge<any> | Connection;
 
 const initialElements: Array<FlowElement> = [
   {
-    id: "3",
+    id: "0",
     type: "customNodeDefault",
     data: { label: "Output Node" },
     position: { x: 250, y: 250 },
@@ -51,6 +51,8 @@ export const Editor = () => {
       },
     ]);
   };
+
+  console.log(elements);
 
   const onLoad = useCallback(
     (rfi) => {
