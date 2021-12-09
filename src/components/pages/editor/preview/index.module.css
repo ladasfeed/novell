@@ -1,0 +1,41 @@
+.container {
+    height: 100vh;
+    color: white;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+}
+
+.text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 300px;
+    padding: 30px;
+    color: white;
+    font-size: 24px;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+.variants {
+    padding: 20px;
+    background: rgba(0,0,0,0.6);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+    display: grid;
+    grid-row-gap: 20px;
+}
+.variant {
+    padding: 10px;
+    border-radius: 5px;
+    transition: .3s;
+    min-width: 300px;
+    background:  rgba(0,0,0,0.4);
+    cursor: pointer;
+}
+.variant:hover {
+    background: black;
+}

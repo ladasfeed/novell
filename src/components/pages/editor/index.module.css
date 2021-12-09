@@ -1,3 +1,15 @@
 .container {
     height: 100vh;
 }
+
+.toolbar {
+    width: 300px;
+    position: absolute;
+    height: 100vh;
+    right: 0;
+    top: 0;
+    background: gray;
+    color: white;
+    z-index: 4;
+    padding: 16px;
+}

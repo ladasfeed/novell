@@ -5,7 +5,7 @@ import { Icons } from "assets/icons";
 
 type variantType = "image" | "settings" | "sound";
 
-type propsType = {} & HTMLAttributes<HTMLDivElement> & {
+type propsType = {} & HTMLAttributes<HTMLLabelElement> & {
     variant?: variantType;
     children?: ReactNode;
   };
@@ -24,9 +24,9 @@ export const NodeToolButton = ({
   ...jsxAttr
 }: propsType) => {
   return (
-    <div {...jsxAttr} className={cn(styles.container, jsxAttr.className)}>
+    <label {...jsxAttr} className={cn(styles.container, jsxAttr.className)}>
       {variant ? React.createElement(iconsMap[variant]) : null}
       {children}
-    </div>
+    </label>
   );
 };

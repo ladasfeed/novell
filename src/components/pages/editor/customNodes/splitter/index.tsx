@@ -6,11 +6,15 @@ import { useFlowContext } from "components/pages/editor/flow context";
 import { NodeToolButton } from "components/ui/NodeToolButton";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { changeElement } from "components/pages/editor/helpers/changeElement";
+import { branches } from "components/pages/editor/index";
 
-export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
+export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
   const { setElements } = useFlowContext();
-  const [nodeText, setNodeText] = useState(data.text);
-  const [isEditingText, setIsEditingText] = useState(false);
+  const [sourceBranches, setSourceBranches] = useState([...branches]);
+
+  const [branchesText, setBranchesText] = useState<{
+    [key: string]: string;
+  }>({ ...data.branchesText });
 
   const changeElementHandler = (fn: (value: FlowElement) => FlowElement) => {
     if (setElements) {
@@ -32,12 +36,11 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
     [setElements]
   );
 
-  const onChangeText = () => {
+  const onSaveText = () => {
     changeElementHandler((value) => ({
       ...value,
-      data: { ...value.data, text: nodeText },
+      data: { ...value.data, branchesText },
     }));
-    setIsEditingText(false);
   };
 
   return (
@@ -48,13 +51,9 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       className={styles.container}
     >
       <Handle
-        className={styles.handle}
         type="target"
         position={Position.Top}
-        onConnect={(v) => {
-          console.log(v);
-        }}
-        id="default"
+        className={styles.handle}
         isConnectable={isConnectable}
       />
       <div className={styles.dark_layer} />
@@ -67,41 +66,39 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
               onChange={onUploadFile}
             />
           </NodeToolButton>
+          <UiElementContainer>
+            {branches.map((item, index) => {
+              return (
+                <input
+                  onChange={(e) => {
+                    const oldText = { ...branchesText };
+                    oldText[item] = e.currentTarget.value;
+                    setBranchesText(oldText);
+                  }}
+                  key={index}
+                />
+              );
+            })}
+            <div onClick={onSaveText}>Save</div>
+          </UiElementContainer>
         </div>
 
         <div className={styles.tools__footer}>
-          <UiElementContainer className={styles.text_edit}>
-            {isEditingText ? (
-              <>
-                <input
-                  defaultValue={data.text}
-                  className={styles.text_edit__input}
-                  type="text"
-                  onChange={(e) => setNodeText(e.currentTarget.value)}
-                />
-                <div onClick={onChangeText}>Save</div>
-              </>
-            ) : (
-              <>
-                <div
-                  className={styles.text_edit__text}
-                  onClick={() => setIsEditingText(true)}
-                >
-                  {data.text}
-                </div>
-              </>
-            )}
-          </UiElementContainer>
+          <UiElementContainer className={styles.text_edit}></UiElementContainer>
         </div>
       </div>
-      <Handle
-        type="source"
-        id={data.branch || "default"}
-        position={Position.Bottom}
-        className={styles.handle}
-        onConnect={(params) => console.log("handle onConnect", params)}
-        isConnectable={isConnectable}
-      />
+      {sourceBranches.map((item, index) => (
+        <div style={{ left: index * 150 }} className={styles.handle_wrapper}>
+          <h3 className={styles.handle_wrapper__text}>{item}</h3>
+          <Handle
+            className={styles.handle}
+            type="source"
+            position={Position.Bottom}
+            id={item}
+            isConnectable={isConnectable}
+          />
+        </div>
+      ))}
     </div>
   );
 });
