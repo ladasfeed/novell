@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
+import { useSelector } from "react-redux";
+import { editorSliceSelectors } from "store/state/editor";
 
 export const Preview = ({ tree }: { tree: Array<any> }) => {
   const [current, setCurrent] = useState(tree[0]);
+  const images = useSelector(editorSliceSelectors.getImages);
 
   useEffect(() => {
     setCurrent(tree[0]);
@@ -26,7 +29,9 @@ export const Preview = ({ tree }: { tree: Array<any> }) => {
       <div
         onClick={next}
         style={{
-          background: `url(${current.data.img})`,
+          background: `url(${
+            images.find((img) => img.id == current.data.imgId)?.value
+          })`,
         }}
         className={styles.container}
       >
@@ -39,7 +44,9 @@ export const Preview = ({ tree }: { tree: Array<any> }) => {
     return (
       <div
         style={{
-          background: `url(${current.data.img})`,
+          background: `url(${
+            images.find((img) => img.id == current.data.imgId)?.value
+          })`,
         }}
         className={styles.container}
       >
