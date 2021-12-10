@@ -20,18 +20,6 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
     }
   };
 
-  const onUploadFile = useCallback(
-    (e: any) => {
-      getFileFromEvent(e).then((file) => {
-        changeElementHandler((value) => ({
-          ...value,
-          data: { ...value.data, img: file.value },
-        }));
-      });
-    },
-    [setElements]
-  );
-
   const onChangeText = () => {
     changeElementHandler((value) => ({
       ...value,
@@ -60,13 +48,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       <div className={styles.dark_layer} />
       <div className={styles.tools_layer}>
         <div className={styles.tools__header}>
-          <NodeToolButton variant="image">
-            <input
-              className={styles.file_input}
-              type="file"
-              onChange={onUploadFile}
-            />
-          </NodeToolButton>
+          <NodeToolButton variant="image" />
         </div>
 
         <div className={styles.tools__footer}>

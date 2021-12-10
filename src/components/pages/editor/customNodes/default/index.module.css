@@ -11,16 +11,6 @@
     display: none;
 }
 
-.upload_picture_button {
-    padding: 5px;
-    border-radius: 50%;
-    background: white;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .dark_layer {
     position: absolute;

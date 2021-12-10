@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import ReactFlow, {
   addEdge,
   Connection,
@@ -14,11 +14,13 @@ import styles from "./index.module.css";
 import { CustomNodeDefault } from "components/pages/editor/customNodes/default";
 import { FlowProvider } from "./flow context";
 import { SplitterNode } from "components/pages/editor/customNodes/splitter";
-import { Preview } from "components/pages/editor/preview";
+import { Preview } from "components/pages/editor/services/preview";
+import { Button } from "components/ui/Button";
+import { BranchEditor } from "components/pages/editor/services/branchEditor";
+import { ImageEditor } from "components/pages/editor/services/imageEditor";
+import { lsController } from "store/ls";
 
 type EdgeUnionType = Edge<any> | Connection;
-
-export const branches = ["default", "fuck"];
 
 const initialElements: Array<FlowElement> = [
   {
@@ -41,13 +43,17 @@ const compile = (elements: Array<any>) => {
   const edges: Array<any> = elements.filter(isEdge);
   let nodesTree: Array<any> = [];
 
-  console.log(edges);
   nodes.forEach((node) => {
     let newNode = { ...node };
     let nodesEdgesOutput = edges.filter((edge) => edge.source == newNode.id);
     let nodesEdgesInput = edges.filter((edge) => edge.target == newNode.id);
 
     newNode.branch = newNode.data.branch || nodesEdgesInput?.[0]?.sourceHandle;
+    if (!nodesEdgesOutput.length) {
+      nodesTree.push(newNode);
+      return;
+    }
+
     if (nodesEdgesOutput.length == 1) {
       newNode.next = nodesEdgesOutput[0].target;
     } else {
@@ -114,6 +120,20 @@ export const Editor = () => {
     setCompiled(compile(elements));
   };
 
+  const saveHandler = () => {
+    // @ts-ignore
+    const saved = reactFlowInstance.toObject();
+    lsController.set("elements", saved);
+  };
+
+  useEffect(() => {
+    const restored = lsController.get("elements");
+    console.log(restored);
+    if (restored) {
+      setElements(restored.elements);
+    }
+  }, []);
+
   console.log(compiled);
   return (
     <>
@@ -132,25 +152,16 @@ export const Editor = () => {
               onConnect={onConnect}
             >
               <div className={styles.toolbar}>
-                <div
-                  style={{
-                    zIndex: 100,
-                    position: "relative",
-                  }}
-                  onClick={() => addNewNode("customNodeDefault")}
-                >
+                <Button onClick={() => addNewNode("customNodeDefault")}>
                   Add node
-                </div>
-                <div
-                  style={{
-                    zIndex: 100,
-                    position: "relative",
-                  }}
-                  onClick={() => addNewNode("splitterNode")}
-                >
+                </Button>
+                <Button onClick={() => addNewNode("splitterNode")}>
                   Add splitter
-                </div>
-                <div onClick={compliedHandler}>Compile</div>
+                </Button>
+                <Button onClick={compliedHandler}>Compile</Button>
+                <BranchEditor />
+                <ImageEditor />
+                <Button onClick={saveHandler}>Save</Button>
               </div>
             </ReactFlow>
           </FlowProvider.Provider>

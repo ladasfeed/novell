@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Elements, FlowElement, Handle, Position } from "react-flow-renderer";
 import styles from "./index.module.css";
 import { getFileFromEvent } from "helpers/file";
@@ -6,10 +6,12 @@ import { useFlowContext } from "components/pages/editor/flow context";
 import { NodeToolButton } from "components/ui/NodeToolButton";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { changeElement } from "components/pages/editor/helpers/changeElement";
-import { branches } from "components/pages/editor/index";
+import { useSelector } from "react-redux";
+import { editorSliceSelectors } from "store/state/editor";
 
 export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
   const { setElements } = useFlowContext();
+  const branches = useSelector(editorSliceSelectors.getBranches);
   const [sourceBranches, setSourceBranches] = useState([...branches]);
 
   const [branchesText, setBranchesText] = useState<{
@@ -23,6 +25,10 @@ export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
       });
     }
   };
+
+  useEffect(() => {
+    setSourceBranches(branches);
+  }, []);
 
   const onUploadFile = useCallback(
     (e: any) => {
@@ -66,7 +72,7 @@ export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
               onChange={onUploadFile}
             />
           </NodeToolButton>
-          <UiElementContainer>
+          <UiElementContainer className={styles.branches_container}>
             {branches.map((item, index) => {
               return (
                 <input
@@ -81,10 +87,6 @@ export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
             })}
             <div onClick={onSaveText}>Save</div>
           </UiElementContainer>
-        </div>
-
-        <div className={styles.tools__footer}>
-          <UiElementContainer className={styles.text_edit}></UiElementContainer>
         </div>
       </div>
       {sourceBranches.map((item, index) => (
