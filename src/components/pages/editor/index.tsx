@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import ReactFlow, {
   addEdge,
   Connection,
@@ -20,10 +26,11 @@ import { BranchEditor } from "components/pages/editor/services/branchEditor";
 import { ImageEditor } from "components/pages/editor/services/imageEditor";
 import { lsController } from "store/ls";
 import { ImageCaseEditor } from "components/pages/editor/services/imageCaseEditor";
+import { Toolbar } from "components/pages/editor/toolbar";
 
 type EdgeUnionType = Edge<any> | Connection;
 
-const initialElements: Array<FlowElement> = [
+export const initialElements: Array<FlowElement> = [
   {
     id: "0",
     type: "customNodeDefault",
@@ -38,43 +45,13 @@ const nodeTypes = {
 };
 
 let rerenderCounter = 0;
-
-const compile = (elements: Array<any>) => {
-  const nodes: Array<any> = elements.filter(isNode);
-  const edges: Array<any> = elements.filter(isEdge);
-  let nodesTree: Array<any> = [];
-
-  nodes.forEach((node) => {
-    let newNode = { ...node };
-    let nodesEdgesOutput = edges.filter((edge) => edge.source == newNode.id);
-    let nodesEdgesInput = edges.filter((edge) => edge.target == newNode.id);
-
-    newNode.branch = newNode.data.branch || nodesEdgesInput?.[0]?.sourceHandle;
-    if (!nodesEdgesOutput.length) {
-      nodesTree.push(newNode);
-      return;
-    }
-
-    if (nodesEdgesOutput.length == 1) {
-      newNode.next = nodesEdgesOutput[0].target;
-    } else {
-      newNode.next = {};
-      nodesEdgesOutput.forEach((edge) => {
-        newNode.next[edge.sourceHandle] = edge.target;
-      });
-    }
-    nodesTree.push(newNode);
-  });
-  console.log(nodesTree);
-
-  return nodesTree;
-};
+let id = 0;
+const getId = () => `dndnode_${id++}`;
 
 export const Editor = () => {
   const [elements, setElements] = useState(initialElements);
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [compiled, setCompiled] = useState<Array<any>>([]);
-
+  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const reactFlowWrapper = useRef<HTMLDivElement | null>(null);
   console.log(elements);
 
   // Handlers
@@ -94,18 +71,6 @@ export const Editor = () => {
     );
   };
 
-  const addNewNode = (nodeType: string) => {
-    setElements((prev) => [
-      ...prev,
-      {
-        id: String(prev.length + 1),
-        type: nodeType,
-        data: { text: "Custom text..." },
-        position: { x: 500, y: 600 },
-      },
-    ]);
-  };
-
   const onLoad = useCallback(
     (rfi) => {
       if (!reactFlowInstance) {
@@ -117,16 +82,6 @@ export const Editor = () => {
 
   rerenderCounter++;
 
-  const compliedHandler = () => {
-    setCompiled(compile(elements));
-  };
-
-  const saveHandler = () => {
-    // @ts-ignore
-    const saved = reactFlowInstance.toObject();
-    lsController.set("elements", saved);
-  };
-
   useEffect(() => {
     const restored = lsController.get("elements");
     console.log(restored);
@@ -135,40 +90,57 @@ export const Editor = () => {
     }
   }, []);
 
+  const onDrop = (event: any) => {
+    event.preventDefault();
+
+    const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect();
+    const type = event.dataTransfer.getData("application/reactflow");
+    const position = reactFlowInstance.project({
+      x: event.clientX - reactFlowBounds!.left,
+      y: event.clientY - reactFlowBounds!.top,
+    });
+    const newNode = {
+      id: String(elements.length + 1),
+      type,
+      position,
+      data: { text: `${type} node` },
+    };
+
+    setElements((es) => es.concat(newNode));
+  };
+
+  const onDragOver = (event: any) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  };
+
   return (
     <>
       <div className={styles.container}>
         <ReactFlowProvider>
           <FlowProvider.Provider
             value={{
-              setElements: setElements,
+              setElements,
+              elements,
             }}
           >
-            <ReactFlow
-              nodeTypes={nodeTypes}
-              onLoad={onLoad}
-              elements={elements}
-              onElementsRemove={onElementsRemove}
-              onConnect={onConnect}
-            >
-              <div className={styles.toolbar}>
-                <Button onClick={() => addNewNode("customNodeDefault")}>
-                  Add node
-                </Button>
-                <Button onClick={() => addNewNode("splitterNode")}>
-                  Add splitter
-                </Button>
-                <Button onClick={compliedHandler}>Compile</Button>
-                <BranchEditor />
-                <ImageEditor />
-                <ImageCaseEditor />
-                <Button onClick={saveHandler}>Save</Button>
-              </div>
-            </ReactFlow>
+            <div className={styles.rf_wrapper} ref={reactFlowWrapper}>
+              <ReactFlow
+                nodeTypes={nodeTypes}
+                onLoad={onLoad}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                elements={elements}
+                onElementsRemove={onElementsRemove}
+                onConnect={onConnect}
+              >
+                <Toolbar />
+              </ReactFlow>
+            </div>
           </FlowProvider.Provider>
         </ReactFlowProvider>
       </div>
-      <Preview tree={compiled} />
+      <Preview />
     </>
   );
 };

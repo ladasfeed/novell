@@ -1,0 +1,17 @@
+.container {
+    font-size: 20px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: #3f153e;
+    font-weight: 700;
+}
+
+.title {
+    margin-bottom: 10px;
+}
+
+.separator {
+    background: #553f7f;
+    height: 2px;
+    width: 100%;
+}

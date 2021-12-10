@@ -1,11 +1,4 @@
 .container {
-    height: 100vh;
-}
-.rf_wrapper {
-    height: 100vh;
-}
-
-.toolbar {
     width: 300px;
     position: absolute;
     height: 100vh;

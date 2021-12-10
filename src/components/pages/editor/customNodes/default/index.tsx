@@ -35,7 +35,6 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
 
   useEffect(() => {
     if (data.imgId !== undefined) {
-      console.log(data.imgId);
       const newImg = images.find((item) => item.id == data.imgId);
       if (newImg) {
         setImage(newImg.value);

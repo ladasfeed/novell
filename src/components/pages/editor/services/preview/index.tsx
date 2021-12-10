@@ -2,54 +2,51 @@ import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import { useSelector } from "react-redux";
 import { editorSliceSelectors } from "store/state/editor";
+import { Popup } from "components/ui/Popup";
 
-export const Preview = ({ tree }: { tree: Array<any> }) => {
-  const [current, setCurrent] = useState(tree[0]);
+export const Preview = () => {
+  const compiled = useSelector(editorSliceSelectors.getCompiled);
   const images = useSelector(editorSliceSelectors.getImages);
+  const [current, setCurrent] = useState(compiled[0]);
+  const [isOpened, setIsOpened] = useState(false);
 
   useEffect(() => {
-    setCurrent(tree[0]);
-  }, [tree]);
+    setIsOpened(true);
+    setCurrent(compiled[0]);
+  }, [compiled]);
 
   const next = () => {
-    setCurrent(tree.find((node: any) => current.next == node.id));
+    const newNode = compiled.find((node: any) => current.next == node.id);
+    if (newNode) {
+      setCurrent(newNode);
+    } else {
+      alert("End");
+    }
   };
 
   const splitterNext = (branch: string) => {
-    const pointer = current.next[branch];
+    const pointer = current.next?.[branch];
 
-    setCurrent(tree.find((node: any) => pointer == node.id));
+    if (pointer) {
+      setCurrent(compiled.find((node: any) => pointer == node.id));
+    } else {
+      alert("End");
+    }
   };
 
-  console.log(current);
   if (!current) return null;
 
-  if (current.type == "customNodeDefault") {
-    return (
-      <div
-        onClick={next}
-        style={{
-          background: `url(${
-            images.find((img) => img.id == current.data.imgId)?.value
-          })`,
-        }}
-        className={styles.container}
-      >
-        <div className={styles.text}>{current.data.text}</div>
-      </div>
-    );
-  } else {
-    const branchesText = Object.entries(current.data.branchesText);
+  const resolve = () => {
+    if (current.type == "customNodeDefault") {
+      return (
+        <div className={styles.text} onClick={next}>
+          {current.data.text}
+        </div>
+      );
+    } else {
+      const branchesText = Object.entries(current.data.branchesText);
 
-    return (
-      <div
-        style={{
-          background: `url(${
-            images.find((img) => img.id == current.data.imgId)?.value
-          })`,
-        }}
-        className={styles.container}
-      >
+      return (
         <div className={styles.variants}>
           {branchesText.map((item: any) => (
             <div
@@ -60,7 +57,22 @@ export const Preview = ({ tree }: { tree: Array<any> }) => {
             </div>
           ))}
         </div>
+      );
+    }
+  };
+
+  return (
+    <Popup isOpened={isOpened} setIsOpened={setIsOpened}>
+      <div
+        style={{
+          background: `url(${
+            images.find((img) => img.id == current.data.imgId)?.value
+          })`,
+        }}
+        className={styles.container}
+      >
+        {resolve()}
       </div>
-    );
-  }
+    </Popup>
+  );
 };
