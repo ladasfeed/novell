@@ -19,6 +19,7 @@ import { Button } from "components/ui/Button";
 import { BranchEditor } from "components/pages/editor/services/branchEditor";
 import { ImageEditor } from "components/pages/editor/services/imageEditor";
 import { lsController } from "store/ls";
+import { ImageCaseEditor } from "components/pages/editor/services/imageCaseEditor";
 
 type EdgeUnionType = Edge<any> | Connection;
 
@@ -134,7 +135,6 @@ export const Editor = () => {
     }
   }, []);
 
-  console.log(compiled);
   return (
     <>
       <div className={styles.container}>
@@ -161,6 +161,7 @@ export const Editor = () => {
                 <Button onClick={compliedHandler}>Compile</Button>
                 <BranchEditor />
                 <ImageEditor />
+                <ImageCaseEditor />
                 <Button onClick={saveHandler}>Save</Button>
               </div>
             </ReactFlow>

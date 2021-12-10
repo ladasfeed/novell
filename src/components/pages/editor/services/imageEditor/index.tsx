@@ -26,7 +26,7 @@ export const ImageEditor = () => {
             ...images,
             {
               ...fileReady,
-              id: res.data.id,
+              id: res.data._id,
             },
           ])
         );
@@ -38,7 +38,14 @@ export const ImageEditor = () => {
   const getImages = () => {
     imageApi.getImages().then((res) => {
       console.log(res.data);
-      dispatch(editorSlice.actions.setImages(res.data));
+      dispatch(
+        editorSlice.actions.setImages(
+          res.data.map(({ _id, ...data }: any) => ({
+            ...data,
+            id: _id,
+          }))
+        )
+      );
     });
   };
 

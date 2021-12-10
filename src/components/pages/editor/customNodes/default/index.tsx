@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Elements, FlowElement, Handle, Position } from "react-flow-renderer";
 import styles from "./index.module.css";
 import { getFileFromEvent } from "helpers/file";
@@ -6,11 +6,16 @@ import { useFlowContext } from "components/pages/editor/flow context";
 import { NodeToolButton } from "components/ui/NodeToolButton";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { changeElement } from "components/pages/editor/helpers/changeElement";
+import { NodeChangeBgButton } from "components/ui/NodeToolButton/binded/NodeChangeBgButton";
+import { useSelector } from "react-redux";
+import { editorSliceSelectors } from "store/state/editor";
 
 export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   const { setElements } = useFlowContext();
   const [nodeText, setNodeText] = useState(data.text);
+  const images = useSelector(editorSliceSelectors.getImages);
   const [isEditingText, setIsEditingText] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
 
   const changeElementHandler = (fn: (value: FlowElement) => FlowElement) => {
     if (setElements) {
@@ -28,10 +33,20 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
     setIsEditingText(false);
   };
 
+  useEffect(() => {
+    if (data.imgId !== undefined) {
+      console.log(data.imgId);
+      const newImg = images.find((item) => item.id == data.imgId);
+      if (newImg) {
+        setImage(newImg.value);
+      }
+    }
+  }, [data.imgId, images]);
+
   return (
     <div
       style={{
-        backgroundImage: `url(${data.img})`,
+        backgroundImage: `url(${image})`,
       }}
       className={styles.container}
     >
@@ -48,7 +63,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       <div className={styles.dark_layer} />
       <div className={styles.tools_layer}>
         <div className={styles.tools__header}>
-          <NodeToolButton variant="image" />
+          <NodeChangeBgButton id={id} />
         </div>
 
         <div className={styles.tools__footer}>
