@@ -122,6 +122,7 @@ export const Editor = () => {
             value={{
               setElements,
               elements,
+              instance: reactFlowInstance,
             }}
           >
             <div className={styles.rf_wrapper} ref={reactFlowWrapper}>

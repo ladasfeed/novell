@@ -1,13 +1,26 @@
-import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
+import React, {
+  FC,
+  HTMLAttributes,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./index.module.css";
 import { RSKHooks } from "react-dev-starter-pack/dist";
+import cn from "classnames";
 
 type propsType = {
   isOpened: boolean;
   setIsOpened: (v: boolean) => void;
   children?: ReactNode;
-};
-export const Popup = ({ isOpened, setIsOpened, children }: propsType) => {
+} & HTMLAttributes<HTMLDivElement>;
+export const Popup = ({
+  isOpened,
+  setIsOpened,
+  children,
+  ...jsxAttr
+}: propsType) => {
   const ref = useRef<HTMLDivElement>(null);
   RSKHooks.useBlurred(ref, setIsOpened, isOpened);
 
@@ -15,8 +28,8 @@ export const Popup = ({ isOpened, setIsOpened, children }: propsType) => {
     return null;
   }
   return (
-    <div className={styles.container}>
-      <div ref={ref} className={styles.container_inner}>
+    <div {...jsxAttr} className={cn(styles.container)}>
+      <div ref={ref} className={cn(styles.container_inner, jsxAttr.className)}>
         {children}
       </div>
     </div>

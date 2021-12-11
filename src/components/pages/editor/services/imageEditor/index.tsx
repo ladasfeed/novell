@@ -3,37 +3,17 @@ import { Popup } from "components/ui/Popup";
 import { Button } from "components/ui/Button";
 import { imageApi } from "api/image";
 import { NodeToolButton } from "components/ui/NodeToolButton";
-import { getFileFromEvent } from "helpers/file";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { useEffect } from "react";
 import styles from "./index.module.css";
+import { editorThunks } from "store/state/editor/thunk";
+import { useAppDispatch } from "store/state";
 
 export const ImageEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
   const images = useSelector(editorSliceSelectors.getImages);
-  const dispatch = useDispatch();
-
-  const uploadImage = (e: any) => {
-    getFileFromEvent(e).then((file) => {
-      const fileReady = {
-        value: file.value,
-        name: file.file_name,
-      };
-      imageApi.createImage(fileReady).then((res) => {
-        dispatch(
-          editorSlice.actions.setImages([
-            ...images,
-            {
-              ...fileReady,
-              id: res.data._id,
-            },
-          ])
-        );
-        console.log(res);
-      });
-    });
-  };
+  const dispatch = useAppDispatch();
 
   const getImages = () => {
     imageApi.getImages().then((res) => {
@@ -47,6 +27,14 @@ export const ImageEditor = () => {
         )
       );
     });
+  };
+
+  const uploadImage = async (e: any) => {
+    dispatch(
+      editorThunks.uploadImage({
+        event: e,
+      })
+    );
   };
 
   useEffect(() => {

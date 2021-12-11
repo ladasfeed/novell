@@ -12,23 +12,18 @@ import { compile } from "components/pages/editor/helpers/compile";
 import { initialElements } from "components/pages/editor/index";
 import { Title } from "components/ui/Title";
 import { CharacterEditor } from "components/pages/editor/services/characterEditor";
+import { mainApi } from "api";
+import { imageApi } from "api/image";
+import { StateType, store } from "store/state";
 
 export const Toolbar = () => {
-  const { setElements, elements } = useFlowContext();
+  const { setElements, elements, instance } = useFlowContext();
   const dispatch = useDispatch();
 
   if (!setElements) return null;
 
-  const addNewNode = (nodeType: string) => {
-    setElements((prev) => [
-      ...prev,
-      {
-        id: String(prev.length + 1),
-        type: nodeType,
-        data: { text: "Custom text..." },
-        position: { x: 500, y: 600 },
-      },
-    ]);
+  const deleteAll = async () => {
+    await imageApi.deleteAll();
   };
 
   const compliedHandler = () => {
@@ -37,8 +32,12 @@ export const Toolbar = () => {
 
   const saveHandler = () => {
     // @ts-ignore
-    const saved = reactFlowInstance.toObject();
+    const saved = instance.toObject();
     lsController.set("elements", saved);
+    lsController.set(
+      "characters",
+      (store.getState() as StateType).editor.characters
+    );
   };
 
   const onDragStart = (event: any, nodeType: string) => {
@@ -79,6 +78,7 @@ export const Toolbar = () => {
       </Button>
       <Button onDoubleClick={lsController.clearAll}>Reset LS</Button>
       <Button onClick={compliedHandler}>Compile</Button>
+      <Button onDoubleClick={deleteAll}>Delete images</Button>
       <Button onClick={saveHandler}>Save</Button>
     </div>
   );

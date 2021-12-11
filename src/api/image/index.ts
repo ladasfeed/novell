@@ -8,4 +8,7 @@ export const imageApi = {
   getImages: builders.api(() => {
     return mainApi.get("/image");
   }),
+  deleteAll: builders.api(() => {
+    return mainApi.delete("/image");
+  }),
 };

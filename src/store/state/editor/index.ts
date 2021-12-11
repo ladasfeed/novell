@@ -38,7 +38,7 @@ export const editorSlice = createSlice({
     images: [],
     isEditingImage: false,
     compiled: [],
-    characters: [],
+    characters: lsController.get("characters") || [],
   } as initialStateType,
   reducers: {
     setEditingImageState: (state, action: PayloadAction<boolean>) => {
@@ -64,6 +64,18 @@ export const editorSlice = createSlice({
               ...item,
               cases: [...item.cases, action.payload.case],
             }
+          : item;
+      });
+    },
+    updateCharacter: (
+      state,
+      action: PayloadAction<{
+        character: characterType;
+      }>
+    ) => {
+      state.characters = state.characters.map((item) => {
+        return item.id == action.payload.character.id
+          ? action.payload.character
           : item;
       });
     },
