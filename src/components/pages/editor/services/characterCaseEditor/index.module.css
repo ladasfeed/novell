@@ -1,0 +1,17 @@
+.popup {
+    width: 1000px;
+}
+
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-gap: 24px;
+}
+
+.character_list {
+}
+
+.character_case {
+    margin-bottom: 20px;
+}

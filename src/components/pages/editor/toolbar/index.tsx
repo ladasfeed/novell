@@ -15,6 +15,7 @@ import { CharacterEditor } from "components/pages/editor/services/characterEdito
 import { mainApi } from "api";
 import { imageApi } from "api/image";
 import { StateType, store } from "store/state";
+import { CharacterCaseEditor } from "components/pages/editor/services/characterCaseEditor";
 
 export const Toolbar = () => {
   const { setElements, elements, instance } = useFlowContext();
@@ -71,6 +72,7 @@ export const Toolbar = () => {
       <ImageEditor />
       <ImageCaseEditor />
       <CharacterEditor />
+      <CharacterCaseEditor />
 
       <Title separator>General control</Title>
       <Button onDoubleClick={() => setElements(initialElements)}>

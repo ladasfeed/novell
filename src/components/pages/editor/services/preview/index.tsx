@@ -36,12 +36,34 @@ export const Preview = () => {
 
   if (!current) return null;
 
+  const renderCharacters = () => {
+    if (!current.data.characterCases) {
+      return null;
+    }
+
+    const characterCase = current.data.characterCases[0];
+    const character = characterCase.character;
+    const fileId = character.states.find(
+      (state: any) => state.name == characterCase.stateName
+    )?.fileId;
+    const caseImage = images.find((im) => im.id == fileId);
+
+    return (
+      <div>
+        <img width={100} height={100} src={caseImage!.value} alt="" />
+      </div>
+    );
+  };
+
   const resolve = () => {
     if (current.type == "customNodeDefault") {
       return (
-        <div className={styles.text} onClick={next}>
-          {current.data.text}
-        </div>
+        <>
+          {renderCharacters()}
+          <div className={styles.text} onClick={next}>
+            {current.data.text}
+          </div>
+        </>
       );
     } else {
       const branchesText = Object.entries(current.data.branchesText);

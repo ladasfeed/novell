@@ -1,23 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StateType } from "store/state/index";
 import { lsController } from "store/ls";
+import { characterStateType, characterType, fileType } from "types";
 
 /* Types */
-type fileType = {
-  name: string;
-  value: string;
-  id?: string;
-};
-
-export type characterCase = {
-  name: string;
-  fileId: string;
-};
-export type characterType = {
-  name: string;
-  id: string;
-  cases: Array<characterCase>;
-};
 
 type initialStateType = {
   branches: Array<string>;
@@ -27,6 +13,7 @@ type initialStateType = {
 
   // action state
   isEditingImage: boolean;
+  isEditingCharacter: boolean;
   compiled: Array<any>;
 };
 
@@ -37,12 +24,16 @@ export const editorSlice = createSlice({
     branches: ["default"],
     images: [],
     isEditingImage: false,
+    isEditingCharacter: false,
     compiled: [],
     characters: lsController.get("characters") || [],
   } as initialStateType,
   reducers: {
     setEditingImageState: (state, action: PayloadAction<boolean>) => {
       state.isEditingImage = action.payload;
+    },
+    setEditingCharacterState: (state, action: PayloadAction<boolean>) => {
+      state.isEditingCharacter = action.payload;
     },
     setCompiled: (state, action: PayloadAction<Array<any>>) => {
       state.compiled = action.payload;
@@ -55,14 +46,14 @@ export const editorSlice = createSlice({
       state,
       action: PayloadAction<{
         id: string;
-        case: characterCase;
+        case: characterStateType;
       }>
     ) => {
       state.characters = state.characters.map((item) => {
         return item.id == action.payload.id
           ? {
               ...item,
-              cases: [...item.cases, action.payload.case],
+              states: [...item.states, action.payload.case],
             }
           : item;
       });
@@ -82,7 +73,6 @@ export const editorSlice = createSlice({
 
     setCurrentOpenedNode: (state, action: PayloadAction<string>) => {
       state.openedNodeId = action.payload;
-      state.isEditingImage = true;
     },
     setBranches: (state, action: PayloadAction<Array<string>>) => {
       state.branches = action.payload;
@@ -99,6 +89,7 @@ export const editorSliceSelectors = {
   getImages: (state: StateType) => state.editor.images,
   getCurrentOpenedNode: (state: StateType) => state.editor.openedNodeId,
   getIsEditingImage: (state: StateType) => state.editor.isEditingImage,
+  getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,
   getCompiled: (state: StateType) => state.editor.compiled,
   getCharacters: (state: StateType) => state.editor.characters,
 };

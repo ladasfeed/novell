@@ -1,5 +1,5 @@
 import { builders } from "react-dev-starter-pack/dist";
-import { characterType } from "store/state/editor";
+import { characterType } from "types";
 
 export const lsController = builders.localStorage<{
   branches: Array<string>;

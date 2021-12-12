@@ -3,17 +3,13 @@ import { useCallback, useEffect, useState } from "react";
 import styles from "./index.module.css";
 import { Button } from "components/ui/Button";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  characterCase,
-  characterType,
-  editorSlice,
-  editorSliceSelectors,
-} from "store/state/editor";
+import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { RSKHooks } from "react-dev-starter-pack/dist";
 import { Icons } from "assets/icons";
 import { Title } from "components/ui/Title";
 import { editorThunks } from "store/state/editor/thunk";
 import { useAppDispatch } from "store/state";
+import { characterStateType, characterType } from "types";
 
 export const CharacterEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -27,7 +23,7 @@ export const CharacterEditor = () => {
   const createCharacter = () => {
     dispatch(
       editorSlice.actions.addNewCharacter({
-        cases: [],
+        states: [],
         name: inputText,
         id: String(characters.length + 1),
       })
@@ -58,7 +54,7 @@ export const CharacterEditor = () => {
       )
         .unwrap()
         .then((id) => {
-          const newCases = currentCharacter!.cases.map((item) => {
+          const newCases = currentCharacter!.states.map((item) => {
             return item.name == name
               ? {
                   name,
@@ -71,7 +67,7 @@ export const CharacterEditor = () => {
             editorSlice.actions.updateCharacter({
               character: {
                 ...currentCharacter,
-                cases: newCases,
+                states: newCases,
               },
             })
           );
@@ -141,7 +137,7 @@ export const CharacterEditor = () => {
                 </div>
 
                 <div className={styles.character_editor__states}>
-                  {currentCharacter.cases.map((item) => {
+                  {currentCharacter.states.map((item) => {
                     return (
                       <CharacterCase
                         characterCase={item}
@@ -160,7 +156,7 @@ export const CharacterEditor = () => {
 };
 
 type CharacterCasePropsType = {
-  characterCase: characterCase;
+  characterCase: characterStateType;
   addImageToCase: (e: any, name: string) => void;
 };
 const CharacterCase = ({
@@ -169,7 +165,6 @@ const CharacterCase = ({
 }: CharacterCasePropsType) => {
   const images = useSelector(editorSliceSelectors.getImages);
   const [image, setImage] = useState<string | undefined>();
-  console.log(images);
   useEffect(() => {
     const newImage = images.find((im) => im.id == characterCase.fileId)?.value;
     console.log(newImage);

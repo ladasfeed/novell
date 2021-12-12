@@ -1,18 +1,10 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ReactFlow, {
   addEdge,
   Connection,
   Edge,
   Elements,
   FlowElement,
-  isEdge,
-  isNode,
   ReactFlowProvider,
   removeElements,
 } from "react-flow-renderer";
@@ -21,14 +13,10 @@ import { CustomNodeDefault } from "components/pages/editor/customNodes/default";
 import { FlowProvider } from "./flow context";
 import { SplitterNode } from "components/pages/editor/customNodes/splitter";
 import { Preview } from "components/pages/editor/services/preview";
-import { Button } from "components/ui/Button";
-import { BranchEditor } from "components/pages/editor/services/branchEditor";
-import { ImageEditor } from "components/pages/editor/services/imageEditor";
 import { lsController } from "store/ls";
-import { ImageCaseEditor } from "components/pages/editor/services/imageCaseEditor";
 import { Toolbar } from "components/pages/editor/toolbar";
-
-type EdgeUnionType = Edge<any> | Connection;
+import { changeElement } from "components/pages/editor/helpers/changeElement";
+import { EdgeUnionType } from "types";
 
 export const initialElements: Array<FlowElement> = [
   {
@@ -39,21 +27,19 @@ export const initialElements: Array<FlowElement> = [
   },
 ];
 
-const nodeTypes = {
+const nodeTypesMap = {
   customNodeDefault: CustomNodeDefault,
   splitterNode: SplitterNode,
 };
 
 let rerenderCounter = 0;
-let id = 0;
-const getId = () => `dndnode_${id++}`;
 
 export const Editor = () => {
   const [elements, setElements] = useState(initialElements);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const reactFlowWrapper = useRef<HTMLDivElement | null>(null);
-  console.log(elements);
 
+  console.log(elements);
   // Handlers
   const onElementsRemove = (elementsToRemove: Elements) =>
     setElements((els) => removeElements(elementsToRemove, els));
@@ -84,7 +70,6 @@ export const Editor = () => {
 
   useEffect(() => {
     const restored = lsController.get("elements");
-    console.log(restored);
     if (restored) {
       setElements(restored.elements);
     }
@@ -114,6 +99,17 @@ export const Editor = () => {
     event.dataTransfer.dropEffect = "move";
   };
 
+  const changeElementHandler = useCallback(
+    (id: string, fn: (value: FlowElement) => FlowElement) => {
+      if (setElements) {
+        setElements((prev) => {
+          return changeElement(prev, id, fn);
+        });
+      }
+    },
+    []
+  );
+
   return (
     <>
       <div className={styles.container}>
@@ -123,11 +119,12 @@ export const Editor = () => {
               setElements,
               elements,
               instance: reactFlowInstance,
+              changeElement: changeElementHandler,
             }}
           >
             <div className={styles.rf_wrapper} ref={reactFlowWrapper}>
               <ReactFlow
-                nodeTypes={nodeTypes}
+                nodeTypes={nodeTypesMap}
                 onLoad={onLoad}
                 onDrop={onDrop}
                 onDragOver={onDragOver}
