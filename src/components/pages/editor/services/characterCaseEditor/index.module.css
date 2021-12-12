@@ -12,6 +12,16 @@
 .character_list {
 }
 
+.character_case__state_name {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 200px 1fr;
+}
+
 .character_case {
     margin-bottom: 20px;
+}
+.character_case {
+    display: grid;
+    grid-gap: 20px;
 }

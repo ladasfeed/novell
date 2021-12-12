@@ -1,3 +1,9 @@
+.popup {
+    height: 90vh;
+    width: 100%!important;
+    padding: 0!important;
+}
+
 .container {
     color: white;
     position: relative;
@@ -6,7 +12,7 @@
     align-items: center;
     background-repeat: no-repeat !important;
     background-size: cover !important;
-    height: 500px;
+    height: 100%;
 }
 
 .text {
@@ -38,4 +44,12 @@
 }
 .variant:hover {
     background: black;
+}
+
+.character {
+    position: absolute;
+    bottom: 0;
+    max-height: 80vh;
+    max-width: 30%;
+    object-fit: contain;
 }

@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import styles from "./index.module.css";
 import { useSelector } from "react-redux";
 import { editorSliceSelectors } from "store/state/editor";
 import { Popup } from "components/ui/Popup";
+//@ts-ignore
+import { Wave } from "react-animated-text";
 
 export const Preview = () => {
   const compiled = useSelector(editorSliceSelectors.getCompiled);
@@ -40,19 +42,29 @@ export const Preview = () => {
     if (!current.data.characterCases) {
       return null;
     }
+    let arrOfReactNodes: Array<ReactNode> = [];
 
-    const characterCase = current.data.characterCases[0];
-    const character = characterCase.character;
-    const fileId = character.states.find(
-      (state: any) => state.name == characterCase.stateName
-    )?.fileId;
-    const caseImage = images.find((im) => im.id == fileId);
+    current.data.characterCases.forEach((characterCase: any) => {
+      const character = characterCase.character;
+      const fileId = character.states.find(
+        (state: any) => state.name == characterCase.stateName
+      )?.fileId;
+      const caseImage = images.find((im) => im.id == fileId);
 
-    return (
-      <div>
-        <img width={100} height={100} src={caseImage!.value} alt="" />
-      </div>
-    );
+      arrOfReactNodes.push(
+        <img
+          style={{
+            left: characterCase.position == "left" ? 100 : undefined,
+            right: characterCase.position == "right" ? 100 : undefined,
+          }}
+          className={styles.character}
+          src={caseImage!.value}
+          alt=""
+        />
+      );
+    });
+
+    return <div>{arrOfReactNodes}</div>;
   };
 
   const resolve = () => {
@@ -61,7 +73,12 @@ export const Preview = () => {
         <>
           {renderCharacters()}
           <div className={styles.text} onClick={next}>
-            {current.data.text}
+            <Wave
+              iterations={1}
+              effect={"verticalFadeIn"}
+              text={current.data.text}
+              speed={20}
+            />
           </div>
         </>
       );
@@ -84,7 +101,11 @@ export const Preview = () => {
   };
 
   return (
-    <Popup isOpened={isOpened} setIsOpened={setIsOpened}>
+    <Popup
+      className={styles.popup}
+      isOpened={isOpened}
+      setIsOpened={setIsOpened}
+    >
       <div
         style={{
           background: `url(${

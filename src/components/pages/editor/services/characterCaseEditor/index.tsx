@@ -9,6 +9,7 @@ import styles from "./index.module.css";
 import { Title } from "components/ui/Title";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { Button } from "components/ui/Button";
+import ReactSelect from "react-select";
 
 export const CharacterCaseEditor = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ export const CharacterCaseEditor = () => {
   // sync
   useEffect(() => {
     setCharacterCases(
-      elements.find((el) => el.id == nodeId)?.data.characterCases
+      elements.find((el) => el.id == nodeId)?.data.characterCases || []
     );
   }, [nodeId]);
 
@@ -51,6 +52,32 @@ export const CharacterCaseEditor = () => {
     }));
   };
 
+  const changeCaseState = (characterId: string, stateName: string) => {
+    setCharacterCases((prev) => {
+      return prev.map((item) =>
+        item.character.id == characterId
+          ? {
+              ...item,
+              stateName: stateName,
+            }
+          : item
+      );
+    });
+  };
+
+  const changeCasePosition = (characterId: string, pos: "left" | "right") => {
+    setCharacterCases((prev) => {
+      return prev.map((item) =>
+        item.character.id == characterId
+          ? {
+              ...item,
+              position: pos,
+            }
+          : item
+      );
+    });
+  };
+
   return (
     <Popup
       className={styles.popup}
@@ -69,8 +96,37 @@ export const CharacterCaseEditor = () => {
           {characterCases?.map((item) => (
             <div className={styles.character_case}>
               <div>Name: {item.character.name}</div>
-              <div>State name: {item.stateName}</div>
-              <div>Position: {item.position}</div>
+              <div className={styles.character_case__state_name}>
+                State name:{" "}
+                <ReactSelect
+                  onChange={(v) => changeCaseState(item.character.id, v!.value)}
+                  options={item.character.states.map((state) => ({
+                    label: state.name,
+                    value: state.name,
+                  }))}
+                />
+              </div>
+              <div className={styles.character_case__state_name}>
+                Position:{" "}
+                <ReactSelect
+                  onChange={(v) =>
+                    changeCasePosition(
+                      item.character.id,
+                      v!.value as "left" | "right"
+                    )
+                  }
+                  options={[
+                    {
+                      value: "left",
+                      label: "left",
+                    },
+                    {
+                      value: "right",
+                      label: "right",
+                    },
+                  ]}
+                />
+              </div>
             </div>
           ))}
           <Button onClick={saveHandler}>Save</Button>
