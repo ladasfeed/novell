@@ -10,16 +10,31 @@
 }
 
 .character_list {
+    display: grid;
+    grid-gap: 10px;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+.character_list__item {
+    cursor: pointer;
 }
 
-.character_case__state_name {
+.character_case__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.character_case__controls {
     display: grid;
     grid-gap: 20px;
+    align-items: center;
     grid-template-columns: 200px 1fr;
 }
 
 .character_case {
     margin-bottom: 20px;
+    padding: 20px;
 }
 .character_case {
     display: grid;

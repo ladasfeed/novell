@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import styles from "./index.module.css";
 import { editorThunks } from "store/state/editor/thunk";
 import { useAppDispatch } from "store/state";
+import { Input } from "components/ui/Input";
 
 export const ImageEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -46,7 +47,7 @@ export const ImageEditor = () => {
       <Button onClick={toggleOpen}>Image editor</Button>
       <Popup isOpened={isOpened} setIsOpened={toggleOpen}>
         <NodeToolButton variant={"image"}>
-          <input
+          <Input
             className={styles.input}
             type={"file"}
             onChange={uploadImage}

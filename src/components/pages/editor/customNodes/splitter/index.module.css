@@ -1,5 +1,5 @@
 .container {
-    height: 400px;
+    height: 300px;
     width: 400px;
     background: gray;
     padding: 20px;
@@ -11,8 +11,19 @@
     display: none;
 }
 
+.tools__buttons {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-items: flex-start;
+    justify-content: flex-start;
+    grid-gap: 16px;
+}
+
 .branches_container {
     margin-top: 20px;
+    display: grid;
+    justify-content: flex-start;
+    justify-items: flex-start;
 }
 
 .dark_layer {
@@ -46,10 +57,7 @@
     grid-column-gap: 20px;
 }
 .text_edit__input {
-    background: #707070;
-    border: none;
-    outline: none;
-    color: white;
+    margin-bottom: 20px;
 }
 .text_edit__text {
     cursor: pointer;
@@ -66,5 +74,5 @@
     position: absolute;
 }
 .handle_wrapper__text {
-
+    color: white;
 }

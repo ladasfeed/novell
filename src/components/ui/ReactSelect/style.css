@@ -1,0 +1,55 @@
+div.ReactSelect {
+    height: 23px;
+    position: relative;
+}
+
+div.ReactSelect__control  {
+    border: unset;
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+    height: 23px;
+    min-height: 23px;
+    border-bottom: 1px solid gray;
+}
+
+div.ReactSelect__placeholder {
+    color: #bebebe;
+}
+
+div.ReactSelect__control:active,
+div.ReactSelect__control:hover {
+
+}
+
+/* value */
+div.ReactSelect__value-container {
+    padding: 0;
+    color: white;
+}
+div.ReactSelect__single-value {
+    font-size: 14px;
+    text-align: start;
+    color: white;
+}
+
+/* input */
+div.ReactSelect__input-container {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: white;
+}
+
+/* indicators */
+div.ReactSelect__indicators {
+    height: 23px;
+}
+span.ReactSelect__indicator-separator {
+    display: none;
+}
+
+/* menu */
+div.ReactSelect__menu {
+    z-index: 4;
+}

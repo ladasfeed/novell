@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import ReactFlow, {
   addEdge,
+  Background,
+  BackgroundVariant,
   Connection,
   Edge,
   Elements,
@@ -50,7 +52,11 @@ export const Editor = () => {
         return params.target == item.id
           ? {
               ...item,
-              data: { ...item.data, branch: params.sourceHandle },
+              data: {
+                ...item.data,
+                branch: params.sourceHandle,
+                branches: [params.sourceHandle],
+              },
             }
           : item;
       })
@@ -126,12 +132,20 @@ export const Editor = () => {
               <ReactFlow
                 nodeTypes={nodeTypesMap}
                 onLoad={onLoad}
+                onlyRenderVisibleElements
                 onDrop={onDrop}
+                snapGrid={[30, 30]}
+                snapToGrid
                 onDragOver={onDragOver}
                 elements={elements}
                 onElementsRemove={onElementsRemove}
                 onConnect={onConnect}
               >
+                <Background
+                  variant={BackgroundVariant.Lines}
+                  gap={20}
+                  size={4}
+                />
                 <Toolbar />
               </ReactFlow>
             </div>

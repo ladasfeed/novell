@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { editorSliceSelectors } from "store/state/editor";
 import { NodeImageChanger } from "components/pages/editor/nodesServices/NodeImageChanger";
 import { NodeCharacterEditorButton } from "components/pages/editor/nodesServices/CharacterChanger";
+import { Input } from "components/ui/Input";
+import { BranchNodeChanger } from "components/pages/editor/nodesServices/BranchChanger";
 
 export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   const { changeElement } = useFlowContext();
@@ -48,7 +50,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       />
       <div className={styles.dark_layer} />
       <div className={styles.tools_layer}>
-        <div className={styles.tools__header}>
+        <div className={styles.tools__buttons}>
           <NodeImageChanger id={id} />
           <NodeCharacterEditorButton id={id} />
         </div>
@@ -57,7 +59,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
           <UiElementContainer className={styles.text_edit}>
             {isEditingText ? (
               <>
-                <input
+                <Input
                   defaultValue={data.text}
                   className={styles.text_edit__input}
                   type="text"
@@ -83,7 +85,6 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
         id={data.branch || "default"}
         position={Position.Bottom}
         className={styles.handle}
-        onConnect={(params) => console.log("handle onConnect", params)}
         isConnectable={isConnectable}
       />
     </div>

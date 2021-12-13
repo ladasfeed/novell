@@ -29,8 +29,12 @@
     justify-content: space-between;
     height: 100%;
 }
-.tools__header {
-
+.tools__buttons {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-items: flex-start;
+    justify-content: flex-start;
+    grid-gap: 16px;
 }
 .tools__footer {
 

@@ -51,17 +51,19 @@ export const Preview = () => {
       )?.fileId;
       const caseImage = images.find((im) => im.id == fileId);
 
-      arrOfReactNodes.push(
-        <img
-          style={{
-            left: characterCase.position == "left" ? 100 : undefined,
-            right: characterCase.position == "right" ? 100 : undefined,
-          }}
-          className={styles.character}
-          src={caseImage!.value}
-          alt=""
-        />
-      );
+      if (caseImage) {
+        arrOfReactNodes.push(
+          <img
+            style={{
+              left: characterCase.position == "left" ? 100 : undefined,
+              right: characterCase.position == "right" ? 100 : undefined,
+            }}
+            className={styles.character}
+            src={caseImage?.value}
+            alt=""
+          />
+        );
+      }
     });
 
     return <div>{arrOfReactNodes}</div>;

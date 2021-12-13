@@ -6,6 +6,7 @@ import { lsController } from "store/ls";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
+import { Input } from "components/ui/Input";
 
 export const BranchEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -33,7 +34,7 @@ export const BranchEditor = () => {
     <>
       <Button onClick={toggleOpen}>Branch Editor</Button>
       <Popup isOpened={isOpened} setIsOpened={toggleOpen}>
-        <input
+        <Input
           onChange={(e) => setInputText(e.currentTarget.value)}
           type="text"
         />

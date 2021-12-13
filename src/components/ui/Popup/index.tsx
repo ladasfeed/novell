@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  HTMLAttributes,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { HTMLAttributes, ReactNode, useRef } from "react";
 import styles from "./index.module.css";
 import { RSKHooks } from "react-dev-starter-pack/dist";
 import cn from "classnames";

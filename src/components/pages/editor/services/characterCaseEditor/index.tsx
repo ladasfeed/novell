@@ -3,15 +3,35 @@ import { useAppDispatch } from "store/state";
 import { useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { UiElementContainer } from "components/ui/UiContainer";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { characterCaseType, characterType } from "types";
 import styles from "./index.module.css";
 import { Title } from "components/ui/Title";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { Button } from "components/ui/Button";
-import ReactSelect from "react-select";
+import { ReactSelect } from "components/ui/ReactSelect";
 
 export const CharacterCaseEditor = () => {
+  const dispatch = useAppDispatch();
+  const isEditingCharacterCase = useSelector(
+    editorSliceSelectors.getIsEditingCharacter
+  );
+  const toggle = () => {
+    dispatch(editorSlice.actions.setEditingCharacterState(false));
+  };
+
+  return (
+    <Popup
+      className={styles.popup}
+      isOpened={isEditingCharacterCase}
+      setIsOpened={toggle}
+    >
+      <CharacterCaseEditorInner />
+    </Popup>
+  );
+};
+
+const CharacterCaseEditorInner = () => {
   const dispatch = useAppDispatch();
   const { changeElement, elements } = useFlowContext();
   const nodeId = useSelector(editorSliceSelectors.getCurrentOpenedNode);
@@ -19,20 +39,13 @@ export const CharacterCaseEditor = () => {
   const [characterCases, setCharacterCases] = useState<
     Array<characterCaseType>
   >([]);
-  const isEditingCharacterCase = useSelector(
-    editorSliceSelectors.getIsEditingCharacter
-  );
 
   // sync
   useEffect(() => {
     setCharacterCases(
       elements.find((el) => el.id == nodeId)?.data.characterCases || []
     );
-  }, [nodeId]);
-
-  const toggle = () => {
-    dispatch(editorSlice.actions.setEditingCharacterState(false));
-  };
+  }, []);
 
   const createCharacterCase = (character: characterType) => {
     setCharacterCases((prev) => [
@@ -78,60 +91,86 @@ export const CharacterCaseEditor = () => {
     });
   };
 
+  const removeCase = (characterId: string) => {
+    setCharacterCases((prev) => {
+      return prev.filter((item) => {
+        return item.character.id != characterId;
+      });
+    });
+  };
+
   return (
-    <Popup
-      className={styles.popup}
-      isOpened={isEditingCharacterCase}
-      setIsOpened={toggle}
-    >
-      <div className={styles.wrapper}>
-        <div className={styles.character_list}>
-          {characters.map((item) => (
-            <UiElementContainer onClick={() => createCharacterCase(item)}>
-              {item.name}
-            </UiElementContainer>
-          ))}
-        </div>
-        <div className={styles.character_cases_list}>
-          {characterCases?.map((item) => (
-            <div className={styles.character_case}>
-              <div>Name: {item.character.name}</div>
-              <div className={styles.character_case__state_name}>
-                State name:{" "}
-                <ReactSelect
-                  onChange={(v) => changeCaseState(item.character.id, v!.value)}
-                  options={item.character.states.map((state) => ({
+    <div className={styles.wrapper}>
+      <div className={styles.character_list}>
+        <Title color="white" rectForm="mrBot">
+          Characters:{" "}
+        </Title>
+
+        {characters.map((item) => (
+          <UiElementContainer
+            className={styles.character_list__item}
+            onClick={() => createCharacterCase(item)}
+          >
+            {item.name}
+          </UiElementContainer>
+        ))}
+      </div>
+      <div className={styles.character_cases_list}>
+        {characterCases?.map((item) => (
+          <UiElementContainer className={styles.character_case}>
+            <div className={styles.character_case__header}>
+              <div>
+                Name: <b>{item.character.name}</b>
+              </div>
+              <div onClick={() => removeCase(item.character.id)}>X</div>
+            </div>
+            <div className={styles.character_case__controls}>
+              State name:{" "}
+              <ReactSelect
+                onChange={(v: any) =>
+                  changeCaseState(item.character.id, v.value)
+                }
+                defaultValue={{
+                  value: item.stateName,
+                  label: item.stateName,
+                }}
+                options={characters
+                  .find((ch) => ch.id == item.character.id)
+                  ?.states.map((state) => ({
                     label: state.name,
                     value: state.name,
                   }))}
-                />
-              </div>
-              <div className={styles.character_case__state_name}>
-                Position:{" "}
-                <ReactSelect
-                  onChange={(v) =>
-                    changeCasePosition(
-                      item.character.id,
-                      v!.value as "left" | "right"
-                    )
-                  }
-                  options={[
-                    {
-                      value: "left",
-                      label: "left",
-                    },
-                    {
-                      value: "right",
-                      label: "right",
-                    },
-                  ]}
-                />
-              </div>
+              />
             </div>
-          ))}
-          <Button onClick={saveHandler}>Save</Button>
-        </div>
+            <div className={styles.character_case__controls}>
+              Position:{" "}
+              <ReactSelect
+                onChange={(v: any) =>
+                  changeCasePosition(
+                    item.character.id,
+                    v!.value as "left" | "right"
+                  )
+                }
+                defaultValue={{
+                  value: item.position,
+                  label: item.position,
+                }}
+                options={[
+                  {
+                    value: "left",
+                    label: "left",
+                  },
+                  {
+                    value: "right",
+                    label: "right",
+                  },
+                ]}
+              />
+            </div>
+          </UiElementContainer>
+        ))}
+        <Button onClick={saveHandler}>Save</Button>
       </div>
-    </Popup>
+    </div>
   );
 };

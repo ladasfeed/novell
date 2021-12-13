@@ -8,12 +8,14 @@ import { characterStateType, characterType, fileType } from "types";
 type initialStateType = {
   branches: Array<string>;
   images: Array<fileType>;
+  audio: Array<fileType>;
   openedNodeId?: string;
   characters: Array<characterType>;
 
   // action state
   isEditingImage: boolean;
   isEditingCharacter: boolean;
+  isEditingBranches: boolean;
   compiled: Array<any>;
 };
 
@@ -23,8 +25,10 @@ export const editorSlice = createSlice({
   initialState: {
     branches: ["default"],
     images: [],
+    audio: [],
     isEditingImage: false,
     isEditingCharacter: false,
+    isEditingBranches: false,
     compiled: [],
     characters: lsController.get("characters") || [],
   } as initialStateType,
@@ -34,6 +38,9 @@ export const editorSlice = createSlice({
     },
     setEditingCharacterState: (state, action: PayloadAction<boolean>) => {
       state.isEditingCharacter = action.payload;
+    },
+    setEditingBranches: (state, action: PayloadAction<boolean>) => {
+      state.isEditingBranches = action.payload;
     },
     setCompiled: (state, action: PayloadAction<Array<any>>) => {
       state.compiled = action.payload;
@@ -81,15 +88,22 @@ export const editorSlice = createSlice({
     setImages: (state, action: PayloadAction<Array<fileType>>) => {
       state.images = action.payload;
     },
+    setAudio: (state, action: PayloadAction<Array<fileType>>) => {
+      state.audio = action.payload;
+    },
   },
 });
 
 export const editorSliceSelectors = {
   getBranches: (state: StateType) => state.editor.branches,
-  getImages: (state: StateType) => state.editor.images,
   getCurrentOpenedNode: (state: StateType) => state.editor.openedNodeId,
-  getIsEditingImage: (state: StateType) => state.editor.isEditingImage,
-  getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,
   getCompiled: (state: StateType) => state.editor.compiled,
   getCharacters: (state: StateType) => state.editor.characters,
+
+  getImages: (state: StateType) => state.editor.images,
+  getAudio: (state: StateType) => state.editor.audio,
+
+  getIsEditingImage: (state: StateType) => state.editor.isEditingImage,
+  getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,
+  getIsEditingBranch: (state: StateType) => state.editor.isEditingBranches,
 };

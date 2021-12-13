@@ -1,5 +1,5 @@
 import { Popup } from "components/ui/Popup";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./index.module.css";
 import { Button } from "components/ui/Button";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,14 +10,18 @@ import { Title } from "components/ui/Title";
 import { editorThunks } from "store/state/editor/thunk";
 import { useAppDispatch } from "store/state";
 import { characterStateType, characterType } from "types";
+import { Input } from "components/ui/Input";
+import { UiElementContainer } from "components/ui/UiContainer";
 
 export const CharacterEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
   const [inputText, setInputText] = useState("");
   const [inputCaseText, setInputCaseText] = useState("");
   const dispatch = useAppDispatch();
-  const [currentCharacter, setCurrentCharacter] =
-    useState<characterType | null>();
+  const [
+    currentCharacter,
+    setCurrentCharacter,
+  ] = useState<characterType | null>();
   const characters = useSelector(editorSliceSelectors.getCharacters);
 
   const createCharacter = () => {
@@ -28,6 +32,7 @@ export const CharacterEditor = () => {
         id: String(characters.length + 1),
       })
     );
+    setInputText("");
   };
 
   const addCaseToCharacter = () => {
@@ -95,45 +100,48 @@ export const CharacterEditor = () => {
       >
         <div className={styles.editor}>
           <div className={styles.create}>
-            <Title noRectLayout color={"white"}>
+            <Title rectForm={"no"} color={"white"}>
               Create character
             </Title>
-            <input
+            <Input
+              value={inputText}
               className={styles.name_input}
               placeholder={"Enter character's name..."}
               onChange={(e) => setInputText(e.currentTarget.value)}
               type="text"
             />
-            <Icons.ui.Plus onClick={createCharacter}>Save</Icons.ui.Plus>
-          </div>
-          <div className={styles.characters}>
+            <Icons.ui.Plus onClick={createCharacter} />
+
             <div className={styles.characters_list}>
               {characters.map((item) => (
-                <div
+                <UiElementContainer
+                  key={item.id}
                   className={styles.characters_list__item}
                   onClick={() => setCurrentCharacter(item)}
                 >
                   {item.name}
-                </div>
+                </UiElementContainer>
               ))}
             </div>
-
+          </div>
+          <div className={styles.characters}>
             {currentCharacter && (
               <div className={styles.character_editor}>
                 <div className={styles.character_editor__name}>
                   {currentCharacter?.name}
                 </div>
 
-                <h5>Add new state</h5>
+                <Title separator color={"white"}>
+                  States editor
+                </Title>
                 <div className={styles.character_editor__add_state}>
-                  <input
+                  <Input
+                    value={inputCaseText}
                     placeholder={"State name..."}
                     onChange={(e) => setInputCaseText(e.currentTarget.value)}
                     type="text"
                   />
-                  <Icons.ui.Plus onClick={addCaseToCharacter}>
-                    Save
-                  </Icons.ui.Plus>
+                  <Icons.ui.Plus onClick={addCaseToCharacter} />
                 </div>
 
                 <div className={styles.character_editor__states}>
@@ -167,7 +175,6 @@ const CharacterCase = ({
   const [image, setImage] = useState<string | undefined>();
   useEffect(() => {
     const newImage = images.find((im) => im.id == characterCase.fileId)?.value;
-    console.log(newImage);
     setImage(newImage);
   }, [images, characterCase.fileId]);
 
@@ -178,7 +185,7 @@ const CharacterCase = ({
         src={image}
         alt=""
       />
-      <input
+      <Input
         style={{
           display: "none",
         }}

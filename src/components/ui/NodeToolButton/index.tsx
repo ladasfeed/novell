@@ -3,7 +3,7 @@ import cn from "classnames";
 import styles from "./index.module.css";
 import { Icons } from "assets/icons";
 
-type variantType = "image" | "settings" | "sound";
+type variantType = "image" | "settings" | "sound" | "character" | "branch";
 
 type propsType = {} & HTMLAttributes<HTMLLabelElement> & {
     variant?: variantType;
@@ -15,7 +15,9 @@ const iconsMap: {
 } = {
   image: Icons.nodeIcons.Picture,
   settings: Icons.nodeIcons.Picture,
+  character: Icons.nodeIcons.UserAdd,
   sound: Icons.nodeIcons.Picture,
+  branch: Icons.nodeIcons.Picture,
 };
 
 export const NodeToolButton = ({

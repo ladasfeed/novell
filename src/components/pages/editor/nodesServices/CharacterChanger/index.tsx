@@ -1,6 +1,9 @@
 import { Button } from "components/ui/Button";
 import { useAppDispatch } from "store/state";
 import { editorSlice } from "store/state/editor";
+import React from "react";
+import { Icons } from "assets/icons";
+import { NodeToolButton } from "components/ui/NodeToolButton";
 
 export const NodeCharacterEditorButton = ({ id }: { id: string }) => {
   const dispatch = useAppDispatch();
@@ -10,5 +13,5 @@ export const NodeCharacterEditorButton = ({ id }: { id: string }) => {
     dispatch(editorSlice.actions.setCurrentOpenedNode(id));
   };
 
-  return <Button onClick={openEditor}>Character</Button>;
+  return <NodeToolButton variant="character" onClick={openEditor} />;
 };
