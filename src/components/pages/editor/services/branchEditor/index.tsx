@@ -7,6 +7,8 @@ import { UiElementContainer } from "components/ui/UiContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { Input } from "components/ui/Input";
+import styles from "./index.module.css";
+import { Icons } from "assets/icons";
 
 export const BranchEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -15,8 +17,10 @@ export const BranchEditor = () => {
   const branches = useSelector(editorSliceSelectors.getBranches);
 
   const updateBranches = () => {
-    dispatch(editorSlice.actions.setBranches([...branches, inputText]));
-    setInputText("");
+    if (inputText) {
+      dispatch(editorSlice.actions.setBranches([...branches, inputText]));
+      setInputText("");
+    }
   };
   const removeBranch = (name: string) => {
     const oldBranches = [...branches].filter((i) => i != name);
@@ -33,17 +37,36 @@ export const BranchEditor = () => {
   return (
     <>
       <Button onClick={toggleOpen}>Branch Editor</Button>
-      <Popup isOpened={isOpened} setIsOpened={toggleOpen}>
-        <Input
-          onChange={(e) => setInputText(e.currentTarget.value)}
-          type="text"
-        />
-        <Button onClick={updateBranches}>Save</Button>
-        {branches?.map((item) => (
-          <UiElementContainer>
-            {item} <span onClick={() => removeBranch(item)}>X</span>
-          </UiElementContainer>
-        ))}
+      <Popup
+        title="Branches editor"
+        isOpened={isOpened}
+        setIsOpened={toggleOpen}
+      >
+        <div className={styles.create}>
+          <Input
+            value={inputText}
+            placeholder="Branch name..."
+            className={styles.input}
+            onChange={(e) => setInputText(e.currentTarget.value)}
+            type="text"
+          />
+          <Icons.ui.Plus onClick={updateBranches} />
+        </div>
+
+        <div className={styles.branches__list}>
+          {branches?.map((item) => (
+            <UiElementContainer className={styles.branches__list_item}>
+              {item}{" "}
+              <span onClick={() => removeBranch(item)}>
+                <Icons.ui.Plus
+                  style={{
+                    transform: "rotateZ(45deg)",
+                  }}
+                />
+              </span>
+            </UiElementContainer>
+          ))}
+        </div>
       </Popup>
     </>
   );

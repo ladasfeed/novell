@@ -6,12 +6,14 @@ import cn from "classnames";
 type propsType = {
   isOpened: boolean;
   setIsOpened: (v: boolean) => void;
+  title?: string;
   children?: ReactNode;
 } & HTMLAttributes<HTMLDivElement>;
 export const Popup = ({
   isOpened,
   setIsOpened,
   children,
+  title,
   ...jsxAttr
 }: propsType) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -23,6 +25,7 @@ export const Popup = ({
   return (
     <div {...jsxAttr} className={cn(styles.container)}>
       <div ref={ref} className={cn(styles.container_inner, jsxAttr.className)}>
+        {title && <h3 className={styles.title}>{title}</h3>}
         {children}
       </div>
     </div>

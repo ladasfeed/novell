@@ -94,6 +94,7 @@ export const CharacterEditor = () => {
     <>
       <Button onClick={toggleOpen}>Edit character</Button>
       <Popup
+        title="Characters editor"
         className={styles.popup}
         isOpened={isOpened}
         setIsOpened={toggleOpen}

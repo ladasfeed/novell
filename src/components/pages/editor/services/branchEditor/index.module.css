@@ -1,0 +1,22 @@
+.create {
+    display: grid;
+    grid-template-columns: 200px auto;
+    grid-gap: 20px;
+    align-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.branches__list {
+    display: grid;
+    grid-row-gap: 20px;
+}
+
+.branches__list_item {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-items: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    grid-gap: 20px;
+}

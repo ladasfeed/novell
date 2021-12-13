@@ -20,13 +20,49 @@ import { Toolbar } from "components/pages/editor/toolbar";
 import { changeElement } from "components/pages/editor/helpers/changeElement";
 import { EdgeUnionType } from "types";
 
+// export const initialElements: Array<FlowElement> = [
+//   ...Array(100)
+//     .fill("")
+//     .map((item, index) => {
+//       return {
+//         id: String(index),
+//         type: "customNodeDefault",
+//         data: { text: "Root node", root: true },
+//         position: { x: 250, y: 250 + index * 300 },
+//       };
+//     }),
+//   ...Array(100)
+//     .fill("")
+//     .map((item, index) => {
+//       return {
+//         id: String(index + "b"),
+//         type: "customNodeDefault",
+//         data: { text: "Root node", root: true },
+//         position: { x: 600, y: 250 + index * 300 },
+//       };
+//     }),
+//   ...Array(100)
+//     .fill("")
+//     .map((item, index) => {
+//       return {
+//         id: String(index + "d"),
+//         type: "customNodeDefault",
+//         data: { text: "Root node", root: true },
+//         position: { x: 1000, y: 250 + index * 300 },
+//       };
+//     }),
+// ];
 export const initialElements: Array<FlowElement> = [
-  {
-    id: "0",
-    type: "customNodeDefault",
-    data: { text: "Root node", root: true },
-    position: { x: 250, y: 250 },
-  },
+  ...Array(1)
+    .fill("")
+    .map((item, index) => {
+      return {
+        id: String(index),
+        type: "customNodeDefault",
+        data: { text: "Root node", root: true },
+        position: { x: 250, y: 250 },
+      };
+    }),
 ];
 
 const nodeTypesMap = {
