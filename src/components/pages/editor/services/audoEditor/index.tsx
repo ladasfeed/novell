@@ -22,10 +22,10 @@ export const AudioEditor = () => {
   };
 
   useEffect(() => {
-    audioApi.get().then((res) => {
-      console.log(res);
-      setArrayAudio(res.data);
-    });
+    // audioApi.get().then((res) => {
+    //   console.log(res);
+    //   setArrayAudio(res.data);
+    // });
   }, []);
 
   return (

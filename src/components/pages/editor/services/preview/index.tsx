@@ -1,50 +1,73 @@
 import { ReactNode, useEffect, useState } from "react";
 import styles from "./index.module.css";
-import { useSelector } from "react-redux";
-import { editorSliceSelectors } from "store/state/editor";
+import { useDispatch, useSelector } from "react-redux";
+import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { Popup } from "components/ui/Popup";
 //@ts-ignore
 import { Wave } from "react-animated-text";
+import { StateType } from "store/state";
+import { compile } from "components/pages/editor/helpers/compile";
 
 export const Preview = () => {
   const compiled = useSelector(editorSliceSelectors.getCompiled);
   const images = useSelector(editorSliceSelectors.getImages);
-  const [current, setCurrent] = useState(compiled[0]);
+  const [currentChapter, setCurrentChapter] = useState(compiled[0]?.data);
+  // const [currentChapterName, setCurrentChapterName] = useState('')
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
+  const [currentFrame, setCurrentFrame] = useState(currentChapter[0]);
   const [isOpened, setIsOpened] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsOpened(true);
-    setCurrent(compiled[0]);
-  }, [compiled]);
+  }, []);
+
+  useEffect(() => {
+    setCurrentFrame(currentChapter[0]);
+  }, [currentChapter]);
 
   const next = () => {
-    const newNode = compiled.find((node: any) => current.next == node.id);
+    const newNode = currentChapter.find(
+      (node: any) => currentFrame.next == node.id
+    );
     if (newNode) {
-      setCurrent(newNode);
+      setCurrentFrame(newNode);
     } else {
-      alert("End");
+      console.log(newNode);
+      if (currentFrame?.data?.isEndNode) {
+        if (compiled[currentChapterIndex + 1]) {
+          setCurrentChapterIndex((prev) => prev + 1);
+          console.log(compiled[currentChapterIndex + 1]);
+          setCurrentChapter(compiled[currentChapterIndex + 1]?.data);
+        } else {
+          alert("No end");
+          dispatch(editorSlice.actions.setCompiled([]));
+        }
+      } else {
+        dispatch(editorSlice.actions.setCompiled([]));
+      }
     }
   };
 
   const splitterNext = (branch: string) => {
-    const pointer = current.next?.[branch];
+    const pointer = currentFrame.next?.[branch];
 
     if (pointer) {
-      setCurrent(compiled.find((node: any) => pointer == node.id));
+      setCurrentFrame(currentChapter.find((node: any) => pointer == node.id));
     } else {
       alert("End");
     }
   };
 
-  if (!current) return null;
+  if (!currentFrame) return null;
 
   const renderCharacters = () => {
-    if (!current.data.characterCases) {
+    if (!currentFrame.data.characterCases) {
       return null;
     }
     let arrOfReactNodes: Array<ReactNode> = [];
 
-    current.data.characterCases.forEach((characterCase: any) => {
+    currentFrame.data.characterCases.forEach((characterCase: any) => {
       const character = characterCase.character;
       const fileId = character.states.find(
         (state: any) => state.name == characterCase.stateName
@@ -69,8 +92,9 @@ export const Preview = () => {
     return <div>{arrOfReactNodes}</div>;
   };
 
+  console.log(currentFrame);
   const resolve = () => {
-    if (current.type == "customNodeDefault") {
+    if (currentFrame.type == "customNodeDefault") {
       return (
         <>
           {renderCharacters()}
@@ -78,14 +102,14 @@ export const Preview = () => {
             <Wave
               iterations={1}
               effect={"verticalFadeIn"}
-              text={current.data.text}
+              text={currentFrame.data.text}
               speed={20}
             />
           </div>
         </>
       );
     } else {
-      const branchesText = Object.entries(current.data.branchesText);
+      const branchesText = Object.entries(currentFrame.data.branchesText);
 
       return (
         <div className={styles.variants}>
@@ -111,7 +135,7 @@ export const Preview = () => {
       <div
         style={{
           background: `url(${
-            images.find((img) => img.id == current.data.imgId)?.value
+            images.find((img) => img.id == currentFrame.data.imgId)?.value
           })`,
         }}
         className={styles.container}

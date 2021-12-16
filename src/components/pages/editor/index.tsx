@@ -19,6 +19,10 @@ import { lsController } from "store/ls";
 import { Toolbar } from "components/pages/editor/toolbar";
 import { changeElement } from "components/pages/editor/helpers/changeElement";
 import { EdgeUnionType } from "types";
+import { ChaptersSidebar } from "components/pages/editor/services/chapters";
+import { useDispatch, useSelector } from "react-redux";
+import { editorSlice, editorSliceSelectors } from "store/state/editor";
+import { StateType } from "store/state";
 
 // export const initialElements: Array<FlowElement> = [
 //   ...Array(100)
@@ -75,9 +79,18 @@ let rerenderCounter = 0;
 export const Editor = () => {
   const [elements, setElements] = useState(initialElements);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const compiled = useSelector(editorSliceSelectors.getCompiled);
   const reactFlowWrapper = useRef<HTMLDivElement | null>(null);
+  const currentChapterName = useSelector(editorSliceSelectors.getChapterName);
+  const currentChapter = useSelector(
+    (state: StateType) => state.editor.chapters[currentChapterName]
+  );
+  const dispatch = useDispatch();
 
-  console.log(elements);
+  useEffect(() => {
+    setElements(currentChapter.data);
+  }, [currentChapter]);
+
   // Handlers
   const onElementsRemove = (elementsToRemove: Elements) =>
     setElements((els) => removeElements(elementsToRemove, els));
@@ -111,10 +124,10 @@ export const Editor = () => {
   rerenderCounter++;
 
   useEffect(() => {
-    const restored = lsController.get("elements");
-    if (restored) {
-      setElements(restored.elements);
-    }
+    // const restored = lsController.get("elements");
+    // if (restored) {
+    //   setElements(restored.elements);
+    // }
   }, []);
 
   const onDrop = (event: any) => {
@@ -152,6 +165,9 @@ export const Editor = () => {
     []
   );
 
+  /* Logs */
+  console.log(elements);
+
   return (
     <>
       <div className={styles.container}>
@@ -182,13 +198,14 @@ export const Editor = () => {
                   gap={20}
                   size={4}
                 />
+                <ChaptersSidebar />
                 <Toolbar />
               </ReactFlow>
             </div>
           </FlowProvider.Provider>
         </ReactFlowProvider>
       </div>
-      <Preview />
+      {compiled.length && <Preview />}
     </>
   );
 };

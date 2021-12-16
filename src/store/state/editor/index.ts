@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StateType } from "store/state/index";
 import { lsController } from "store/ls";
-import { characterStateType, characterType, fileType } from "types";
-
-/* Types */
+import {
+  chaptersObjectType,
+  chapterType,
+  characterStateType,
+  characterType,
+  fileType,
+} from "types";
+import { Elements } from "react-flow-renderer";
 
 type initialStateType = {
   branches: Array<string>;
@@ -17,6 +22,9 @@ type initialStateType = {
   isEditingCharacter: boolean;
   isEditingBranches: boolean;
   compiled: Array<any>;
+
+  currentChapterName: string;
+  chapters: chaptersObjectType;
 };
 
 /* Slice */
@@ -30,24 +38,60 @@ export const editorSlice = createSlice({
     isEditingCharacter: false,
     isEditingBranches: false,
     compiled: [],
+    currentChapterName: "first",
     characters: lsController.get("characters") || [],
+    chapters: lsController.get("chapters") || {
+      first: {
+        data: [],
+        id: "1",
+      },
+    },
   } as initialStateType,
   reducers: {
+    /* Chapters */
+    addNewChapter: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        chapter: chapterType;
+        name: string;
+      }>
+    ) => {
+      state.chapters[payload.name] = payload.chapter;
+    },
+    updateChapterElements: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        data: Elements;
+        name: string;
+      }>
+    ) => {
+      if (state.chapters[payload.name]) {
+        state.chapters[payload.name].data = payload.data;
+        lsController.set("chapters", state.chapters);
+      }
+    },
+    setChapterName: (state, action: PayloadAction<string>) => {
+      state.currentChapterName = action.payload;
+    },
+
+    /* Images */
+    setImages: (state, action: PayloadAction<Array<fileType>>) => {
+      state.images = action.payload;
+    },
     setEditingImageState: (state, action: PayloadAction<boolean>) => {
       state.isEditingImage = action.payload;
     },
-    setEditingCharacterState: (state, action: PayloadAction<boolean>) => {
-      state.isEditingCharacter = action.payload;
-    },
-    setEditingBranches: (state, action: PayloadAction<boolean>) => {
-      state.isEditingBranches = action.payload;
-    },
-    setCompiled: (state, action: PayloadAction<Array<any>>) => {
-      state.compiled = action.payload;
-    },
 
+    /* Character */
     addNewCharacter: (state, action: PayloadAction<characterType>) => {
       state.characters = [...state.characters, action.payload];
+    },
+    setEditingCharacterState: (state, action: PayloadAction<boolean>) => {
+      state.isEditingCharacter = action.payload;
     },
     addCharacterCase: (
       state,
@@ -78,18 +122,26 @@ export const editorSlice = createSlice({
       });
     },
 
-    setCurrentOpenedNode: (state, action: PayloadAction<string>) => {
-      state.openedNodeId = action.payload;
-    },
+    /* Branches */
     setBranches: (state, action: PayloadAction<Array<string>>) => {
       state.branches = action.payload;
       lsController.set("branches", action.payload);
     },
-    setImages: (state, action: PayloadAction<Array<fileType>>) => {
-      state.images = action.payload;
+    setEditingBranches: (state, action: PayloadAction<boolean>) => {
+      state.isEditingBranches = action.payload;
     },
+
+    /* Audio */
     setAudio: (state, action: PayloadAction<Array<fileType>>) => {
       state.audio = action.payload;
+    },
+
+    /* System */
+    setCurrentOpenedNode: (state, action: PayloadAction<string>) => {
+      state.openedNodeId = action.payload;
+    },
+    setCompiled: (state, action: PayloadAction<Array<any>>) => {
+      state.compiled = action.payload;
     },
   },
 });
@@ -106,4 +158,7 @@ export const editorSliceSelectors = {
   getIsEditingImage: (state: StateType) => state.editor.isEditingImage,
   getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,
   getIsEditingBranch: (state: StateType) => state.editor.isEditingBranches,
+
+  getChapters: (state: StateType) => state.editor.chapters,
+  getChapterName: (state: StateType) => state.editor.currentChapterName,
 };

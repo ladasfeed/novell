@@ -6,8 +6,8 @@ import React from "react";
 import styles from "./index.module.css";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { lsController } from "store/ls";
-import { useDispatch } from "react-redux";
-import { editorSlice } from "store/state/editor";
+import { useDispatch, useSelector } from "react-redux";
+import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { compile } from "components/pages/editor/helpers/compile";
 import { initialElements } from "components/pages/editor/index";
 import { Title } from "components/ui/Title";
@@ -22,6 +22,8 @@ import { AudioEditor } from "components/pages/editor/services/audoEditor";
 export const Toolbar = () => {
   const { setElements, elements, instance } = useFlowContext();
   const dispatch = useDispatch();
+  const currentChapterName = useSelector(editorSliceSelectors.getChapterName);
+  const chapters = useSelector(editorSliceSelectors.getChapters);
 
   if (!setElements) return null;
 
@@ -30,13 +32,25 @@ export const Toolbar = () => {
   };
 
   const compliedHandler = () => {
-    dispatch(editorSlice.actions.setCompiled(compile(elements)));
+    const arrayOfChapters = Object.entries(chapters).map(([name, chapter]) => {
+      return {
+        data: compile(chapter.data),
+        name,
+      };
+    });
+
+    dispatch(editorSlice.actions.setCompiled(arrayOfChapters));
   };
 
   const saveHandler = () => {
     // @ts-ignore
     const saved = instance.toObject();
-    lsController.set("elements", saved);
+    dispatch(
+      editorSlice.actions.updateChapterElements({
+        data: elements,
+        name: currentChapterName,
+      })
+    );
     lsController.set(
       "characters",
       (store.getState() as StateType).editor.characters
@@ -44,7 +58,6 @@ export const Toolbar = () => {
   };
 
   const onDragStart = (event: any, nodeType: string) => {
-    console.log(nodeType);
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";
   };

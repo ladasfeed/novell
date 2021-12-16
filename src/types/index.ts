@@ -1,4 +1,4 @@
-import { Connection, Edge } from "react-flow-renderer";
+import { Connection, Edge, Elements } from "react-flow-renderer";
 
 export type EdgeUnionType = Edge<any> | Connection;
 
@@ -22,4 +22,13 @@ export type characterCaseType = {
   stateName: string;
   character: characterType;
   position: "left" | "right";
+};
+
+export type chapterType = {
+  data: Elements;
+  id: string;
+};
+
+export type chaptersObjectType = {
+  [key: string]: chapterType;
 };

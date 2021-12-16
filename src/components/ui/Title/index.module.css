@@ -1,6 +1,6 @@
 .container {
     font-size: 20px;
-    color: #3f153e;
+    color: #ffffff;
     font-weight: 700;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .separator {
-    background: #553f7f;
+    background: white;
     height: 2px;
     width: 100%;
 }

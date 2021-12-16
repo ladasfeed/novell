@@ -8,7 +8,6 @@ import { editorSliceSelectors } from "store/state/editor";
 import { NodeImageChanger } from "components/pages/editor/nodesServices/NodeImageChanger";
 import { NodeCharacterEditorButton } from "components/pages/editor/nodesServices/CharacterChanger";
 import { Input } from "components/ui/Input";
-import { BranchNodeChanger } from "components/pages/editor/nodesServices/BranchChanger";
 
 export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   const { changeElement } = useFlowContext();
@@ -33,6 +32,16 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       }
     }
   }, [data.imgId, images]);
+
+  const toggleEndNodeState = (e: any) => {
+    const value = e.currentTarget.checked;
+    changeElement(id, (v) => {
+      return {
+        ...v,
+        data: { ...v.data, isEndNode: value },
+      };
+    });
+  };
 
   return (
     <div
@@ -78,6 +87,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
               </>
             )}
           </UiElementContainer>
+          <input onChange={toggleEndNodeState} type="checkbox" />
         </div>
       </div>
       <Handle

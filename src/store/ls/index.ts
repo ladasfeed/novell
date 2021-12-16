@@ -1,8 +1,8 @@
 import { builders } from "react-dev-starter-pack/dist";
-import { characterType } from "types";
+import { chaptersObjectType, characterType } from "types";
 
 export const lsController = builders.localStorage<{
   branches: Array<string>;
-  elements: any;
+  chapters: chaptersObjectType;
   characters: Array<characterType>;
 }>();
