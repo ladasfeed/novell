@@ -10,10 +10,15 @@ import {
 } from "types";
 import { Elements } from "react-flow-renderer";
 
+type serverAudioType = {
+  path: string;
+  id: string;
+};
+
 type initialStateType = {
   branches: Array<string>;
   images: Array<fileType>;
-  audio: Array<fileType>;
+  audio: Array<serverAudioType>;
   openedNodeId?: string;
   characters: Array<characterType>;
 
@@ -21,7 +26,11 @@ type initialStateType = {
   isEditingImage: boolean;
   isEditingCharacter: boolean;
   isEditingBranches: boolean;
+  isEditingAudio: boolean;
   compiled: Array<any>;
+
+  //react flow state
+  previewImageMode: boolean;
 
   currentChapterName: string;
   chapters: chaptersObjectType;
@@ -36,7 +45,9 @@ export const editorSlice = createSlice({
     audio: [],
     isEditingImage: false,
     isEditingCharacter: false,
+    previewImageMode: false,
     isEditingBranches: false,
+    isEditingAudio: false,
     compiled: [],
     currentChapterName: "first",
     characters: lsController.get("characters") || [],
@@ -132,8 +143,11 @@ export const editorSlice = createSlice({
     },
 
     /* Audio */
-    setAudio: (state, action: PayloadAction<Array<fileType>>) => {
+    setAudio: (state, action: PayloadAction<Array<serverAudioType>>) => {
       state.audio = action.payload;
+    },
+    setIsEditingAudio: (state, action: PayloadAction<boolean>) => {
+      state.isEditingAudio = action.payload;
     },
 
     /* System */
@@ -142,6 +156,9 @@ export const editorSlice = createSlice({
     },
     setCompiled: (state, action: PayloadAction<Array<any>>) => {
       state.compiled = action.payload;
+    },
+    togglePreviewImagesMode: (state) => {
+      state.previewImageMode = !state.previewImageMode;
     },
   },
 });
@@ -158,7 +175,10 @@ export const editorSliceSelectors = {
   getIsEditingImage: (state: StateType) => state.editor.isEditingImage,
   getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,
   getIsEditingBranch: (state: StateType) => state.editor.isEditingBranches,
+  getIsEditingAudio: (state: StateType) => state.editor.isEditingAudio,
 
   getChapters: (state: StateType) => state.editor.chapters,
   getChapterName: (state: StateType) => state.editor.currentChapterName,
+
+  getIsImagesPreviewMode: (state: StateType) => state.editor.previewImageMode,
 };

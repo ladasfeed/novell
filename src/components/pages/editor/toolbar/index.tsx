@@ -18,6 +18,7 @@ import { StateType, store } from "store/state";
 import { CharacterCaseEditor } from "components/pages/editor/services/characterCaseEditor";
 import { BranchCaseEditor } from "components/pages/editor/services/branchCaseEditor";
 import { AudioEditor } from "components/pages/editor/services/audoEditor";
+import { AudioCaseEditor } from "components/pages/editor/services/audioCaseEditor";
 
 export const Toolbar = () => {
   const { setElements, elements, instance } = useFlowContext();
@@ -62,8 +63,15 @@ export const Toolbar = () => {
     event.dataTransfer.effectAllowed = "move";
   };
 
+  const togglePreviewImageMode = () => {
+    dispatch(editorSlice.actions.togglePreviewImagesMode());
+  };
+
   return (
     <div className={styles.container}>
+      <Title separator>View mode</Title>
+      <Button onClick={togglePreviewImageMode}>Toggle image preview</Button>
+
       <Title separator>Nodes</Title>
       <Button
         variant="add-node"
@@ -94,6 +102,7 @@ export const Toolbar = () => {
       <CharacterCaseEditor />
 
       <AudioEditor />
+      <AudioCaseEditor />
 
       <Title separator>General control</Title>
       <Button onDoubleClick={() => setElements(initialElements)}>

@@ -5,6 +5,18 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { StateType } from "store/state/index";
 import { audioApi } from "api/audio";
 
+function urltoFile(url: string, filename: string, mimeType: string) {
+  return new Promise((resolve) => {
+    fetch(url)
+      .then(function (res) {
+        return res.arrayBuffer();
+      })
+      .then(function (buf) {
+        resolve(new File([buf], filename, { type: mimeType }));
+      });
+  });
+}
+
 export const editorThunks = {
   uploadImage: createAsyncThunk(
     "uploadImage",
@@ -47,34 +59,24 @@ export const editorThunks = {
       },
       { dispatch, getState }
     ) => {
-      console.log(event);
       const audio = event.target.files[0];
       let reader = new FileReader();
       reader.readAsDataURL(audio);
 
-      const file = await new Promise((res) => {
+      const file: string = await new Promise((res) => {
         reader.onload = function (event: any) {
           res(event.target.result);
         };
       });
+
+      // const ss = await urltoFile(file, audio.name, audio.type);
 
       const fileReady = {
         value: file as string,
         name: "test",
       };
 
-      const audioArray = (getState() as StateType).editor.audio;
       const response = await audioApi.create(fileReady);
-      dispatch(
-        editorSlice.actions.setImages([
-          ...audioArray,
-          {
-            ...fileReady,
-            id: response?.data.id,
-          },
-        ])
-      );
-
       return response?.data.id as string;
     }
   ),

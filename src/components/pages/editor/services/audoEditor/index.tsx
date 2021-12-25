@@ -7,11 +7,16 @@ import { useAppDispatch } from "store/state";
 import { editorThunks } from "store/state/editor/thunk";
 import { fileType } from "types";
 import { audioApi } from "api/audio";
+import { editorSlice } from "store/state/editor";
 
 export const AudioEditor = () => {
   const [opened, toggle] = RSKHooks.useToggle(false);
   const dispatch = useAppDispatch();
-  const [arrayAudio, setArrayAudio] = useState<Array<fileType>>([]);
+  const [arrayAudio, setArrayAudio] = useState<
+    Array<{
+      path: string;
+    }>
+  >([]);
 
   const upload = (e: any) => {
     dispatch(
@@ -22,10 +27,10 @@ export const AudioEditor = () => {
   };
 
   useEffect(() => {
-    // audioApi.get().then((res) => {
-    //   console.log(res);
-    //   setArrayAudio(res.data);
-    // });
+    audioApi.get().then((res) => {
+      const audioArray = res.data;
+      dispatch(editorSlice.actions.setAudio(audioArray));
+    });
   }, []);
 
   return (
@@ -33,6 +38,11 @@ export const AudioEditor = () => {
       <Button onClick={toggle}>Audio editor</Button>
       <Popup isOpened={opened} setIsOpened={toggle}>
         <input onChange={upload} type={"file"} />
+        <div>
+          {arrayAudio?.map((item) => (
+            <audio controls src={`http://localhost:4000${item.path}`} />
+          ))}
+        </div>
       </Popup>
     </>
   );

@@ -5,17 +5,17 @@ import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { Popup } from "components/ui/Popup";
 //@ts-ignore
 import { Wave } from "react-animated-text";
-import { StateType } from "store/state";
-import { compile } from "components/pages/editor/helpers/compile";
+import { baseUrl } from "api";
 
 export const Preview = () => {
   const compiled = useSelector(editorSliceSelectors.getCompiled);
   const images = useSelector(editorSliceSelectors.getImages);
   const [currentChapter, setCurrentChapter] = useState(compiled[0]?.data);
-  // const [currentChapterName, setCurrentChapterName] = useState('')
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [currentFrame, setCurrentFrame] = useState(currentChapter[0]);
   const [isOpened, setIsOpened] = useState(false);
+  const audioFiles = useSelector(editorSliceSelectors.getAudio);
+  const [audioObject, setAudioObject] = useState<any>();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -48,6 +48,27 @@ export const Preview = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (!currentFrame) return;
+
+    const audioAction = currentFrame.data.audioAction;
+
+    if (audioAction) {
+      if (audioAction.type == "set") {
+        const audio = audioFiles.find((item) => item.id == audioAction.audioId);
+
+        console.log(audio);
+        if (audio) {
+          const audioController = new Audio(baseUrl + audio!.path);
+          audioController.play();
+          console.log(audioController);
+
+          setAudioObject(audioController);
+        }
+      }
+    }
+  }, [currentFrame]);
 
   const splitterNext = (branch: string) => {
     const pointer = currentFrame.next?.[branch];

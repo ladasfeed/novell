@@ -1,0 +1,7 @@
+.audio_wrapper {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: auto auto;
+    justify-content: flex-start;
+    align-items: center;
+}

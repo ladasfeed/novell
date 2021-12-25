@@ -8,6 +8,7 @@ import { editorSliceSelectors } from "store/state/editor";
 import { NodeImageChanger } from "components/pages/editor/nodesServices/NodeImageChanger";
 import { NodeCharacterEditorButton } from "components/pages/editor/nodesServices/CharacterChanger";
 import { Input } from "components/ui/Input";
+import { NodeAudioChanger } from "components/pages/editor/nodesServices/AudioChanger";
 
 export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   const { changeElement } = useFlowContext();
@@ -15,6 +16,9 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   const images = useSelector(editorSliceSelectors.getImages);
   const [isEditingText, setIsEditingText] = useState(false);
   const [image, setImage] = useState<string | null>(null);
+  const isPreviewImageMode = useSelector(
+    editorSliceSelectors.getIsImagesPreviewMode
+  );
 
   const onChangeText = () => {
     changeElement(id, (value) => ({
@@ -46,7 +50,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   return (
     <div
       style={{
-        backgroundImage: `url(${image})`,
+        backgroundImage: isPreviewImageMode ? `url(${image})` : "",
       }}
       className={styles.container}
     >
@@ -62,6 +66,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
         <div className={styles.tools__buttons}>
           <NodeImageChanger id={id} />
           <NodeCharacterEditorButton id={id} />
+          <NodeAudioChanger id={id} />
         </div>
 
         <div className={styles.tools__footer}>
