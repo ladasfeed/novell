@@ -9,6 +9,7 @@ import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { Input } from "components/ui/Input";
 import styles from "./index.module.css";
 import { Icons } from "assets/icons";
+import { ToolButton } from "components/ui/ToolButton";
 
 export const BranchEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -36,7 +37,11 @@ export const BranchEditor = () => {
 
   return (
     <>
-      <Button onClick={toggleOpen}>Branch Editor</Button>
+      <ToolButton
+        title="branch"
+        onClick={toggleOpen}
+        icon={<Icons.ui.BranchEditor />}
+      />
       <Popup
         title="Branches editor"
         isOpened={isOpened}

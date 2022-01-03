@@ -8,11 +8,13 @@ type propsType = {
   setIsOpened: (v: boolean) => void;
   title?: string;
   children?: ReactNode;
+  autoWidth?: boolean;
 } & HTMLAttributes<HTMLDivElement>;
 export const Popup = ({
   isOpened,
   setIsOpened,
   children,
+  autoWidth,
   title,
   ...jsxAttr
 }: propsType) => {
@@ -24,7 +26,12 @@ export const Popup = ({
   }
   return (
     <div {...jsxAttr} className={cn(styles.container)}>
-      <div ref={ref} className={cn(styles.container_inner, jsxAttr.className)}>
+      <div
+        ref={ref}
+        className={cn(styles.container_inner, jsxAttr.className, {
+          [`${styles["container_inner--auto-width"]}`]: autoWidth,
+        })}
+      >
         {title && <h3 className={styles.title}>{title}</h3>}
         {children}
       </div>

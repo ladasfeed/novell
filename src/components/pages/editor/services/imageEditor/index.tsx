@@ -10,6 +10,9 @@ import styles from "./index.module.css";
 import { editorThunks } from "store/state/editor/thunk";
 import { useAppDispatch } from "store/state";
 import { Input } from "components/ui/Input";
+import { ToolButton } from "components/ui/ToolButton";
+import { Icons } from "assets/icons";
+import { Img } from "components/ui/Image";
 
 export const ImageEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -44,20 +47,29 @@ export const ImageEditor = () => {
 
   return (
     <>
-      <Button onClick={toggleOpen}>Image editor</Button>
-      <Popup isOpened={isOpened} setIsOpened={toggleOpen}>
-        <NodeToolButton variant={"image"}>
+      <ToolButton onClick={toggleOpen} icon={<Icons.ui.ImageEditor />} />
+      <Popup
+        title={"Image editor"}
+        autoWidth
+        isOpened={isOpened}
+        setIsOpened={toggleOpen}
+      >
+        <NodeToolButton>
           <Input
             className={styles.input}
             type={"file"}
             onChange={uploadImage}
           />
+          +
         </NodeToolButton>
         <div>
-          <h4>Images</h4>
           <div className={styles.image_list}>
             {images.map((item) => (
-              <img className={styles.image} src={item.value} />
+              <Img
+                className={styles.image}
+                src={item.value}
+                name={"no name."}
+              />
             ))}
           </div>
         </div>

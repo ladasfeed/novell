@@ -6,16 +6,45 @@ import { Popup } from "components/ui/Popup";
 //@ts-ignore
 import { Wave } from "react-animated-text";
 import { baseUrl } from "api";
+import { Icons } from "assets/icons";
+import { flowDefaultNodeType } from "types";
+
+const fadeVolumeController = (audio: HTMLAudioElement, type: "in" | "out") => {
+  const res = new Promise((resolve) => {
+    var interval = setInterval(() => {
+      if (type == "out") {
+        audio.volume = audio.volume - 0.02;
+        if (audio.volume <= 0.05) {
+          window.clearInterval(interval);
+          resolve("");
+        }
+      } else {
+        audio.volume = audio.volume + 0.02;
+        if (audio.volume >= 0.91) {
+          window.clearInterval(interval);
+          resolve("");
+        }
+      }
+    }, 100);
+  });
+  return res;
+};
 
 export const Preview = () => {
   const compiled = useSelector(editorSliceSelectors.getCompiled);
   const images = useSelector(editorSliceSelectors.getImages);
   const [currentChapter, setCurrentChapter] = useState(compiled[0]?.data);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
-  const [currentFrame, setCurrentFrame] = useState(currentChapter[0]);
+  const [currentFrame, setCurrentFrame] = useState<
+    {
+      data: flowDefaultNodeType;
+    } & {
+      [key: string]: any;
+    }
+  >(currentChapter[0]);
   const [isOpened, setIsOpened] = useState(false);
   const audioFiles = useSelector(editorSliceSelectors.getAudio);
-  const [audioObject, setAudioObject] = useState<any>();
+  const [audioObject, setAudioObject] = useState<HTMLAudioElement>(new Audio());
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -58,17 +87,36 @@ export const Preview = () => {
       if (audioAction.type == "set") {
         const audio = audioFiles.find((item) => item.id == audioAction.audioId);
 
-        console.log(audio);
         if (audio) {
-          const audioController = new Audio(baseUrl + audio!.path);
-          audioController.play();
-          console.log(audioController);
-
-          setAudioObject(audioController);
+          if (audioObject.src) {
+            fadeVolumeController(audioObject, "out").then(() => {
+              audioObject.src = baseUrl + audio!.path;
+              audioObject.play();
+            });
+          } else {
+            audioObject.src = baseUrl + audio!.path;
+            audioObject.play();
+          }
         }
       }
     }
   }, [currentFrame]);
+
+  useEffect(() => {
+    console.log(audioObject);
+    audioObject.volume = 0;
+    audioObject.onloadeddata = () => {
+      fadeVolumeController(audioObject, "in");
+    };
+  }, []);
+
+  const toggleAudio = () => {
+    if (audioObject.paused) {
+      audioObject.play();
+    } else {
+      audioObject.pause();
+    }
+  };
 
   const splitterNext = (branch: string) => {
     const pointer = currentFrame.next?.[branch];
@@ -113,7 +161,6 @@ export const Preview = () => {
     return <div>{arrOfReactNodes}</div>;
   };
 
-  console.log(currentFrame);
   const resolve = () => {
     if (currentFrame.type == "customNodeDefault") {
       return (
@@ -130,7 +177,9 @@ export const Preview = () => {
         </>
       );
     } else {
-      const branchesText = Object.entries(currentFrame.data.branchesText);
+      const branchesText = Object.entries(
+        currentFrame!.data!.branchesText as object
+      );
 
       return (
         <div className={styles.variants}>
@@ -161,6 +210,9 @@ export const Preview = () => {
         }}
         className={styles.container}
       >
+        <div onClick={toggleAudio} className={styles.audio}>
+          <Icons.ui.Pause />
+        </div>
         {resolve()}
       </div>
     </Popup>

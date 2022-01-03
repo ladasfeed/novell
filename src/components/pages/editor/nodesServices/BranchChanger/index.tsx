@@ -3,7 +3,7 @@ import { NodeToolButton } from "components/ui/NodeToolButton";
 import { editorSlice } from "store/state/editor";
 import React from "react";
 
-export const BranchNodeChanger = ({ id }: { id: string }) => {
+export const NodeBranchChanger = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
 
   const open = () => {

@@ -1,6 +1,6 @@
 import { Elements, FlowElement } from "react-flow-renderer";
 
-export const changeElement = (
+export const changeFlowElement = (
   elements: Elements,
   id: string,
   setValue: (value: FlowElement) => FlowElement

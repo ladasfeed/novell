@@ -8,6 +8,8 @@ import { editorThunks } from "store/state/editor/thunk";
 import { fileType } from "types";
 import { audioApi } from "api/audio";
 import { editorSlice } from "store/state/editor";
+import { ToolButton } from "components/ui/ToolButton";
+import { Icons } from "assets/icons";
 
 export const AudioEditor = () => {
   const [opened, toggle] = RSKHooks.useToggle(false);
@@ -35,7 +37,7 @@ export const AudioEditor = () => {
 
   return (
     <>
-      <Button onClick={toggle}>Audio editor</Button>
+      <ToolButton icon={<Icons.ui.Audio />} onClick={toggle} />
       <Popup isOpened={opened} setIsOpened={toggle}>
         <input onChange={upload} type={"file"} />
         <div>

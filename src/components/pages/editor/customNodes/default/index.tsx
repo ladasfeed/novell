@@ -9,24 +9,15 @@ import { NodeImageChanger } from "components/pages/editor/nodesServices/NodeImag
 import { NodeCharacterEditorButton } from "components/pages/editor/nodesServices/CharacterChanger";
 import { Input } from "components/ui/Input";
 import { NodeAudioChanger } from "components/pages/editor/nodesServices/AudioChanger";
+import { NodeCommonChanger } from "components/pages/editor/nodesServices/CommonChanger";
+import { NodeBranchChanger } from "components/pages/editor/nodesServices/BranchChanger";
 
 export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
-  const { changeElement } = useFlowContext();
-  const [nodeText, setNodeText] = useState(data.text);
   const images = useSelector(editorSliceSelectors.getImages);
-  const [isEditingText, setIsEditingText] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const isPreviewImageMode = useSelector(
     editorSliceSelectors.getIsImagesPreviewMode
   );
-
-  const onChangeText = () => {
-    changeElement(id, (value) => ({
-      ...value,
-      data: { ...value.data, text: nodeText },
-    }));
-    setIsEditingText(false);
-  };
 
   useEffect(() => {
     if (data.imgId !== undefined) {
@@ -36,16 +27,6 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       }
     }
   }, [data.imgId, images]);
-
-  const toggleEndNodeState = (e: any) => {
-    const value = e.currentTarget.checked;
-    changeElement(id, (v) => {
-      return {
-        ...v,
-        data: { ...v.data, isEndNode: value },
-      };
-    });
-  };
 
   return (
     <div
@@ -67,32 +48,8 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
           <NodeImageChanger id={id} />
           <NodeCharacterEditorButton id={id} />
           <NodeAudioChanger id={id} />
-        </div>
-
-        <div className={styles.tools__footer}>
-          <UiElementContainer className={styles.text_edit}>
-            {isEditingText ? (
-              <>
-                <Input
-                  defaultValue={data.text}
-                  className={styles.text_edit__input}
-                  type="text"
-                  onChange={(e) => setNodeText(e.currentTarget.value)}
-                />
-                <div onClick={onChangeText}>Save</div>
-              </>
-            ) : (
-              <>
-                <div
-                  className={styles.text_edit__text}
-                  onClick={() => setIsEditingText(true)}
-                >
-                  {data.text}
-                </div>
-              </>
-            )}
-          </UiElementContainer>
-          <input onChange={toggleEndNodeState} type="checkbox" />
+          <NodeCommonChanger id={id} />
+          <NodeBranchChanger id={id} />
         </div>
       </div>
       <Handle

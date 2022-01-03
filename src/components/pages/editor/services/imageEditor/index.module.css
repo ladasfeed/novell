@@ -5,11 +5,11 @@
 }
 
 .input {
-
     display: none;
 }
 
 .image_list {
+    margin-top: 20px;
     display: grid;
     grid-gap: 10px;
     grid-template-columns: repeat(4, 1fr);

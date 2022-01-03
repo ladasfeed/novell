@@ -102,7 +102,7 @@ const CharacterCaseEditorInner = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.character_list}>
-        <Title color="white" rectForm="mrBot">
+        <Title color="black" rectForm="mrBot">
           Characters:{" "}
         </Title>
 

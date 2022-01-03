@@ -34,6 +34,7 @@ const BranchCaseEditorInner = () => {
   }, [elements]);
 
   const onAddBranch = (branch: string) => {
+    // TODO говно
     changeElement(nodeId as string, (v) => ({
       ...v,
       data: { ...v.data, branches: [...v.data.branches, branch] },

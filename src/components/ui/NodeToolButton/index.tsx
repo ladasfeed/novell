@@ -20,10 +20,10 @@ const iconsMap: {
   [key in variantType]: FC;
 } = {
   image: Icons.nodeIcons.Picture,
-  settings: Icons.nodeIcons.Picture,
+  settings: Icons.ui.AddSplitter,
   character: Icons.nodeIcons.UserAdd,
-  sound: Icons.nodeIcons.Picture,
-  branch: Icons.nodeIcons.Picture,
+  sound: Icons.ui.Audio,
+  branch: Icons.ui.BranchEditor,
   plus: Icons.ui.Plus,
 };
 

@@ -12,16 +12,15 @@ import { useAppDispatch } from "store/state";
 import { characterStateType, characterType } from "types";
 import { Input } from "components/ui/Input";
 import { UiElementContainer } from "components/ui/UiContainer";
+import { ToolButton } from "components/ui/ToolButton";
 
 export const CharacterEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
   const [inputText, setInputText] = useState("");
   const [inputCaseText, setInputCaseText] = useState("");
   const dispatch = useAppDispatch();
-  const [
-    currentCharacter,
-    setCurrentCharacter,
-  ] = useState<characterType | null>();
+  const [currentCharacter, setCurrentCharacter] =
+    useState<characterType | null>();
   const characters = useSelector(editorSliceSelectors.getCharacters);
 
   const createCharacter = () => {
@@ -92,7 +91,7 @@ export const CharacterEditor = () => {
   console.log(currentCharacter);
   return (
     <>
-      <Button onClick={toggleOpen}>Edit character</Button>
+      <ToolButton onClick={toggleOpen} icon={<Icons.ui.CharacterEdit />} />
       <Popup
         title="Characters editor"
         className={styles.popup}

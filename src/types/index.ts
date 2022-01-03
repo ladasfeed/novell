@@ -32,3 +32,26 @@ export type chapterType = {
 export type chaptersObjectType = {
   [key: string]: chapterType;
 };
+
+export type flowNodeBaseType = {
+  text?: string;
+  imgId?: string;
+  isEndNode?: boolean;
+  audioAction?: {
+    type: "set";
+    audioId: string;
+  };
+};
+
+export type flowDefaultNodeType = {
+  characterCases?: Array<characterCaseType>;
+  branchesText?: {
+    [key: string]: string;
+  };
+} & flowNodeBaseType;
+
+export type flowSplitterNodeType = {
+  branchesText: {
+    [key: string]: string;
+  };
+} & flowNodeBaseType;

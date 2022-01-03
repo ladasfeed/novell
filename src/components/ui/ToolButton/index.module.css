@@ -1,0 +1,10 @@
+.container {
+    width: 30px;
+    height: 30px;
+    padding: 3px;
+    cursor: pointer;
+}
+.container > svg {
+    width: 100%;
+    max-height: 100%;
+}

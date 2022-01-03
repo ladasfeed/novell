@@ -8,8 +8,8 @@ import { editorSliceSelectors } from "store/state/editor";
 import { NodeImageChanger } from "components/pages/editor/nodesServices/NodeImageChanger";
 import { NodeCharacterEditorButton } from "components/pages/editor/nodesServices/CharacterChanger";
 import { Input } from "components/ui/Input";
-import { BranchNodeChanger } from "components/pages/editor/nodesServices/BranchChanger";
 import { Button } from "components/ui/Button";
+import { NodeBranchChanger } from "components/pages/editor/nodesServices/BranchChanger";
 
 export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
   const { changeElement } = useFlowContext();
@@ -50,7 +50,7 @@ export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
           <div className={styles.tools__buttons}>
             <NodeImageChanger id={id} />
             <NodeCharacterEditorButton id={id} />
-            <BranchNodeChanger id={id} />
+            <NodeBranchChanger id={id} />
           </div>
 
           <UiElementContainer className={styles.branches_container}>

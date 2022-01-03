@@ -15,6 +15,12 @@
     height: 100%;
 }
 
+.audio {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
 .text {
     position: absolute;
     bottom: 0;

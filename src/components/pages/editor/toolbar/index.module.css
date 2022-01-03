@@ -2,14 +2,27 @@
     width: 300px;
     position: absolute;
     height: 100vh;
-    right: 0;
+    right: -300px;
     top: 0;
-    background: gray;
-    color: white;
+    background: #ffffff;
+    color: #000000;
     z-index: 4;
     padding: 16px;
     align-items: flex-start;
     align-content: flex-start;
     display: grid;
     grid-row-gap: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    transition: .4s;
+}
+
+.container--opened {
+    right: 0;
+}
+
+.open_button {
+    position: fixed;
+    z-index: 4;
+    right: 10px;
+    top: 10px;
 }

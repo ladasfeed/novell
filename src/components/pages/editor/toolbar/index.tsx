@@ -2,7 +2,7 @@ import { Button } from "components/ui/Button";
 import { BranchEditor } from "components/pages/editor/services/branchEditor";
 import { ImageEditor } from "components/pages/editor/services/imageEditor";
 import { ImageCaseEditor } from "components/pages/editor/services/imageCaseEditor";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./index.module.css";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { lsController } from "store/ls";
@@ -19,12 +19,19 @@ import { CharacterCaseEditor } from "components/pages/editor/services/characterC
 import { BranchCaseEditor } from "components/pages/editor/services/branchCaseEditor";
 import { AudioEditor } from "components/pages/editor/services/audoEditor";
 import { AudioCaseEditor } from "components/pages/editor/services/audioCaseEditor";
+import { ToolsGroup } from "components/ui/ToolsGroup";
+import { ToolButton } from "components/ui/ToolButton";
+import { Icons } from "assets/icons";
+import { RSKHooks } from "react-dev-starter-pack/dist";
+import cn from "classnames";
+import { CommonCaseEditor } from "components/pages/editor/services/commonCaseEditor";
 
 export const Toolbar = () => {
   const { setElements, elements, instance } = useFlowContext();
   const dispatch = useDispatch();
   const currentChapterName = useSelector(editorSliceSelectors.getChapterName);
   const chapters = useSelector(editorSliceSelectors.getChapters);
+  const [isOpen, toggleOpen] = RSKHooks.useToggle();
 
   if (!setElements) return null;
 
@@ -68,50 +75,74 @@ export const Toolbar = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <Title separator>View mode</Title>
-      <Button onClick={togglePreviewImageMode}>Toggle image preview</Button>
-
-      <Title separator>Nodes</Title>
-      <Button
-        variant="add-node"
-        className={"dndnode"}
-        draggable
-        onDragStart={(e) => onDragStart(e, "customNodeDefault")}
+    <>
+      <Button className={styles.open_button} onClick={toggleOpen}>
+        Toolbar
+      </Button>
+      <div
+        className={cn(styles.container, {
+          [`${styles["container--opened"]}`]: isOpen,
+        })}
       >
-        Add node
-      </Button>
-      <Button
-        className={"dndnode"}
-        draggable
-        variant="add-node"
-        onDragStart={(e) => onDragStart(e, "splitterNode")}
-      >
-        Add splitter
-      </Button>
+        <div
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={toggleOpen}
+        >
+          Close
+        </div>
 
-      <Title separator>Editors </Title>
+        <ToolsGroup name="View">
+          <ToolButton
+            title={"preview images"}
+            icon={<Icons.ui.ImageEditor />}
+            onClick={togglePreviewImageMode}
+          />
+        </ToolsGroup>
 
-      <BranchEditor />
-      <BranchCaseEditor />
+        <ToolsGroup name="Nodes">
+          <ToolButton
+            title={"node"}
+            className={"dndnode"}
+            draggable
+            onDragStart={(e) => onDragStart(e, "customNodeDefault")}
+            icon={<Icons.ui.AddNode />}
+          />
+          <ToolButton
+            title={"splitter"}
+            className={"dndnode"}
+            draggable
+            onDragStart={(e) => onDragStart(e, "splitterNode")}
+            icon={<Icons.ui.AddSplitter />}
+          />
+        </ToolsGroup>
 
-      <ImageEditor />
-      <ImageCaseEditor />
+        <ToolsGroup name="Editors">
+          <BranchEditor />
+          <ImageEditor />
+          <CharacterEditor />
+          <AudioEditor />
+        </ToolsGroup>
 
-      <CharacterEditor />
-      <CharacterCaseEditor />
+        <BranchCaseEditor />
+        <CharacterCaseEditor />
+        <AudioCaseEditor />
+        <ImageCaseEditor />
+        <CommonCaseEditor />
 
-      <AudioEditor />
-      <AudioCaseEditor />
+        <ToolsGroup name="General">
+          <ToolButton
+            onDoubleClick={() => setElements(initialElements)}
+            icon={<Icons.ui.Reset />}
+          />
+          <ToolButton onClick={compliedHandler} icon={<Icons.ui.Compile />} />
+          <ToolButton onClick={saveHandler} icon={<Icons.ui.Save />} />
+        </ToolsGroup>
 
-      <Title separator>General control</Title>
-      <Button onDoubleClick={() => setElements(initialElements)}>
-        Reset All
-      </Button>
-      <Button onDoubleClick={lsController.clearAll}>Reset LS</Button>
-      <Button onClick={compliedHandler}>Compile</Button>
-      <Button onDoubleClick={deleteAll}>Delete images</Button>
-      <Button onClick={saveHandler}>Save</Button>
-    </div>
+        <Button onDoubleClick={lsController.clearAll}>Reset LS</Button>
+        <Button onDoubleClick={deleteAll}>Delete images</Button>
+      </div>
+    </>
   );
 };
