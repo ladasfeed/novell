@@ -37,7 +37,7 @@ const BranchCaseEditorInner = () => {
     // TODO говно
     changeElement(nodeId as string, (v) => ({
       ...v,
-      data: { ...v.data, branches: [...v.data.branches, branch] },
+      data: { ...v.data, branches: [...v?.data?.branches, branch] },
     }));
   };
 

@@ -1,10 +1,11 @@
 .container {
-    height: 200px;
-    width: 400px;
+    height: 100px;
+    width: 300px;
     background: #84cada;
     padding: 20px;
     background-repeat: no-repeat;
     background-size: cover;
+    border-radius: 10px;
 }
 
 .file_input {
@@ -59,7 +60,14 @@
 .handle {
     width: 20px;
     height: 20px;
-    background: gray;
-    transform: translateY(-50%) translateX(-10px);
+    background: rgba(255, 255, 255, 0.65);
+    transform: translateX(-10px);
     z-index: 2;
+}
+
+.handle_top {
+    transform: translateY(-50%) translateX(-10px);
+}
+.handle_bottom {
+    transform: translateY(50%) translateX(-10px);
 }

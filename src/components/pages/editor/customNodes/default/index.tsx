@@ -11,6 +11,7 @@ import { Input } from "components/ui/Input";
 import { NodeAudioChanger } from "components/pages/editor/nodesServices/AudioChanger";
 import { NodeCommonChanger } from "components/pages/editor/nodesServices/CommonChanger";
 import { NodeBranchChanger } from "components/pages/editor/nodesServices/BranchChanger";
+import cn from "classnames";
 
 export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   const images = useSelector(editorSliceSelectors.getImages);
@@ -36,7 +37,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       className={styles.container}
     >
       <Handle
-        className={styles.handle}
+        className={cn(styles.handle, styles.handle_top)}
         type="target"
         position={Position.Top}
         id="default"
@@ -56,7 +57,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
         type="source"
         id={data.branch || "default"}
         position={Position.Bottom}
-        className={styles.handle}
+        className={cn(styles.handle, styles.handle_bottom)}
         isConnectable={isConnectable}
       />
     </div>
