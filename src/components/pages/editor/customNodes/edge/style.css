@@ -1,0 +1,10 @@
+.react-flow__edge-path {
+    stroke-width: 6px;
+    stroke: #62eadf;
+}
+
+.react-flow__text {
+    transform: rotateZ(-90deg);
+    transform-origin: center center;
+    transform-box: fill-box;
+}

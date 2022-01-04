@@ -7,6 +7,10 @@ import { useFlowContext } from "components/pages/editor/flow context";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { Input } from "components/ui/Input";
 import styles from "components/pages/editor/nodesServices/NodeTextChanger/editor/index.module.css";
+import { Button } from "components/ui/Button";
+import { Icons } from "assets/icons";
+import { NodeToolButton } from "components/ui/NodeToolButton";
+import { ToolButton } from "components/ui/ToolButton";
 
 export default () => {
   const dispatch = useAppDispatch();
@@ -22,7 +26,7 @@ export default () => {
       className={styles.popup}
       isOpened={isEditingCharacterCase}
       setIsOpened={toggle}
-      title="Common node settings"
+      title="Text node settings"
     >
       <Inner />
     </Popup>
@@ -32,7 +36,6 @@ export default () => {
 const Inner = () => {
   const nodeId = useSelector(editorSliceSelectors.getCurrentOpenedNode);
   const { changeElement, elements } = useFlowContext();
-  const [isEditingText, setIsEditingText] = useState(false);
   const element = useMemo(() => {
     return elements.find((item) => item.id == nodeId);
   }, [elements]);
@@ -43,7 +46,6 @@ const Inner = () => {
       ...value,
       data: { ...value.data, text: nodeText },
     }));
-    setIsEditingText(false);
   };
 
   // const toggleEndNodeState = (e: any) => {
@@ -60,24 +62,18 @@ const Inner = () => {
 
   return (
     <div>
-      <UiElementContainer className={styles.node_text}>
-        {isEditingText ? (
-          <>
-            <Input
-              defaultValue={element?.data?.text}
-              type="text"
-              onChange={(e) => setNodeText(e.currentTarget.value)}
-            />
-            <div onClick={onChangeText}>Save</div>
-          </>
-        ) : (
-          <>
-            <div onClick={() => setIsEditingText(true)}>
-              {element?.data?.text}
-            </div>
-          </>
-        )}
-      </UiElementContainer>
+      <div className={styles.node_text}>
+        <Input
+          defaultValue={element?.data?.text}
+          type="text"
+          placeholder="Node text..."
+          onChange={(e) => setNodeText(e.currentTarget.value)}
+        />
+        <ToolButton
+          icon={<Icons.ui.Save onClick={onChangeText}>Save</Icons.ui.Save>}
+        />
+      </div>
+
       {/*<label htmlFor="">*/}
       {/*  Is node root:*/}
       {/*  <input onChange={toggleEndNodeState} type="checkbox" />*/}

@@ -26,7 +26,7 @@ export const useDragFlow = ({
         id: String(elements.length + 1),
         type,
         position,
-        data: { text: `...` },
+        data: {},
       };
 
       setElements((es) => es.concat(newNode));

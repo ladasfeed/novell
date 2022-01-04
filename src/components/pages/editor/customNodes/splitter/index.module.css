@@ -13,7 +13,7 @@
 
 .tools__buttons {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(4, auto);
     justify-items: flex-start;
     justify-content: flex-start;
     grid-gap: 16px;

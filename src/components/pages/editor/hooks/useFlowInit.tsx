@@ -23,7 +23,14 @@ export const useFlowInit = ({
 
   const onConnect = (params: EdgeUnionType) => {
     setElements((els) =>
-      addEdge(params, els).map((item) => {
+      addEdge(
+        {
+          ...params,
+          type: "custom",
+          data: { text: params.sourceHandle },
+        },
+        els
+      ).map((item) => {
         return params.target == item.id
           ? {
               ...item,

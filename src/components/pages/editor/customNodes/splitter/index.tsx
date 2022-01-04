@@ -13,6 +13,7 @@ const services = [
   nodesServices.nodeImageService,
   nodesServices.nodeAudioService,
   nodesServices.nodeCharacterService,
+  nodesServices.nodeBranchService,
 ];
 
 export const SplitterNode = memo(({ data, isConnectable, id }: any) => {

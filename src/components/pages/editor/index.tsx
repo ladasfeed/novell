@@ -13,7 +13,7 @@ import { ChaptersSidebar } from "components/pages/editor/services/chapters";
 import { useSelector } from "react-redux";
 import { editorSliceSelectors } from "store/state/editor";
 import { StateType } from "store/state";
-import { nodeTypesMap } from "components/pages/editor/constants";
+import { edgeTypesMap, nodeTypesMap } from "components/pages/editor/constants";
 import { useDragFlow } from "components/pages/editor/hooks/useDragFlow";
 import { useFlowInit } from "components/pages/editor/hooks/useFlowInit";
 
@@ -68,6 +68,7 @@ export const Editor = () => {
                 onlyRenderVisibleElements
                 snapGrid={[30, 30]}
                 snapToGrid
+                edgeTypes={edgeTypesMap}
                 elements={elements}
                 onElementsRemove={flowHandlers.onElementsRemove}
                 onConnect={flowHandlers.onConnect}

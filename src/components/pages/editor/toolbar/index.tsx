@@ -29,7 +29,7 @@ export const Toolbar = () => {
   const dispatch = useDispatch();
   const currentChapterName = useSelector(editorSliceSelectors.getChapterName);
   const chapters = useSelector(editorSliceSelectors.getChapters);
-  const [isOpen, toggleOpen] = RSKHooks.useToggle();
+  const [isOpen, toggleOpen] = RSKHooks.useToggle(true);
 
   if (!setElements) return null;
 

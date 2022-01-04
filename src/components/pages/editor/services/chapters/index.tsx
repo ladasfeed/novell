@@ -1,6 +1,5 @@
 import styles from "./index.module.css";
-import { useState } from "react";
-import { NodeToolButton } from "components/ui/NodeToolButton";
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { useAppDispatch } from "store/state";
@@ -8,20 +7,31 @@ import { Title } from "components/ui/Title";
 import { UiElementContainer } from "components/ui/UiContainer";
 import cn from "classnames";
 import { RSKHooks } from "react-dev-starter-pack/dist";
-import { Icons } from "assets/icons";
+import { Input } from "components/ui/Input";
 
 export const ChaptersSidebar = () => {
   const [chapterInputName, setChapterInputName] = useState("");
-  const [isOpen, toggleOpen] = RSKHooks.useToggle(false);
+  const [isOpen, toggleOpen] = RSKHooks.useToggle();
+  const [contextMenuState, setContextMenuState] = useState({
+    isOpen: false,
+    position: [0, 0],
+  });
   const chapters = useSelector(editorSliceSelectors.getChapters);
   const currentChapterName = useSelector(editorSliceSelectors.getChapterName);
   const dispatch = useAppDispatch();
+  const contextMenuRef = useRef<HTMLDivElement | null>(null);
 
   const getArrayOfChapters = () => {
     return Object.entries(chapters).map(([name]) => name);
   };
+  RSKHooks.useBlurred(
+    contextMenuRef,
+    (v) => setContextMenuState((prev) => ({ ...prev, isOpen: false })),
+    contextMenuState.isOpen
+  );
 
   const addNewChapter = () => {
+    setChapterInputName("");
     dispatch(
       editorSlice.actions.addNewChapter({
         name: chapterInputName,
@@ -37,8 +47,17 @@ export const ChaptersSidebar = () => {
     dispatch(editorSlice.actions.setChapterName(name));
   };
 
+  const onContextMenu = (e: any) => {
+    const position = [e.clientX, e.clientY];
+    setContextMenuState({
+      position,
+      isOpen: true,
+    });
+    e.preventDefault();
+  };
+
   return (
-    <div>
+    <div onContextMenu={onContextMenu}>
       <div onClick={toggleOpen} className={styles.preview}>
         Chapter:&nbsp;<b>{currentChapterName}</b>
       </div>
@@ -54,11 +73,7 @@ export const ChaptersSidebar = () => {
         {/*  Create new chapter*/}
         {/*</Title>*/}
         {/*<div className={styles.create_chapter}>*/}
-        {/*  <input*/}
-        {/*    type="text"*/}
-        {/*    value={chapterInputName}*/}
-        {/*    onChange={(event) => setChapterInputName(event.currentTarget.value)}*/}
-        {/*  />*/}
+
         {/*  <NodeToolButton onClick={addNewChapter} variant={"plus"}>*/}
         {/*    Save*/}
         {/*  </NodeToolButton>*/}
@@ -80,6 +95,34 @@ export const ChaptersSidebar = () => {
             </UiElementContainer>
           ))}
         </div>
+        {contextMenuState.isOpen && (
+          <div
+            ref={contextMenuRef}
+            className={styles.context_menu}
+            style={{
+              position: "fixed",
+              top: contextMenuState.position[1],
+              left: contextMenuState.position[0],
+            }}
+          >
+            <Input
+              type="text"
+              placeholder="Chapter name"
+              value={chapterInputName}
+              onChange={(event) =>
+                setChapterInputName(event.currentTarget.value)
+              }
+            />
+            <UiElementContainer
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={addNewChapter}
+            >
+              Add new chapter
+            </UiElementContainer>
+          </div>
+        )}
       </div>
     </div>
   );
