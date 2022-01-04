@@ -10,13 +10,12 @@ import { FlowProvider } from "./flow context";
 import { Preview } from "components/pages/editor/services/preview";
 import { Toolbar } from "components/pages/editor/toolbar";
 import { ChaptersSidebar } from "components/pages/editor/services/chapters";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { editorSliceSelectors } from "store/state/editor";
 import { StateType } from "store/state";
 import { nodeTypesMap } from "components/pages/editor/constants";
 import { useDragFlow } from "components/pages/editor/hooks/useDragFlow";
 import { useFlowInit } from "components/pages/editor/hooks/useFlowInit";
-import { lsController } from "store/ls";
 
 export const initialElements: Array<FlowElement> = [];
 
@@ -89,7 +88,7 @@ export const Editor = () => {
           </FlowProvider.Provider>
         </ReactFlowProvider>
       </div>
-      {compiled.length && <Preview />}
+      {Boolean(compiled.length) && <Preview />}
     </>
   );
 };

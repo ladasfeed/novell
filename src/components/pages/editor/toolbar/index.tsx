@@ -1,7 +1,6 @@
 import { Button } from "components/ui/Button";
 import { BranchEditor } from "components/pages/editor/services/branchEditor";
 import { ImageEditor } from "components/pages/editor/services/imageEditor";
-import { ImageCaseEditor } from "components/pages/editor/services/imageCaseEditor";
 import React, { useState } from "react";
 import styles from "./index.module.css";
 import { useFlowContext } from "components/pages/editor/flow context";
@@ -10,21 +9,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { compile } from "components/pages/editor/helpers/compile";
 import { initialElements } from "components/pages/editor/index";
-import { Title } from "components/ui/Title";
 import { CharacterEditor } from "components/pages/editor/services/characterEditor";
-import { mainApi } from "api";
 import { imageApi } from "api/image";
 import { StateType, store } from "store/state";
-import { CharacterCaseEditor } from "components/pages/editor/services/characterCaseEditor";
-import { BranchCaseEditor } from "components/pages/editor/services/branchCaseEditor";
 import { AudioEditor } from "components/pages/editor/services/audoEditor";
-import { AudioCaseEditor } from "components/pages/editor/services/audioCaseEditor";
 import { ToolsGroup } from "components/ui/ToolsGroup";
 import { ToolButton } from "components/ui/ToolButton";
 import { Icons } from "assets/icons";
 import { RSKHooks } from "react-dev-starter-pack/dist";
 import cn from "classnames";
-import { CommonCaseEditor } from "components/pages/editor/services/commonCaseEditor";
+import { nodesServices } from "components/pages/editor/nodesServices";
+
+const arrayOfNodeServices = Object.entries(nodesServices).map(
+  (item) => item[1]
+);
 
 export const Toolbar = () => {
   const { setElements, elements, instance } = useFlowContext();
@@ -125,11 +123,7 @@ export const Toolbar = () => {
           <AudioEditor />
         </ToolsGroup>
 
-        <BranchCaseEditor />
-        <CharacterCaseEditor />
-        <AudioCaseEditor />
-        <ImageCaseEditor />
-        <CommonCaseEditor />
+        {arrayOfNodeServices.map((s) => React.createElement(s.service))}
 
         <ToolsGroup name="General">
           <ToolButton

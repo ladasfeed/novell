@@ -1,17 +1,17 @@
-import { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Handle, Position } from "react-flow-renderer";
 import styles from "./index.module.css";
-import { useFlowContext } from "components/pages/editor/flow context";
-import { UiElementContainer } from "components/ui/UiContainer";
 import { useSelector } from "react-redux";
 import { editorSliceSelectors } from "store/state/editor";
-import { NodeImageChanger } from "components/pages/editor/nodesServices/NodeImageChanger";
-import { NodeCharacterEditorButton } from "components/pages/editor/nodesServices/CharacterChanger";
-import { Input } from "components/ui/Input";
-import { NodeAudioChanger } from "components/pages/editor/nodesServices/AudioChanger";
-import { NodeCommonChanger } from "components/pages/editor/nodesServices/CommonChanger";
-import { NodeBranchChanger } from "components/pages/editor/nodesServices/BranchChanger";
 import cn from "classnames";
+import { nodesServices } from "components/pages/editor/nodesServices";
+
+const services = [
+  nodesServices.nodeImageService,
+  nodesServices.nodeAudioService,
+  nodesServices.nodeCharacterService,
+  nodesServices.nodeTextService,
+];
 
 export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
   const images = useSelector(editorSliceSelectors.getImages);
@@ -27,7 +27,7 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
         setImage(newImg.value);
       }
     }
-  }, [data.imgId, images]);
+  }, [data.imgId]);
 
   return (
     <div
@@ -46,11 +46,9 @@ export const CustomNodeDefault = memo(({ data, isConnectable, id }: any) => {
       <div className={styles.dark_layer} />
       <div className={styles.tools_layer}>
         <div className={styles.tools__buttons}>
-          <NodeImageChanger id={id} />
-          <NodeCharacterEditorButton id={id} />
-          <NodeAudioChanger id={id} />
-          <NodeCommonChanger id={id} />
-          <NodeBranchChanger id={id} />
+          {services.map((item) => {
+            return React.createElement(item.NodeButton, { id });
+          })}
         </div>
       </div>
       <Handle

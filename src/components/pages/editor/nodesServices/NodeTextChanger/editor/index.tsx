@@ -6,15 +6,15 @@ import React, { useMemo, useState } from "react";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { Input } from "components/ui/Input";
-import styles from "./index.module.css";
+import styles from "components/pages/editor/nodesServices/NodeTextChanger/editor/index.module.css";
 
-export const CommonCaseEditor = () => {
+export default () => {
   const dispatch = useAppDispatch();
   const isEditingCharacterCase = useSelector(
-    editorSliceSelectors.getIsEditingCommon
+    editorSliceSelectors.getIsEditingNodeText
   );
   const toggle = () => {
-    dispatch(editorSlice.actions.setIsEditingCommon(false));
+    dispatch(editorSlice.actions.setIsEditingNodeText(false));
   };
 
   return (
@@ -24,12 +24,12 @@ export const CommonCaseEditor = () => {
       setIsOpened={toggle}
       title="Common node settings"
     >
-      <CommonCaseEditorInner />
+      <Inner />
     </Popup>
   );
 };
 
-const CommonCaseEditorInner = () => {
+const Inner = () => {
   const nodeId = useSelector(editorSliceSelectors.getCurrentOpenedNode);
   const { changeElement, elements } = useFlowContext();
   const [isEditingText, setIsEditingText] = useState(false);
@@ -46,15 +46,15 @@ const CommonCaseEditorInner = () => {
     setIsEditingText(false);
   };
 
-  const toggleEndNodeState = (e: any) => {
-    const value = e.currentTarget.checked;
-    changeElement(nodeId as string, (v) => {
-      return {
-        ...v,
-        data: { ...v.data, isEndNode: value },
-      };
-    });
-  };
+  // const toggleEndNodeState = (e: any) => {
+  //   const value = e.currentTarget.checked;
+  //   changeElement(nodeId as string, (v) => {
+  //     return {
+  //       ...v,
+  //       data: { ...v.data, isEndNode: value },
+  //     };
+  //   });
+  // };
 
   console.log(element);
 
@@ -78,10 +78,10 @@ const CommonCaseEditorInner = () => {
           </>
         )}
       </UiElementContainer>
-      <label htmlFor="">
-        Is node root:
-        <input onChange={toggleEndNodeState} type="checkbox" />
-      </label>
+      {/*<label htmlFor="">*/}
+      {/*  Is node root:*/}
+      {/*  <input onChange={toggleEndNodeState} type="checkbox" />*/}
+      {/*</label>*/}
     </div>
   );
 };

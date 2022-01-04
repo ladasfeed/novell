@@ -1,12 +1,12 @@
 import { editorSlice } from "store/state/editor";
 import React from "react";
 import { nodeServiceFactory } from "components/pages/editor/helpers/nodeServiceFactory";
-import BranchCaseEditor from "./branchCaseEditor";
+import NodeTextEditor from "./editor";
 
 export default nodeServiceFactory({
-  service: BranchCaseEditor,
+  service: NodeTextEditor,
   nodeButtonParams: {
-    variantOrIcon: "branch",
-    reduxActionToOpen: editorSlice.actions.setEditingBranches,
+    reduxActionToOpen: editorSlice.actions.setIsEditingNodeText,
+    variantOrIcon: "settings",
   },
 });

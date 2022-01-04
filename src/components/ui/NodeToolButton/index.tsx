@@ -3,7 +3,7 @@ import cn from "classnames";
 import styles from "./index.module.css";
 import { Icons } from "assets/icons";
 
-type variantType =
+export type NodeToolButtonIconType =
   | "image"
   | "settings"
   | "sound"
@@ -12,12 +12,12 @@ type variantType =
   | "plus";
 
 type propsType = {} & HTMLAttributes<HTMLLabelElement> & {
-    variant?: variantType;
+    variant?: NodeToolButtonIconType;
     children?: ReactNode;
   };
 
 const iconsMap: {
-  [key in variantType]: FC;
+  [key in NodeToolButtonIconType]: FC;
 } = {
   image: Icons.nodeIcons.Picture,
   settings: Icons.ui.AddSplitter,

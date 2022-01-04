@@ -1,15 +1,19 @@
-import { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Handle, Position, useUpdateNodeInternals } from "react-flow-renderer";
 import styles from "./index.module.css";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { useSelector } from "react-redux";
 import { editorSliceSelectors } from "store/state/editor";
-import { NodeImageChanger } from "components/pages/editor/nodesServices/NodeImageChanger";
-import { NodeCharacterEditorButton } from "components/pages/editor/nodesServices/CharacterChanger";
 import { Input } from "components/ui/Input";
 import { Button } from "components/ui/Button";
-import { NodeBranchChanger } from "components/pages/editor/nodesServices/BranchChanger";
+import { nodesServices } from "components/pages/editor/nodesServices";
+
+const services = [
+  nodesServices.nodeImageService,
+  nodesServices.nodeAudioService,
+  nodesServices.nodeCharacterService,
+];
 
 export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
   const { changeElement } = useFlowContext();
@@ -48,9 +52,9 @@ export const SplitterNode = memo(({ data, isConnectable, id }: any) => {
       <div className={styles.tools_layer}>
         <div className={styles.tools__header}>
           <div className={styles.tools__buttons}>
-            <NodeImageChanger id={id} />
-            <NodeCharacterEditorButton id={id} />
-            <NodeBranchChanger id={id} />
+            {services.map((item) => {
+              return React.createElement(item.NodeButton, { id });
+            })}
           </div>
 
           <UiElementContainer className={styles.branches_container}>

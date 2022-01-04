@@ -7,7 +7,7 @@ type propsType = {
 export const ToolButton = ({ icon, ...jsxAttr }: propsType) => {
   return (
     <div {...jsxAttr} className={cn(styles.container, jsxAttr.className)}>
-      {/*{icon}*/}
+      {icon}
     </div>
   );
 };

@@ -27,7 +27,7 @@ type initialStateType = {
   isEditingCharacter: boolean;
   isEditingBranches: boolean;
   isEditingAudio: boolean;
-  isEditingCommon: boolean;
+  isEditingNodeText: boolean;
   compiled: Array<any>;
 
   //react flow state
@@ -49,7 +49,7 @@ export const editorSlice = createSlice({
     previewImageMode: false,
     isEditingBranches: false,
     isEditingAudio: false,
-    isEditingCommon: false,
+    isEditingNodeText: false,
     compiled: [],
     currentChapterName: "first",
     characters: lsController.get("characters") || [],
@@ -153,8 +153,8 @@ export const editorSlice = createSlice({
     },
 
     /* Common */
-    setIsEditingCommon: (state, action: PayloadAction<boolean>) => {
-      state.isEditingCommon = action.payload;
+    setIsEditingNodeText: (state, action: PayloadAction<boolean>) => {
+      state.isEditingNodeText = action.payload;
     },
 
     /* System */
@@ -183,7 +183,7 @@ export const editorSliceSelectors = {
   getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,
   getIsEditingBranch: (state: StateType) => state.editor.isEditingBranches,
   getIsEditingAudio: (state: StateType) => state.editor.isEditingAudio,
-  getIsEditingCommon: (state: StateType) => state.editor.isEditingCommon,
+  getIsEditingNodeText: (state: StateType) => state.editor.isEditingNodeText,
 
   getChapters: (state: StateType) => state.editor.chapters,
   getChapterName: (state: StateType) => state.editor.currentChapterName,

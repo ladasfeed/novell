@@ -5,13 +5,13 @@ import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { UiElementContainer } from "components/ui/UiContainer";
 import React, { useEffect, useState } from "react";
 import { characterCaseType, characterType } from "types";
-import styles from "./index.module.css";
+import styles from "components/pages/editor/nodesServices/CharacterChanger/characterCaseEditor/index.module.css";
 import { Title } from "components/ui/Title";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { Button } from "components/ui/Button";
 import { ReactSelect } from "components/ui/ReactSelect";
 
-export const CharacterCaseEditor = () => {
+export default () => {
   const dispatch = useAppDispatch();
   const isEditingCharacterCase = useSelector(
     editorSliceSelectors.getIsEditingCharacter

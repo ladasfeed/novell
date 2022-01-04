@@ -53,6 +53,7 @@ export const ImageEditor = () => {
         autoWidth
         isOpened={isOpened}
         setIsOpened={toggleOpen}
+        className={styles.popup}
       >
         <NodeToolButton>
           <Input

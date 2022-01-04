@@ -2,12 +2,11 @@ import { Popup } from "components/ui/Popup";
 import { useDispatch, useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { useFlowContext } from "components/pages/editor/flow context";
-import { useContext } from "react";
 import { baseUrl } from "api";
 import { NodeToolButton } from "components/ui/NodeToolButton";
-import styles from "./index.module.css";
+import styles from "components/pages/editor/nodesServices/AudioChanger/audioCaseEditor/index.module.css";
 
-export const AudioCaseEditor = () => {
+export default () => {
   const isOpened = useSelector(editorSliceSelectors.getIsEditingAudio);
   const dispatch = useDispatch();
 
@@ -45,7 +44,6 @@ const AudioCaseEditorInner = ({
     togglePopup(false);
   };
 
-  console.log(audioFiles);
   return (
     <div>
       {audioFiles.map((item) => (

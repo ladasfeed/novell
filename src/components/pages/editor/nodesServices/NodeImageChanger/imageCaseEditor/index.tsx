@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { Popup } from "components/ui/Popup";
-import styles from "./index.module.css";
+import styles from "components/pages/editor/nodesServices/NodeImageChanger/imageCaseEditor/index.module.css";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { Title } from "components/ui/Title";
 import { useEffect, useState } from "react";
 
-export const ImageCaseEditor = () => {
+export default () => {
   const nodeId = useSelector(editorSliceSelectors.getCurrentOpenedNode);
   const images = useSelector(editorSliceSelectors.getImages);
   const isEditing = useSelector(editorSliceSelectors.getIsEditingImage);
@@ -26,7 +26,7 @@ export const ImageCaseEditor = () => {
   }, [isEditing]);
   useEffect(() => {
     setCurrentImage(images.find((i) => i.id == node?.data?.imgId));
-  }, [isEditing]);
+  }, [node]);
 
   const changeImage = (e: any) => {
     const imgId = e.currentTarget.getAttribute("data-id");

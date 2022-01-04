@@ -1,14 +1,11 @@
-import { useDispatch } from "react-redux";
+import { nodeServiceFactory } from "components/pages/editor/helpers/nodeServiceFactory";
+import ImageCaseEditor from "components/pages/editor/nodesServices/NodeImageChanger/imageCaseEditor";
 import { editorSlice } from "store/state/editor";
-import { NodeToolButton } from "components/ui/NodeToolButton";
 
-export const NodeImageChanger = ({ id }: { id: string }) => {
-  const dispatch = useDispatch();
-
-  const changeBg = () => {
-    dispatch(editorSlice.actions.setCurrentOpenedNode(id));
-    dispatch(editorSlice.actions.setEditingImageState(true));
-  };
-
-  return <NodeToolButton onClick={changeBg} variant="image" />;
-};
+export default nodeServiceFactory({
+  service: ImageCaseEditor,
+  nodeButtonParams: {
+    variantOrIcon: "image",
+    reduxActionToOpen: editorSlice.actions.setEditingImageState,
+  },
+});

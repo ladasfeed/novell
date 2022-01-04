@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { useFlowContext } from "components/pages/editor/flow context";
 import { useEffect, useState } from "react";
-import styles from "./index.module.css";
+import styles from "components/pages/editor/nodesServices/BranchChanger/branchCaseEditor/index.module.css";
 import { UiElementContainer } from "components/ui/UiContainer";
 
-export const BranchCaseEditor = () => {
+export default () => {
   const isEditing = useSelector(editorSliceSelectors.getIsEditingBranch);
   const dispatch = useDispatch();
 
