@@ -62,14 +62,11 @@ export const Preview = () => {
     if (newNode) {
       setCurrentFrame(newNode);
     } else {
-      console.log(newNode);
       if (currentFrame?.data?.isEndNode) {
         if (compiled[currentChapterIndex + 1]) {
           setCurrentChapterIndex((prev) => prev + 1);
-          console.log(compiled[currentChapterIndex + 1]);
           setCurrentChapter(compiled[currentChapterIndex + 1]?.data);
         } else {
-          alert("No end");
           dispatch(editorSlice.actions.setCompiled([]));
         }
       } else {
@@ -103,7 +100,6 @@ export const Preview = () => {
   }, [currentFrame]);
 
   useEffect(() => {
-    console.log(audioObject);
     audioObject.volume = 0;
     audioObject.onloadeddata = () => {
       fadeVolumeController(audioObject, "in");
@@ -167,28 +163,26 @@ export const Preview = () => {
         <>
           {renderCharacters()}
           <div className={styles.text} onClick={next}>
-            <Wave
-              iterations={1}
-              effect={"verticalFadeIn"}
-              text={currentFrame.data.text}
-              speed={20}
-            />
+            {currentFrame.data?.text && (
+              <Wave
+                iterations={1}
+                effect={"verticalFadeIn"}
+                text={currentFrame.data.text}
+                speed={20}
+              />
+            )}
           </div>
         </>
       );
     } else {
-      const branchesText = Object.entries(
-        currentFrame!.data!.branchesText as object
-      );
-
       return (
         <div className={styles.variants}>
-          {branchesText.map((item: any) => (
+          {currentFrame?.data?.branchesText?.map((item: any) => (
             <div
               className={styles.variant}
-              onClick={() => splitterNext(item[0])}
+              onClick={() => splitterNext(item.branch)}
             >
-              {item[1]}
+              {item.text}
             </div>
           ))}
         </div>

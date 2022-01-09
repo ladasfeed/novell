@@ -15,7 +15,7 @@ export default () => {
   };
 
   return (
-    <Popup isOpened={isOpened} setIsOpened={togglePopup}>
+    <Popup title="Audio editor" isOpened={isOpened} setIsOpened={togglePopup}>
       <AudioCaseEditorInner togglePopup={togglePopup} />
     </Popup>
   );

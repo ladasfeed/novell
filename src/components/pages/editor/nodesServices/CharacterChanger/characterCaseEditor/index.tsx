@@ -22,6 +22,7 @@ export default () => {
 
   return (
     <Popup
+      title="Characters"
       className={styles.popup}
       isOpened={isEditingCharacterCase}
       setIsOpened={toggle}
@@ -40,10 +41,11 @@ const CharacterCaseEditorInner = () => {
     Array<characterCaseType>
   >([]);
 
-  // sync
   useEffect(() => {
     setCharacterCases(
-      elements.find((el) => el.id == nodeId)?.data.characterCases || []
+      elements.find((el) => {
+        return el.id == nodeId;
+      })?.data?.characterCases || []
     );
   }, []);
 
