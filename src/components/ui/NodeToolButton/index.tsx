@@ -9,7 +9,8 @@ export type NodeToolButtonIconType =
   | "sound"
   | "character"
   | "branch"
-  | "plus";
+  | "plus"
+  | "cross";
 
 type propsType = {} & HTMLAttributes<HTMLLabelElement> & {
     variant?: NodeToolButtonIconType;
@@ -25,6 +26,7 @@ const iconsMap: {
   sound: Icons.ui.Audio,
   branch: Icons.ui.BranchEditor,
   plus: Icons.ui.Plus,
+  cross: Icons.ui.Reset,
 };
 
 export const NodeToolButton = ({

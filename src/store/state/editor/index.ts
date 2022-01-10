@@ -22,6 +22,14 @@ type initialStateType = {
   openedNodeId?: string;
   characters: Array<characterType>;
 
+  popupState:
+    | "image"
+    | "character"
+    | "branches"
+    | "audio"
+    | "text"
+    | "remove"
+    | null;
   // action state
   isEditingImage: boolean;
   isEditingCharacter: boolean;
@@ -44,6 +52,7 @@ export const editorSlice = createSlice({
     branches: ["default"],
     images: [],
     audio: [],
+    popupState: null,
     isEditingImage: false,
     isEditingCharacter: false,
     previewImageMode: false,
@@ -89,6 +98,13 @@ export const editorSlice = createSlice({
     },
     setChapterName: (state, action: PayloadAction<string>) => {
       state.currentChapterName = action.payload;
+    },
+
+    setPopupState: (
+      state,
+      action: PayloadAction<initialStateType["popupState"]>
+    ) => {
+      state.popupState = action.payload;
     },
 
     /* Images */
@@ -157,6 +173,8 @@ export const editorSlice = createSlice({
       state.isEditingNodeText = action.payload;
     },
 
+    /* Remove */
+
     /* System */
     setCurrentOpenedNode: (state, action: PayloadAction<string>) => {
       state.openedNodeId = action.payload;
@@ -189,4 +207,6 @@ export const editorSliceSelectors = {
   getChapterName: (state: StateType) => state.editor.currentChapterName,
 
   getIsImagesPreviewMode: (state: StateType) => state.editor.previewImageMode,
+
+  getPopupState: (state: StateType) => state.editor.popupState,
 };

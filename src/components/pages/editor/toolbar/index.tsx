@@ -51,9 +51,12 @@ export const Toolbar = () => {
   const saveHandler = () => {
     // @ts-ignore
     const saved = instance.toObject();
+
+    console.log(saved);
+
     dispatch(
       editorSlice.actions.updateChapterElements({
-        data: elements,
+        data: saved.elements,
         name: currentChapterName,
       })
     );

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { Dispatch, FC } from "react";
 import { useDispatch } from "react-redux";
 import { editorSlice } from "store/state/editor";
 import {
@@ -9,19 +9,20 @@ import { type } from "os";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useAppDispatch } from "store/state";
 
-type nodeServicesType =
-  | "image"
-  | "branch"
-  | "text"
-  | "effects"
-  | "audio"
-  | "character"
-  | "clone";
+// type nodeServicesType =
+//   | "image"
+//   | "branch"
+//   | "text"
+//   | "effects"
+//   | "audio"
+//   | "character"
+//   | "clone"
 
 export const nodeServiceFactory = (props: {
   nodeButtonParams: {
     variantOrIcon: NodeToolButtonIconType | FC;
-    reduxActionToOpen: ActionCreatorWithPayload<boolean>;
+    reduxActionToOpen?: ActionCreatorWithPayload<boolean>;
+    action?: (dispatch: Dispatch<any>) => void;
   };
   service: React.FC;
 }) => {
@@ -32,7 +33,14 @@ export const nodeServiceFactory = (props: {
 
       const open = () => {
         dispatch(editorSlice.actions.setCurrentOpenedNode(id));
-        dispatch(props.nodeButtonParams.reduxActionToOpen(true));
+
+        if (props.nodeButtonParams.reduxActionToOpen) {
+          dispatch(props.nodeButtonParams.reduxActionToOpen(true));
+          return;
+        }
+        if (props.nodeButtonParams.action) {
+          props.nodeButtonParams.action(dispatch);
+        }
       };
 
       if (typeof props.nodeButtonParams.variantOrIcon == "string") {

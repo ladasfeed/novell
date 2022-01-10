@@ -9,6 +9,7 @@ const services = [
   nodesServices.nodeAudioService,
   nodesServices.nodeCharacterService,
   nodesServices.nodeTextService,
+  nodesServices.removeNodeService,
 ];
 
 export const CustomNodeDefault = memo(

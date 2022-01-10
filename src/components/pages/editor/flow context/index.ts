@@ -4,7 +4,12 @@ import { flowDefaultNodeType } from "types";
 
 export const FlowProvider = React.createContext<{
   setElements: React.Dispatch<React.SetStateAction<FlowElement<any>[]>> | null;
-  elements: Elements<flowDefaultNodeType>;
+  elements: Array<
+    FlowElement<flowDefaultNodeType> & {
+      target?: string;
+      source?: string;
+    }
+  >;
   changeElement: (
     id: string,
     fn: (

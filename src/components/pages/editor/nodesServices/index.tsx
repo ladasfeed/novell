@@ -3,6 +3,7 @@ import nodeAudioService from "./AudioChanger";
 import nodeCharacterService from "./CharacterChanger";
 import nodeBranchService from "./BranchChanger";
 import nodeTextService from "./NodeTextChanger";
+import removeNodeService from "./RemoveNode";
 
 export const nodesServices = {
   nodeImageService,
@@ -10,4 +11,5 @@ export const nodesServices = {
   nodeCharacterService,
   nodeBranchService,
   nodeTextService,
+  removeNodeService,
 };

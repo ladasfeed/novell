@@ -16,6 +16,7 @@ const services = [
   nodesServices.nodeAudioService,
   nodesServices.nodeCharacterService,
   nodesServices.nodeBranchService,
+  nodesServices.removeNodeService,
 ];
 
 export const SplitterNode = memo(
