@@ -48,18 +48,6 @@ const Inner = () => {
     }));
   };
 
-  // const toggleEndNodeState = (e: any) => {
-  //   const value = e.currentTarget.checked;
-  //   changeElement(nodeId as string, (v) => {
-  //     return {
-  //       ...v,
-  //       data: { ...v.data, isEndNode: value },
-  //     };
-  //   });
-  // };
-
-  console.log(element);
-
   return (
     <div>
       <div className={styles.node_text}>
@@ -73,11 +61,6 @@ const Inner = () => {
           icon={<Icons.ui.Save onClick={onChangeText}>Save</Icons.ui.Save>}
         />
       </div>
-
-      {/*<label htmlFor="">*/}
-      {/*  Is node root:*/}
-      {/*  <input onChange={toggleEndNodeState} type="checkbox" />*/}
-      {/*</label>*/}
     </div>
   );
 };

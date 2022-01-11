@@ -10,6 +10,7 @@ const services = [
   nodesServices.nodeCharacterService,
   nodesServices.nodeTextService,
   nodesServices.removeNodeService,
+  nodesServices.systemNodeService,
 ];
 
 export const CustomNodeDefault = memo(
@@ -23,7 +24,11 @@ export const CustomNodeDefault = memo(
     [key: string]: any;
   }) => {
     return (
-      <ReactFlowNode imageId={data.imgId}>
+      <ReactFlowNode
+        isRootNode={data.isRootNode}
+        isEndNode={data.isEndNode}
+        imageId={data.imgId}
+      >
         <ReactFlowNode.Handle
           type="target"
           position={Position.Top}

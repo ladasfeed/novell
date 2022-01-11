@@ -1,6 +1,6 @@
 .container {
-    height: 100px;
-    width: 300px;
+    height: auto;
+    width: 320px;
     background: #84cada;
     padding: 20px;
     background-repeat: no-repeat;
@@ -27,7 +27,7 @@
 }
 .tools__buttons {
     display: grid;
-    grid-template-columns: repeat(6, auto);
+    grid-template-columns: repeat(5, auto);
     justify-items: flex-start;
     justify-content: flex-start;
     grid-gap: 16px;

@@ -29,6 +29,7 @@ type initialStateType = {
     | "audio"
     | "text"
     | "remove"
+    | "system"
     | null;
   // action state
   isEditingImage: boolean;
@@ -36,7 +37,10 @@ type initialStateType = {
   isEditingBranches: boolean;
   isEditingAudio: boolean;
   isEditingNodeText: boolean;
-  compiled: Array<any>;
+  compiled: Array<{
+    name: string;
+    data: Array<any>;
+  }>;
 
   //react flow state
   previewImageMode: boolean;
@@ -179,7 +183,15 @@ export const editorSlice = createSlice({
     setCurrentOpenedNode: (state, action: PayloadAction<string>) => {
       state.openedNodeId = action.payload;
     },
-    setCompiled: (state, action: PayloadAction<Array<any>>) => {
+    setCompiled: (
+      state,
+      action: PayloadAction<
+        Array<{
+          name: string;
+          data: Array<any>;
+        }>
+      >
+    ) => {
       state.compiled = action.payload;
     },
     togglePreviewImagesMode: (state) => {

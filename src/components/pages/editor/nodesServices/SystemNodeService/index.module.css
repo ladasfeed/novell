@@ -1,0 +1,13 @@
+.container {
+    display: grid;
+    grid-gap: 30px;
+}
+
+.is_end_node {
+    margin-bottom: 10px;
+}
+
+.choose_chapter {
+    display: grid;
+    grid-gap: 30px;
+}

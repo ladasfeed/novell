@@ -7,6 +7,6 @@ export default nodeServiceFactory({
   service: NodeTextEditor,
   nodeButtonParams: {
     reduxActionToOpen: editorSlice.actions.setIsEditingNodeText,
-    variantOrIcon: "settings",
+    variantOrIcon: "text",
   },
 });

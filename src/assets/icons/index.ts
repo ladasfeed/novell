@@ -14,6 +14,8 @@ import { ReactComponent as ImageEditor } from "./buttons/image-editor.svg";
 import { ReactComponent as Reset } from "./buttons/reset.svg";
 import { ReactComponent as Save } from "./buttons/save.svg";
 import { ReactComponent as CharacterEdit } from "./buttons/character-edit.svg";
+import { ReactComponent as Settings } from "./buttons/settings.svg";
+import { ReactComponent as Text } from "./buttons/text.svg";
 
 export const Icons = {
   nodeIcons: {
@@ -33,5 +35,7 @@ export const Icons = {
     Reset,
     Save,
     CharacterEdit,
+    Settings,
+    Text,
   },
 };

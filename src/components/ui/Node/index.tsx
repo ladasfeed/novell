@@ -8,8 +8,15 @@ import styles from "./index.module.css";
 type propsType = {
   children: ReactNode;
   imageId?: string;
+  isRootNode?: boolean;
+  isEndNode?: boolean;
 };
-export function ReactFlowNode({ imageId, children }: propsType) {
+export function ReactFlowNode({
+  imageId,
+  children,
+  isRootNode,
+  isEndNode,
+}: propsType) {
   const images = useSelector(editorSliceSelectors.getImages);
   const [image, setImage] = useState<string | null>(null);
   const isPreviewImageMode = useSelector(
@@ -30,7 +37,10 @@ export function ReactFlowNode({ imageId, children }: propsType) {
       style={{
         backgroundImage: isPreviewImageMode ? `url(${image})` : "",
       }}
-      className={styles.container}
+      className={cn(styles.container, {
+        [`${styles["node--root"]}`]: isRootNode,
+        [`${styles["node--end"]}`]: isEndNode,
+      })}
     >
       <div className={styles.dark_layer} />
 

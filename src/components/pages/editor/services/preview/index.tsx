@@ -8,6 +8,7 @@ import { Wave } from "react-animated-text";
 import { baseUrl } from "api";
 import { Icons } from "assets/icons";
 import { flowDefaultNodeType } from "types";
+import { log } from "util";
 
 const fadeVolumeController = (audio: HTMLAudioElement, type: "in" | "out") => {
   const res = new Promise((resolve) => {
@@ -34,44 +35,57 @@ export const Preview = () => {
   const compiled = useSelector(editorSliceSelectors.getCompiled);
   const images = useSelector(editorSliceSelectors.getImages);
   const [currentChapter, setCurrentChapter] = useState(compiled[0]?.data);
-  const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [currentFrame, setCurrentFrame] = useState<
     {
       data: flowDefaultNodeType;
     } & {
       [key: string]: any;
     }
-  >(currentChapter[0]);
+  >();
   const [isOpened, setIsOpened] = useState(false);
   const audioFiles = useSelector(editorSliceSelectors.getAudio);
   const [audioObject, setAudioObject] = useState<HTMLAudioElement>(new Audio());
   const dispatch = useDispatch();
+
+  console.log(compiled);
+
+  const end = () => {
+    dispatch(editorSlice.actions.setCompiled([]));
+  };
 
   useEffect(() => {
     setIsOpened(true);
   }, []);
 
   useEffect(() => {
-    setCurrentFrame(currentChapter[0]);
+    setCurrentFrame(currentChapter?.find((node) => node?.data?.isRootNode));
   }, [currentChapter]);
 
   const next = () => {
+    if (currentFrame?.data?.isEndNode) {
+      const nextChapter = compiled.find(
+        (ch) => currentFrame?.data?.nextChapter == ch.name
+      );
+      if (nextChapter) {
+        setCurrentChapter(nextChapter.data);
+      } else {
+        end();
+      }
+
+      return;
+    } else {
+      end();
+
+      return;
+    }
+
     const newNode = currentChapter.find(
-      (node: any) => currentFrame.next == node.id
+      (node: any) => currentFrame?.next == node.id
     );
     if (newNode) {
       setCurrentFrame(newNode);
     } else {
-      if (currentFrame?.data?.isEndNode) {
-        if (compiled[currentChapterIndex + 1]) {
-          setCurrentChapterIndex((prev) => prev + 1);
-          setCurrentChapter(compiled[currentChapterIndex + 1]?.data);
-        } else {
-          dispatch(editorSlice.actions.setCompiled([]));
-        }
-      } else {
-        dispatch(editorSlice.actions.setCompiled([]));
-      }
+      end();
     }
   };
 
@@ -115,7 +129,7 @@ export const Preview = () => {
   };
 
   const splitterNext = (branch: string) => {
-    const pointer = currentFrame.next?.[branch];
+    const pointer = currentFrame?.next?.[branch];
 
     if (pointer) {
       setCurrentFrame(currentChapter.find((node: any) => pointer == node.id));

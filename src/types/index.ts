@@ -37,6 +37,8 @@ export type flowNodeBaseType = {
   text?: string;
   imgId?: string;
   isEndNode?: boolean;
+  isRootNode?: boolean;
+  nextChapter?: string;
   audioAction?: {
     type: "set";
     audioId: string;

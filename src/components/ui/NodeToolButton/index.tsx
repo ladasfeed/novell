@@ -10,7 +10,8 @@ export type NodeToolButtonIconType =
   | "character"
   | "branch"
   | "plus"
-  | "cross";
+  | "cross"
+  | "text";
 
 type propsType = {} & HTMLAttributes<HTMLLabelElement> & {
     variant?: NodeToolButtonIconType;
@@ -21,12 +22,13 @@ const iconsMap: {
   [key in NodeToolButtonIconType]: FC;
 } = {
   image: Icons.nodeIcons.Picture,
-  settings: Icons.ui.AddSplitter,
+  settings: Icons.ui.Settings,
   character: Icons.nodeIcons.UserAdd,
   sound: Icons.ui.Audio,
   branch: Icons.ui.BranchEditor,
   plus: Icons.ui.Plus,
   cross: Icons.ui.Reset,
+  text: Icons.ui.Text,
 };
 
 export const NodeToolButton = ({
