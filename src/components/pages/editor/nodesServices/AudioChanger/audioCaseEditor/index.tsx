@@ -5,6 +5,7 @@ import { useFlowContext } from "components/pages/editor/flow context";
 import { baseUrl } from "api";
 import { NodeToolButton } from "components/ui/NodeToolButton";
 import styles from "components/pages/editor/nodesServices/AudioChanger/audioCaseEditor/index.module.css";
+import { Track } from "components/ui/Track";
 
 export default () => {
   const isOpened = useSelector(editorSliceSelectors.getIsEditingAudio);
@@ -45,10 +46,10 @@ const AudioCaseEditorInner = ({
   };
 
   return (
-    <div>
+    <div className={styles.list}>
       {audioFiles.map((item) => (
         <div className={styles.audio_wrapper}>
-          <audio controls src={baseUrl + item.path} />
+          <Track name="Wow" src={baseUrl + item.path} />
           <NodeToolButton
             onClick={() => {
               setAudio(item.id);

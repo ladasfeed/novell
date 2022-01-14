@@ -9,7 +9,9 @@ import { useEffect, useState } from "react";
 export default () => {
   const nodeId = useSelector(editorSliceSelectors.getCurrentOpenedNode);
   const images = useSelector(editorSliceSelectors.getImages);
-  const isEditing = useSelector(editorSliceSelectors.getIsEditingImage);
+  const popupState = useSelector(editorSliceSelectors.getPopupState);
+  const isEditing = popupState == "image";
+
   const { changeElement, elements } = useFlowContext();
   const dispatch = useDispatch();
   const [node, setNode] = useState(elements.find((i) => i.id == nodeId));
@@ -17,9 +19,9 @@ export default () => {
     images.find((i) => i.id == node?.data?.imgId)
   );
 
-  const toggleOpen = () => {
-    dispatch(editorSlice.actions.setEditingImageState(!isEditing));
-  };
+  const togglePopup = (v: boolean) => [
+    dispatch(editorSlice.actions.setPopupState(v ? "image" : null)),
+  ];
 
   useEffect(() => {
     setNode(elements.find((i) => i.id == nodeId));
@@ -34,14 +36,14 @@ export default () => {
       ...value,
       data: { ...value.data, imgId: imgId },
     }));
-    toggleOpen();
+    togglePopup(false);
   };
 
   return (
     <Popup
       isOpened={isEditing}
       className={styles.popup}
-      setIsOpened={toggleOpen}
+      setIsOpened={togglePopup}
     >
       {currentImage && (
         <div className={styles.current}>

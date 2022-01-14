@@ -6,6 +6,6 @@ export default nodeServiceFactory({
   service: ImageCaseEditor,
   nodeButtonParams: {
     variantOrIcon: "image",
-    reduxActionToOpen: editorSlice.actions.setEditingImageState,
+    action: (dispatch) => dispatch(editorSlice.actions.setPopupState("image")),
   },
 });

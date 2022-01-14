@@ -1,0 +1,13 @@
+.input {
+    display: none;
+}
+
+.upload {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.track_list {
+    display: grid;
+    grid-gap: 10px;
+}

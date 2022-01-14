@@ -1,0 +1,29 @@
+.container {
+    width: 160px;
+    height: 40px;
+    background: rgb(0, 0, 0);
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.audio {
+    display: none;
+}
+
+.control {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+
+}
+
+.control rect {
+    fill: white;
+}
+
+.name {
+    color: #c5c5c5;
+}

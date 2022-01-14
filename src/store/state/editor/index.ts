@@ -31,8 +31,7 @@ type initialStateType = {
     | "remove"
     | "system"
     | null;
-  // action state
-  isEditingImage: boolean;
+
   isEditingCharacter: boolean;
   isEditingBranches: boolean;
   isEditingAudio: boolean;
@@ -115,9 +114,6 @@ export const editorSlice = createSlice({
     setImages: (state, action: PayloadAction<Array<fileType>>) => {
       state.images = action.payload;
     },
-    setEditingImageState: (state, action: PayloadAction<boolean>) => {
-      state.isEditingImage = action.payload;
-    },
 
     /* Character */
     addNewCharacter: (state, action: PayloadAction<characterType>) => {
@@ -164,7 +160,7 @@ export const editorSlice = createSlice({
       state.isEditingBranches = action.payload;
     },
 
-    /* Audio */
+    /* Track */
     setAudio: (state, action: PayloadAction<Array<serverAudioType>>) => {
       state.audio = action.payload;
     },
@@ -209,7 +205,6 @@ export const editorSliceSelectors = {
   getImages: (state: StateType) => state.editor.images,
   getAudio: (state: StateType) => state.editor.audio,
 
-  getIsEditingImage: (state: StateType) => state.editor.isEditingImage,
   getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,
   getIsEditingBranch: (state: StateType) => state.editor.isEditingBranches,
   getIsEditingAudio: (state: StateType) => state.editor.isEditingAudio,
