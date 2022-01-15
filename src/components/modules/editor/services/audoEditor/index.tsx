@@ -12,6 +12,7 @@ import { Button } from "components/ui/Button";
 import { useSelector } from "react-redux";
 import { Track } from "components/ui/Track";
 import { UiElementContainer } from "components/ui/UiContainer";
+import { baseUrl } from "api";
 
 export const AudioEditor = () => {
   const [opened, toggle] = RSKHooks.useToggle(false);
@@ -44,7 +45,7 @@ export const AudioEditor = () => {
         <UiElementContainer className={styles.track_list}>
           <h2>Track list</h2>
           {audioTracks?.map((item) => (
-            <Track name={"Wow"} src={`http://localhost:4000${item.path}`} />
+            <Track name={"Wow"} src={`${baseUrl}${item.path}`} />
           ))}
         </UiElementContainer>
       </Popup>
