@@ -24,6 +24,7 @@ export type popupTemplates =
   | "text"
   | "remove"
   | "system"
+  | "copy"
   | null;
 
 type initialStateType = {

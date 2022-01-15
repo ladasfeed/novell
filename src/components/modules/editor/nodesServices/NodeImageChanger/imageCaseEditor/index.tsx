@@ -4,6 +4,7 @@ import styles from "components/modules/editor/nodesServices/NodeImageChanger/ima
 import { useFlowContext } from "components/modules/editor/flow context";
 import { Title } from "components/ui/Title";
 import { useEffect, useState } from "react";
+import { baseUrl } from "api";
 
 export default () => {
   const node = useSelector(editorSliceSelectors.getCurrentOpenedNode);
@@ -31,7 +32,7 @@ export default () => {
         <div className={styles.current}>
           <Title>Current image</Title>
           <div className={styles.img_container}>
-            <img className={styles.img} src={currentImage.value} />
+            <img className={styles.img} src={baseUrl + currentImage.path} />
           </div>
         </div>
       )}
@@ -43,7 +44,7 @@ export default () => {
             data-id={item.id}
             onClick={changeImage}
           >
-            <img className={styles.img} src={item.value} />
+            <img className={styles.img} src={baseUrl + item.path} />
           </div>
         ))}
       </div>

@@ -11,7 +11,8 @@ export type NodeToolButtonIconType =
   | "branch"
   | "plus"
   | "cross"
-  | "text";
+  | "text"
+  | "copy";
 
 type propsType = {} & HTMLAttributes<HTMLLabelElement> & {
     variant?: NodeToolButtonIconType;
@@ -29,6 +30,7 @@ const iconsMap: {
   plus: Icons.ui.Plus,
   cross: Icons.ui.Reset,
   text: Icons.ui.Text,
+  copy: Icons.ui.Copy,
 };
 
 export const NodeToolButton = ({

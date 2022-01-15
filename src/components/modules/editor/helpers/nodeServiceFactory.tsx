@@ -18,6 +18,7 @@ import { flowDefaultNodeType, reactFlowNodeType } from "types";
 export const nodeServiceFactory = (props: {
   nodeButtonParams: {
     variantOrIcon: NodeToolButtonIconType | FC;
+    action?: () => void;
   };
   popupProps?: {
     className?: string;
@@ -61,13 +62,13 @@ export const nodeServiceFactory = (props: {
       if (typeof props.nodeButtonParams.variantOrIcon == "string") {
         return (
           <NodeToolButton
-            onClick={open}
+            onClick={props.nodeButtonParams.action || open}
             variant={props.nodeButtonParams.variantOrIcon}
           />
         );
       } else {
         return (
-          <NodeToolButton onClick={open}>
+          <NodeToolButton onClick={props.nodeButtonParams.action || open}>
             {React.createElement(props.nodeButtonParams.variantOrIcon)}
           </NodeToolButton>
         );

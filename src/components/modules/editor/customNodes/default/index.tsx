@@ -11,6 +11,7 @@ const services = [
   nodesServices.nodeTextService,
   nodesServices.removeNodeService,
   nodesServices.systemNodeService,
+  nodesServices.copyNodeService,
 ];
 
 export const CustomNodeDefault = memo(

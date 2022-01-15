@@ -5,6 +5,7 @@ import nodeBranchService from "components/modules/editor/nodesServices/BranchCha
 import nodeTextService from "components/modules/editor/nodesServices/NodeTextChanger";
 import removeNodeService from "components/modules/editor/nodesServices/RemoveNode";
 import systemNodeService from "components/modules/editor/nodesServices/SystemNodeService";
+import copyNodeService from "components/modules/editor/nodesServices/CopyNodeService";
 
 export const nodesServices = {
   nodeImageService,
@@ -14,4 +15,5 @@ export const nodesServices = {
   nodeTextService,
   removeNodeService,
   systemNodeService,
+  copyNodeService,
 };

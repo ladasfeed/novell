@@ -64,6 +64,10 @@ export const useAudioTrack = ({
     audioObject.onloadeddata = () => {
       fadeVolumeController(audioObject, "in");
     };
+
+    return () => {
+      audioObject.pause();
+    };
   }, []);
 
   const toggleAudio = () => {

@@ -13,6 +13,7 @@ import { Input } from "components/ui/Input";
 import { ToolButton } from "components/ui/ToolButton";
 import { Icons } from "assets/icons";
 import { Img } from "components/ui/Image";
+import { baseUrl } from "api";
 
 export const ImageEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -68,7 +69,7 @@ export const ImageEditor = () => {
             {images.map((item) => (
               <Img
                 className={styles.image}
-                src={item.value}
+                src={baseUrl + item.path}
                 name={"no name."}
               />
             ))}

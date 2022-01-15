@@ -40,7 +40,7 @@ export const editorThunks = {
         editorSlice.actions.setImages([
           ...images,
           {
-            ...fileReady,
+            path: response?.data.path,
             id: response?.data.id,
           },
         ])

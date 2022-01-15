@@ -1,19 +1,9 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect } from "react";
 import { Handle, Position, useUpdateNodeInternals } from "react-flow-renderer";
 import styles from "components/modules/editor/customNodes/splitter/index.module.css";
-import { useFlowContext } from "components/modules/editor/flow context";
-import { UiElementContainer } from "components/ui/UiContainer";
-import { useSelector } from "react-redux";
-import { editorSliceSelectors } from "store/state/editor";
-import { Input } from "components/ui/Input";
-import { Button } from "components/ui/Button";
 import { nodesServices } from "components/modules/editor/nodesServices";
 import { ReactFlowNode } from "components/ui/Node";
-import {
-  flowDefaultNodeType,
-  flowNodeBaseType,
-  reactFlowNodeType,
-} from "types";
+import { reactFlowNodeType } from "types";
 
 const services = [
   nodesServices.nodeImageService,

@@ -12,7 +12,7 @@ export default () => {
   const { changeElement } = useFlowContext();
 
   const setAudio = (audioId: string) => {
-    changeElement(node?.data as string, (value) => ({
+    changeElement(node?.id as string, (value) => ({
       ...value,
       data: {
         ...value.data,

@@ -3,8 +3,7 @@ import { Connection, Edge, Elements, FlowElement } from "react-flow-renderer";
 export type EdgeUnionType = Edge<any> | Connection;
 
 export type fileType = {
-  name: string;
-  value: string;
+  path: string;
   id?: string;
 };
 

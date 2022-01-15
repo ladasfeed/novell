@@ -8,6 +8,8 @@ import { Wave } from "react-animated-text";
 import { Icons } from "assets/icons";
 import { flowDefaultNodeType } from "types";
 import { useAudioTrack } from "components/modules/engine/services/audio";
+import { baseUrl } from "api";
+import useCharactersRenderer from "./services/characters";
 
 export declare namespace ReaderEngineNamespace {
   export type currentFrameType = {
@@ -19,16 +21,18 @@ export declare namespace ReaderEngineNamespace {
 
 export const Preview = () => {
   const compiled = useSelector(editorSliceSelectors.getCompiled);
-  const images = useSelector(editorSliceSelectors.getImages);
   const [currentChapter, setCurrentChapter] = useState(compiled[0]?.data);
   const [currentFrame, setCurrentFrame] =
     useState<ReaderEngineNamespace.currentFrameType>();
   const [isOpened, setIsOpened] = useState(false);
   const dispatch = useDispatch();
+  const images = useSelector(editorSliceSelectors.getImages);
 
   const { toggleAudio } = useAudioTrack({
     currentFrame: currentFrame,
   });
+
+  const renderCharacters = useCharactersRenderer({ currentFrame });
 
   const end = () => {
     dispatch(editorSlice.actions.setCompiled([]));
@@ -78,37 +82,6 @@ export const Preview = () => {
 
   if (!currentFrame) return null;
 
-  const renderCharacters = () => {
-    if (!currentFrame.data.characterCases) {
-      return null;
-    }
-    let arrOfReactNodes: Array<ReactNode> = [];
-
-    currentFrame.data.characterCases.forEach((characterCase: any) => {
-      const character = characterCase.character;
-      const fileId = character.states.find(
-        (state: any) => state.name == characterCase.stateName
-      )?.fileId;
-      const caseImage = images.find((im) => im.id == fileId);
-
-      if (caseImage) {
-        arrOfReactNodes.push(
-          <img
-            style={{
-              left: characterCase.position == "left" ? 100 : undefined,
-              right: characterCase.position == "right" ? 100 : undefined,
-            }}
-            className={styles.character}
-            src={caseImage?.value}
-            alt=""
-          />
-        );
-      }
-    });
-
-    return <div>{arrOfReactNodes}</div>;
-  };
-
   const resolve = () => {
     if (currentFrame.type == "customNodeDefault") {
       return (
@@ -151,7 +124,8 @@ export const Preview = () => {
       <div
         style={{
           background: `url(${
-            images.find((img) => img.id == currentFrame.data.imgId)?.value
+            baseUrl +
+            images.find((img) => img.id == currentFrame.data.imgId)?.path
           })`,
         }}
         className={styles.container}

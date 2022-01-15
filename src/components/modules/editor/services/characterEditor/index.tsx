@@ -13,6 +13,8 @@ import { characterStateType, characterType } from "types";
 import { Input } from "components/ui/Input";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { ToolButton } from "components/ui/ToolButton";
+import { Img } from "components/ui/Image";
+import { baseUrl } from "api";
 
 export const CharacterEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -88,7 +90,6 @@ export const CharacterEditor = () => {
     }
   }, [characters]);
 
-  console.log(currentCharacter);
   return (
     <>
       <ToolButton onClick={toggleOpen} icon={<Icons.ui.CharacterEdit />} />
@@ -174,16 +175,16 @@ const CharacterCase = ({
   const images = useSelector(editorSliceSelectors.getImages);
   const [image, setImage] = useState<string | undefined>();
   useEffect(() => {
-    const newImage = images.find((im) => im.id == characterCase.fileId)?.value;
-    setImage(newImage);
+    const newImage = images.find((im) => im.id == characterCase.fileId)?.path;
+    setImage(baseUrl + newImage);
   }, [images, characterCase.fileId]);
 
   return (
     <label className={styles.character_editor__state}>
-      <img
+      <Img
         className={styles.character_editor__state__image}
         src={image}
-        alt=""
+        name={characterCase.name}
       />
       <Input
         style={{
@@ -192,9 +193,6 @@ const CharacterCase = ({
         onChange={(e) => addImageToCase(e, characterCase.name)}
         type="file"
       />
-      <h6 className={styles.character_editor__state__name}>
-        {characterCase.name}
-      </h6>
     </label>
   );
 };

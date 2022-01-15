@@ -27,7 +27,7 @@ export function ReactFlowNode({
     if (imageId !== undefined) {
       const newImg = images.find((item) => item.id == imageId);
       if (newImg) {
-        setImage(newImg.value);
+        setImage(newImg.path);
       }
     }
   }, [imageId]);

@@ -16,6 +16,7 @@ import { ReactComponent as Save } from "./buttons/save.svg";
 import { ReactComponent as CharacterEdit } from "./buttons/character-edit.svg";
 import { ReactComponent as Settings } from "./buttons/settings.svg";
 import { ReactComponent as Text } from "./buttons/text.svg";
+import { ReactComponent as Copy } from "./buttons/copy.svg";
 
 export const Icons = {
   nodeIcons: {
@@ -37,5 +38,6 @@ export const Icons = {
     CharacterEdit,
     Settings,
     Text,
+    Copy,
   },
 };
