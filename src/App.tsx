@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { Editor } from "components/pages/editor";
+import { Editor } from "components/modules/editor";
 
 function App() {
   return (

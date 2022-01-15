@@ -7,6 +7,7 @@ import {
   characterStateType,
   characterType,
   fileType,
+  reactFlowNodeType,
 } from "types";
 import { Elements } from "react-flow-renderer";
 
@@ -15,23 +16,24 @@ type serverAudioType = {
   id: string;
 };
 
+export type popupTemplates =
+  | "image"
+  | "character"
+  | "branches"
+  | "audio"
+  | "text"
+  | "remove"
+  | "system"
+  | null;
+
 type initialStateType = {
   branches: Array<string>;
   images: Array<fileType>;
   audio: Array<serverAudioType>;
-  openedNodeId?: string;
+  openedNode?: reactFlowNodeType;
   characters: Array<characterType>;
 
-  popupState:
-    | "image"
-    | "character"
-    | "branches"
-    | "audio"
-    | "text"
-    | "remove"
-    | "system"
-    | null;
-
+  popupState: popupTemplates;
   isEditingCharacter: boolean;
   isEditingBranches: boolean;
   isEditingAudio: boolean;
@@ -176,8 +178,8 @@ export const editorSlice = createSlice({
     /* Remove */
 
     /* System */
-    setCurrentOpenedNode: (state, action: PayloadAction<string>) => {
-      state.openedNodeId = action.payload;
+    setCurrentOpenedNode: (state, action: PayloadAction<reactFlowNodeType>) => {
+      state.openedNode = action.payload;
     },
     setCompiled: (
       state,
@@ -198,7 +200,7 @@ export const editorSlice = createSlice({
 
 export const editorSliceSelectors = {
   getBranches: (state: StateType) => state.editor.branches,
-  getCurrentOpenedNode: (state: StateType) => state.editor.openedNodeId,
+  getCurrentOpenedNode: (state: StateType) => state.editor.openedNode,
   getCompiled: (state: StateType) => state.editor.compiled,
   getCharacters: (state: StateType) => state.editor.characters,
 
