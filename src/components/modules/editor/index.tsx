@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
+  Controls,
   FlowElement,
+  MiniMap,
   ReactFlowProvider,
 } from "react-flow-renderer";
 import styles from "./index.module.css";
@@ -69,23 +71,26 @@ export const Editor = () => {
                 nodeTypes={nodeTypesMap}
                 onLoad={flowHandlers.onLoad}
                 onlyRenderVisibleElements
-                snapGrid={[30, 30]}
+                snapGrid={[16, 16]}
+                minZoom={0.1}
                 edgeTypes={edgeTypesMap}
+                snapToGrid
                 elements={elements}
                 onElementsRemove={flowHandlers.onElementsRemove}
                 onConnect={flowHandlers.onConnect}
                 {...dragControls}
               >
                 <Background
-                  variant={BackgroundVariant.Lines}
+                  variant={BackgroundVariant.Dots}
                   style={{
-                    backgroundColor: "#cecece",
+                    backgroundColor: "#000000",
                   }}
-                  gap={20}
-                  size={4}
+                  color="#000000"
                 />
                 <ChaptersSidebar />
                 <Toolbar />
+                <MiniMap nodeColor={() => "#a43939"} nodeStrokeWidth={3} />
+                <Controls />
               </ReactFlow>
             </div>
           </FlowProvider.Provider>

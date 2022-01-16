@@ -7,4 +7,6 @@
     transform: rotateZ(-90deg);
     transform-origin: center center;
     transform-box: fill-box;
+    stroke: white;
+    fill: white;
 }

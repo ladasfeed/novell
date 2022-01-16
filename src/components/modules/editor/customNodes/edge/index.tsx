@@ -36,7 +36,7 @@ export default function CustomEdge({
       <text className="react-flow__text">
         <textPath
           href={`#${id}`}
-          style={{ fontSize: "12px", stroke: "black" }}
+          style={{ fontSize: "12px", stroke: "white", letterSpacing: 3 }}
           startOffset="50%"
           textAnchor="middle"
         >

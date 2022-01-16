@@ -4,6 +4,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import cn from "classnames";
 import { Handle, Position } from "react-flow-renderer";
 import styles from "./index.module.css";
+import { baseUrl } from "api";
 
 type propsType = {
   children: ReactNode;
@@ -27,7 +28,7 @@ export function ReactFlowNode({
     if (imageId !== undefined) {
       const newImg = images.find((item) => item.id == imageId);
       if (newImg) {
-        setImage(newImg.path);
+        setImage(baseUrl + newImg.path);
       }
     }
   }, [imageId]);

@@ -19,6 +19,7 @@ import cn from "classnames";
 import { nodesServices } from "components/modules/editor/nodesServices";
 import { compile } from "components/modules/editor/helpers/compile";
 import { initialElements } from "components/modules/editor/index";
+import { VariablesEditor } from "components/modules/editor/services/variablesEditor";
 
 const arrayOfNodeServices = Object.entries(nodesServices).map(
   (item) => item[1]
@@ -124,6 +125,7 @@ export const Toolbar = () => {
           <ImageEditor />
           <CharacterEditor />
           <AudioEditor />
+          <VariablesEditor />
         </ToolsGroup>
 
         {arrayOfNodeServices.map((s) => React.createElement(s.Service))}
