@@ -1,20 +1,18 @@
 import React, { useContext } from "react";
 import { Elements, FlowElement } from "react-flow-renderer";
-import { flowDefaultNodeType } from "types";
+import { nodeDataType } from "types";
 
 export const FlowProvider = React.createContext<{
   setElements: React.Dispatch<React.SetStateAction<FlowElement<any>[]>> | null;
   elements: Array<
-    FlowElement<flowDefaultNodeType> & {
+    FlowElement<nodeDataType> & {
       target?: string;
       source?: string;
     }
   >;
   changeElement: (
     id: string,
-    fn: (
-      value: FlowElement<flowDefaultNodeType>
-    ) => FlowElement<flowDefaultNodeType>
+    fn: (value: FlowElement<nodeDataType>) => FlowElement<nodeDataType>
   ) => void;
   instance: any;
 }>({

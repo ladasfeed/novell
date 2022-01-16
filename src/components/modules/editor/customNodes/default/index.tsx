@@ -2,7 +2,8 @@ import React, { memo } from "react";
 import { Position, Node } from "react-flow-renderer";
 import { nodesServices } from "components/modules/editor/nodesServices";
 import { ReactFlowNode } from "components/ui/Node";
-import { flowDefaultNodeType, reactFlowNodeType } from "types";
+import { reactFlowNodeType } from "types";
+import { NodeServiceConnector } from "components/modules/editor/helpers/nodeServiceFactory";
 
 const services = [
   nodesServices.nodeImageService,
@@ -20,6 +21,8 @@ export const CustomNodeDefault = memo(
     ...nodeProps
   }: reactFlowNodeType & {
     isConnectable: boolean;
+    xPos: number;
+    yPos: number;
   }) => {
     return (
       <ReactFlowNode
@@ -34,9 +37,7 @@ export const CustomNodeDefault = memo(
           isConnectable={isConnectable}
         />
         <ReactFlowNode.Tools>
-          {services.map((item) => {
-            return React.createElement(item.NodeButton, { node: nodeProps });
-          })}
+          <NodeServiceConnector services={services} nodeProps={nodeProps} />
         </ReactFlowNode.Tools>
         <ReactFlowNode.Handle
           type="source"

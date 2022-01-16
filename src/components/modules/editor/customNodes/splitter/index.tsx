@@ -4,6 +4,7 @@ import styles from "components/modules/editor/customNodes/splitter/index.module.
 import { nodesServices } from "components/modules/editor/nodesServices";
 import { ReactFlowNode } from "components/ui/Node";
 import { reactFlowNodeType } from "types";
+import { NodeServiceConnector } from "components/modules/editor/helpers/nodeServiceFactory";
 
 const services = [
   nodesServices.nodeImageService,
@@ -35,9 +36,7 @@ export const SplitterNode = memo(
           isConnectable={isConnectable}
         />
         <ReactFlowNode.Tools>
-          {services.map((item) => {
-            return React.createElement(item.NodeButton, { node: nodeProps });
-          })}
+          <NodeServiceConnector services={services} nodeProps={nodeProps} />
         </ReactFlowNode.Tools>
 
         <div

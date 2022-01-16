@@ -10,6 +10,7 @@ import {
   reactFlowNodeType,
 } from "types";
 import { Elements } from "react-flow-renderer";
+import { ImageApiDTO } from "api/image/types";
 
 type serverAudioType = {
   path: string;
@@ -27,9 +28,16 @@ export type popupTemplates =
   | "copy"
   | null;
 
+type setImageActionType = {
+  type: ImageApiDTO.imageType;
+  images: Array<fileType>;
+};
+
 type initialStateType = {
   branches: Array<string>;
-  images: Array<fileType>;
+  images: {
+    [key in ImageApiDTO.imageType]: Array<fileType>;
+  };
   audio: Array<serverAudioType>;
   openedNode?: reactFlowNodeType;
   characters: Array<characterType>;
@@ -56,7 +64,10 @@ export const editorSlice = createSlice({
   name: "editor",
   initialState: {
     branches: ["default"],
-    images: [],
+    images: {
+      background: [],
+      character: [],
+    },
     audio: [],
     popupState: null,
     isEditingImage: false,
@@ -114,8 +125,8 @@ export const editorSlice = createSlice({
     },
 
     /* Images */
-    setImages: (state, action: PayloadAction<Array<fileType>>) => {
-      state.images = action.payload;
+    setImages: (state, { payload }: PayloadAction<setImageActionType>) => {
+      state.images[payload.type] = payload.images;
     },
 
     /* Character */
@@ -206,6 +217,8 @@ export const editorSliceSelectors = {
   getCharacters: (state: StateType) => state.editor.characters,
 
   getImages: (state: StateType) => state.editor.images,
+  getBackgroundImages: (state: StateType) => state.editor.images.background,
+  getCharacterImages: (state: StateType) => state.editor.images.character,
   getAudio: (state: StateType) => state.editor.audio,
 
   getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,

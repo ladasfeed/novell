@@ -10,7 +10,7 @@ export default ({
 }: {
   currentFrame: ReaderEngineNamespace.currentFrameType | undefined;
 }) => {
-  const images = useSelector(editorSliceSelectors.getImages);
+  const images = useSelector(editorSliceSelectors.getCharacterImages);
 
   const renderCharacters = () => {
     if (!currentFrame?.data.characterCases) {

@@ -50,12 +50,17 @@ export const CharacterEditor = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(editorThunks.getImages({ type: "character" }));
+  }, []);
+
   const addImageToCase = useCallback(
     async (e: any, name: string) => {
       if (!currentCharacter) return;
       dispatch(
         editorThunks.uploadImage({
           event: e,
+          type: "character",
         })
       )
         .unwrap()
@@ -172,10 +177,12 @@ const CharacterCase = ({
   characterCase,
   addImageToCase,
 }: CharacterCasePropsType) => {
-  const images = useSelector(editorSliceSelectors.getImages);
+  const images = useSelector(editorSliceSelectors.getCharacterImages);
   const [image, setImage] = useState<string | undefined>();
   useEffect(() => {
     const newImage = images.find((im) => im.id == characterCase.fileId)?.path;
+    console.log(images);
+    console.log(characterCase);
     setImage(baseUrl + newImage);
   }, [images, characterCase.fileId]);
 

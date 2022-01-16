@@ -85,6 +85,7 @@ export const ChaptersSidebar = () => {
         <div className={styles.chapters}>
           {getArrayOfChapters().map((chapter) => (
             <UiElementContainer
+              key={chapter}
               className={cn(styles.chapter_element, {
                 [styles["chapter_element--active"]]:
                   currentChapterName == chapter,

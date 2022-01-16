@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editorSlice,
@@ -9,11 +9,14 @@ import {
   NodeToolButton,
   NodeToolButtonIconType,
 } from "components/ui/NodeToolButton";
-import { type } from "os";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useAppDispatch } from "store/state";
 import { Popup } from "components/ui/Popup";
-import { flowDefaultNodeType, reactFlowNodeType } from "types";
+import { reactFlowNodeType } from "types";
+
+export type nodeServiceFactoryType = {
+  Service: FC<any>;
+  NodeButton: ({ node }: { node: reactFlowNodeType }) => JSX.Element;
+};
 
 export const nodeServiceFactory = (props: {
   nodeButtonParams: {
@@ -75,4 +78,26 @@ export const nodeServiceFactory = (props: {
       }
     },
   };
+};
+
+export const NodeServiceConnector = ({
+  services,
+  nodeProps,
+}: {
+  services: Array<nodeServiceFactoryType>;
+  nodeProps: any;
+}) => {
+  return (
+    <>
+      {services.map((item, index) => {
+        return React.createElement(item.NodeButton, {
+          node: {
+            ...nodeProps,
+            position: { x: nodeProps.xPos, y: nodeProps.yPos },
+          },
+          key: index,
+        });
+      })}
+    </>
+  );
 };

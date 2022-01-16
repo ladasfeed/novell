@@ -17,7 +17,7 @@ export function ReactFlowNode({
   isRootNode,
   isEndNode,
 }: propsType) {
-  const images = useSelector(editorSliceSelectors.getImages);
+  const images = useSelector(editorSliceSelectors.getBackgroundImages);
   const [image, setImage] = useState<string | null>(null);
   const isPreviewImageMode = useSelector(
     editorSliceSelectors.getIsImagesPreviewMode

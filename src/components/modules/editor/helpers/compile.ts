@@ -11,6 +11,7 @@ export const compile = (elements: Array<any>) => {
     let nodesEdgesOutput = edges.filter((edge) => edge.source == newNode.id);
     let nodesEdgesInput = edges.filter((edge) => edge.target == newNode.id);
 
+    // out branch
     newNode.branch = newNode.data.branch || nodesEdgesInput?.[0]?.sourceHandle;
     if (!nodesEdgesOutput.length) {
       nodesTree.push(newNode);

@@ -70,7 +70,6 @@ export const Editor = () => {
                 onLoad={flowHandlers.onLoad}
                 onlyRenderVisibleElements
                 snapGrid={[30, 30]}
-                // snapToGrid
                 edgeTypes={edgeTypesMap}
                 elements={elements}
                 onElementsRemove={flowHandlers.onElementsRemove}

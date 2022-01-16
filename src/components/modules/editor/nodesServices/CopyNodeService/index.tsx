@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { useFlowContext } from "components/modules/editor/flow context";
 import { Button } from "components/ui/Button";
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "components/ui/Input";
 import { addEdge } from "react-flow-renderer";
+import * as _ from "lodash";
+import { nodeTypesMap } from "components/modules/editor/constants";
 
 export default nodeServiceFactory({
   Service: () => {
@@ -16,9 +18,16 @@ export default nodeServiceFactory({
 
     const copy = () => {
       if (setElements) {
-        const newId = String(Number(elements[elements.length - 1].id) + 1);
+        let newId: string;
 
-        //@ts-ignore
+        const nodesTypes = Object.keys(nodeTypesMap);
+        for (let i = elements.length - 1; i >= 0; i--) {
+          if (nodesTypes.includes(elements[i].type || "")) {
+            newId = String(Number(elements[i].id) + 1);
+            break;
+          }
+        }
+
         setElements((prev) => [
           ...prev,
           {
@@ -28,8 +37,7 @@ export default nodeServiceFactory({
               text: inputValue,
             },
             type: node?.type,
-            //@ts-ignore
-            position: { x: node.xPos, y: node.yPos + 300 },
+            position: { ...node!.position, y: node!.position.y + 300 },
           },
         ]);
 

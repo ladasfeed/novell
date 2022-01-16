@@ -4,18 +4,7 @@ import { editorSlice } from "store/state/editor/index";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { StateType } from "store/state/index";
 import { audioApi } from "api/audio";
-
-function urltoFile(url: string, filename: string, mimeType: string) {
-  return new Promise((resolve) => {
-    fetch(url)
-      .then(function (res) {
-        return res.arrayBuffer();
-      })
-      .then(function (buf) {
-        resolve(new File([buf], filename, { type: mimeType }));
-      });
-  });
-}
+import { ImageApiDTO } from "api/image/types";
 
 export const editorThunks = {
   uploadImage: createAsyncThunk(
@@ -23,8 +12,10 @@ export const editorThunks = {
     async (
       {
         event,
+        type,
       }: {
         event: any;
+        type: ImageApiDTO.imageType;
       },
       { dispatch, getState }
     ) => {
@@ -35,15 +26,21 @@ export const editorThunks = {
       };
 
       const images = (getState() as StateType).editor.images;
-      const response = await imageApi.createImage(fileReady);
+      const response = await imageApi.createImage({
+        ...fileReady,
+        type,
+      });
       dispatch(
-        editorSlice.actions.setImages([
-          ...images,
-          {
-            path: response?.data.path,
-            id: response?.data.id,
-          },
-        ])
+        editorSlice.actions.setImages({
+          type,
+          images: [
+            ...images[type],
+            {
+              path: response?.data.path,
+              id: response?.data.id,
+            },
+          ],
+        })
       );
 
       return response?.data.id as string;
@@ -78,6 +75,25 @@ export const editorThunks = {
 
       const response = await audioApi.create(fileReady);
       return response?.data.id as string;
+    }
+  ),
+
+  getImages: createAsyncThunk(
+    "getImage",
+    async (apiProps: ImageApiDTO.getImages, thunkAPI) => {
+      const response = await imageApi.getImages(apiProps);
+
+      thunkAPI.dispatch(
+        editorSlice.actions.setImages({
+          type: apiProps.type,
+          images: response.data.map((item: any) => ({
+            ...item,
+            id: item._id,
+          })),
+        })
+      );
+
+      return response;
     }
   ),
 };

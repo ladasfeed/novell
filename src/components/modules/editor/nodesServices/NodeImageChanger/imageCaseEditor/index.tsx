@@ -8,7 +8,7 @@ import { baseUrl } from "api";
 
 export default () => {
   const node = useSelector(editorSliceSelectors.getCurrentOpenedNode);
-  const images = useSelector(editorSliceSelectors.getImages);
+  const images = useSelector(editorSliceSelectors.getBackgroundImages);
   const { changeElement, elements } = useFlowContext();
   const [currentImage, setCurrentImage] = useState(
     images.find((i) => i.id == node?.data?.imgId)

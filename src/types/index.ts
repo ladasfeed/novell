@@ -1,4 +1,5 @@
 import { Connection, Edge, Elements, FlowElement } from "react-flow-renderer";
+import { Node } from "react-flow-renderer/dist/types";
 
 export type EdgeUnionType = Edge<any> | Connection;
 
@@ -32,7 +33,7 @@ export type chaptersObjectType = {
   [key: string]: chapterType;
 };
 
-export type flowNodeBaseType = {
+export type nodeDataType = {
   text?: string;
   imgId?: string;
   isEndNode?: boolean;
@@ -43,17 +44,14 @@ export type flowNodeBaseType = {
     audioId: string;
   };
   branch?: string;
-  branches?: Array<string>;
-};
-
-export type flowDefaultNodeType = {
   characterCases?: Array<characterCaseType>;
+
+  // splitter only
+  branches?: Array<string>;
   branchesText?: Array<{
     branch: string;
     text: string;
   }>;
-} & flowNodeBaseType;
+};
 
-export type reactFlowNodeType = FlowElement<flowDefaultNodeType>;
-
-let ss: reactFlowNodeType;
+export type reactFlowNodeType = Node<nodeDataType>;

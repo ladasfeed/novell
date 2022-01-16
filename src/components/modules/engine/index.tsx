@@ -6,14 +6,14 @@ import { Popup } from "components/ui/Popup";
 //@ts-ignore
 import { Wave } from "react-animated-text";
 import { Icons } from "assets/icons";
-import { flowDefaultNodeType } from "types";
 import { useAudioTrack } from "components/modules/engine/services/audio";
 import { baseUrl } from "api";
 import useCharactersRenderer from "./services/characters";
+import { nodeDataType } from "types";
 
 export declare namespace ReaderEngineNamespace {
   export type currentFrameType = {
-    data: flowDefaultNodeType;
+    data: nodeDataType;
   } & {
     [key: string]: any;
   };
@@ -26,7 +26,8 @@ export const Preview = () => {
     useState<ReaderEngineNamespace.currentFrameType>();
   const [isOpened, setIsOpened] = useState(false);
   const dispatch = useDispatch();
-  const images = useSelector(editorSliceSelectors.getImages);
+  const backgroundImage = useSelector(editorSliceSelectors.getBackgroundImages);
+  const characterImages = useSelector(editorSliceSelectors.getCharacterImages);
 
   const { toggleAudio } = useAudioTrack({
     currentFrame: currentFrame,
@@ -125,7 +126,8 @@ export const Preview = () => {
         style={{
           background: `url(${
             baseUrl +
-            images.find((img) => img.id == currentFrame.data.imgId)?.path
+            backgroundImage.find((img) => img.id == currentFrame.data.imgId)
+              ?.path
           })`,
         }}
         className={styles.container}

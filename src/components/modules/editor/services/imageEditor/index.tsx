@@ -17,27 +17,22 @@ import { baseUrl } from "api";
 
 export const ImageEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
-  const images = useSelector(editorSliceSelectors.getImages);
+  const images = useSelector(editorSliceSelectors.getBackgroundImages);
   const dispatch = useAppDispatch();
 
   const getImages = () => {
-    imageApi.getImages().then((res) => {
-      console.log(res.data);
-      dispatch(
-        editorSlice.actions.setImages(
-          res.data.map(({ _id, ...data }: any) => ({
-            ...data,
-            id: _id,
-          }))
-        )
-      );
-    });
+    dispatch(
+      editorThunks.getImages({
+        type: "background",
+      })
+    );
   };
 
   const uploadImage = async (e: any) => {
     dispatch(
       editorThunks.uploadImage({
         event: e,
+        type: "background",
       })
     );
   };
