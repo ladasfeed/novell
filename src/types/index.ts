@@ -33,8 +33,15 @@ export type chaptersObjectType = {
   [key: string]: chapterType;
 };
 
+export type actFrameType = {
+  text: string;
+  charactersCases: Array<characterCaseType>;
+};
+
+export type actType = Array<actFrameType>;
+
 export type nodeDataType = {
-  text?: string;
+  act?: actType;
   imgId?: string;
   isEndNode?: boolean;
   isRootNode?: boolean;

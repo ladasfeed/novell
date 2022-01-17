@@ -1,5 +1,6 @@
 import {
   addEdge,
+  ArrowHeadType,
   Elements,
   FlowElement,
   removeElements,
@@ -7,6 +8,7 @@ import {
 import { EdgeUnionType } from "types";
 import { useCallback } from "react";
 import { changeFlowElement } from "components/modules/editor/helpers/changeElement";
+import { addEdgeHandler } from "components/modules/editor/helpers/addEdgeHandler";
 
 export const useFlowInit = ({
   reactFlowInstance,
@@ -23,14 +25,10 @@ export const useFlowInit = ({
 
   const onConnect = (params: EdgeUnionType) => {
     setElements((els) =>
-      addEdge(
-        {
-          ...params,
-          type: "custom",
-          data: { text: params.sourceHandle },
-        },
-        els
-      ).map((item) => {
+      addEdgeHandler({
+        elements: els,
+        params: params,
+      }).map((item) => {
         return params.target == item.id
           ? {
               ...item,

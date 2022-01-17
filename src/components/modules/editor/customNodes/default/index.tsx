@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Position, Node } from "react-flow-renderer";
+import { Position, Node, useStoreState } from "react-flow-renderer";
 import { nodesServices } from "components/modules/editor/nodesServices";
 import { ReactFlowNode } from "components/ui/Node";
 import { reactFlowNodeType } from "types";
@@ -24,6 +24,8 @@ export const CustomNodeDefault = memo(
     xPos: number;
     yPos: number;
   }) => {
+    const s = useStoreState((state) => state);
+
     return (
       <ReactFlowNode
         isRootNode={nodeProps.data?.isRootNode}

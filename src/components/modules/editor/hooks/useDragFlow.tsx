@@ -32,6 +32,7 @@ export const useDragFlow = ({
         position,
         data: {
           branch: branches[0],
+          act: [],
         },
       };
 

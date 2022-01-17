@@ -3,7 +3,9 @@ import { Elements, FlowElement } from "react-flow-renderer";
 import { nodeDataType } from "types";
 
 export const FlowProvider = React.createContext<{
-  setElements: React.Dispatch<React.SetStateAction<FlowElement<any>[]>> | null;
+  setElements: React.Dispatch<
+    React.SetStateAction<FlowElement<nodeDataType>[]>
+  > | null;
   elements: Array<
     FlowElement<nodeDataType> & {
       target?: string;

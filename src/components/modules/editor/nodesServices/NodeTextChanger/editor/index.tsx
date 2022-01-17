@@ -6,33 +6,67 @@ import { Input } from "components/ui/Input";
 import styles from "components/modules/editor/nodesServices/NodeTextChanger/editor/index.module.css";
 import { Icons } from "assets/icons";
 import { ToolButton } from "components/ui/ToolButton";
+import { actType } from "types";
+import { Button } from "components/ui/Button";
 
 export default () => {
   const node = useSelector(editorSliceSelectors.getCurrentOpenedNode);
-  const { changeElement, elements } = useFlowContext();
-  const element = useMemo(() => {
-    return elements.find((item) => item.id == node?.id);
-  }, [elements]);
-  const [nodeText, setNodeText] = useState(element?.data?.text);
+  const { changeElement } = useFlowContext();
+  const [actData, setActData] = useState<actType>(node?.data?.act || []);
 
-  const onChangeText = () => {
+  const onSave = () => {
     changeElement(node?.id as string, (value) => ({
       ...value,
-      data: { ...value.data, text: nodeText },
+      data: { ...value.data, act: actData },
     }));
   };
 
+  const addActFrame = () => {
+    setActData((prev) => [
+      ...prev,
+      {
+        charactersCases: [],
+        text: "",
+      },
+    ]);
+  };
+
+  const editText = (e: any) => {
+    const currentFrameIndex = Number(
+      e.currentTarget.getAttribute("data-index")
+    );
+    const value = e.currentTarget.value;
+
+    setActData((prev) =>
+      prev.map((item, index) => {
+        return currentFrameIndex == index
+          ? {
+              text: value,
+              charactersCases: [],
+            }
+          : item;
+      })
+    );
+  };
+
+  // useFieldsArray
   return (
     <div>
-      <div className={styles.node_text}>
-        <Input
-          defaultValue={element?.data?.text}
-          type="text"
-          placeholder="Node text..."
-          onChange={(e) => setNodeText(e.currentTarget.value)}
-        />
+      {actData.map((item, index) => (
+        <div className={styles.node_text}>
+          <Input
+            value={item.text}
+            type="text"
+            data-index={index}
+            placeholder="Node text..."
+            onChange={editText}
+          />
+        </div>
+      ))}
+      <div className={styles.buttons}>
+        <Icons.ui.Plus onClick={addActFrame}>Add</Icons.ui.Plus>
         <ToolButton
-          icon={<Icons.ui.Save onClick={onChangeText}>Save</Icons.ui.Save>}
+          icon={<Icons.ui.Save onClick={onSave}>Save</Icons.ui.Save>}
         />
       </div>
     </div>

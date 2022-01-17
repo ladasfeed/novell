@@ -9,7 +9,7 @@ import { Icons } from "assets/icons";
 import { useAudioTrack } from "components/modules/engine/services/audio";
 import { baseUrl } from "api";
 import useCharactersRenderer from "./services/characters";
-import { nodeDataType } from "types";
+import { actFrameType, nodeDataType } from "types";
 
 export declare namespace ReaderEngineNamespace {
   export type currentFrameType = {
@@ -27,7 +27,11 @@ export const Preview = () => {
   const [isOpened, setIsOpened] = useState(false);
   const dispatch = useDispatch();
   const backgroundImage = useSelector(editorSliceSelectors.getBackgroundImages);
-  const characterImages = useSelector(editorSliceSelectors.getCharacterImages);
+  const [currentActFrame, setCurrentActFrame] = useState<
+    actFrameType & {
+      index: number;
+    }
+  >();
 
   const { toggleAudio } = useAudioTrack({
     currentFrame: currentFrame,
@@ -46,20 +50,40 @@ export const Preview = () => {
   useEffect(() => {
     setCurrentFrame(currentChapter?.find((node) => node?.data?.isRootNode));
   }, [currentChapter]);
+  useEffect(() => {
+    if (currentFrame) {
+      setCurrentActFrame({
+        ...currentFrame!.data!.act![0],
+        index: 0,
+      });
+    }
+  }, [currentFrame]);
 
   const next = () => {
-    if (currentFrame?.data?.isEndNode) {
-      const nextChapter = compiled.find(
-        (ch) => currentFrame?.data?.nextChapter == ch.name
-      );
-      if (nextChapter) {
-        setCurrentChapter(nextChapter.data);
-      } else {
-        end();
-      }
-
+    // next act frame
+    const nextActFrame = currentFrame?.data.act?.[currentActFrame!.index + 1];
+    if (nextActFrame) {
+      setCurrentActFrame({
+        ...nextActFrame,
+        index: currentActFrame!.index + 1,
+      });
       return;
     }
+
+    // ...
+    if (currentFrame?.data)
+      if (currentFrame?.data?.isEndNode) {
+        const nextChapter = compiled.find(
+          (ch) => currentFrame?.data?.nextChapter == ch.name
+        );
+        if (nextChapter) {
+          setCurrentChapter(nextChapter.data);
+        } else {
+          end();
+        }
+
+        return;
+      }
 
     const newNode = currentChapter.find(
       (node: any) => currentFrame?.next == node.id
@@ -89,11 +113,11 @@ export const Preview = () => {
         <>
           {renderCharacters()}
           <div className={styles.text} onClick={next}>
-            {currentFrame.data?.text && (
+            {currentActFrame?.text && (
               <Wave
                 iterations={1}
                 effect={"verticalFadeIn"}
-                text={currentFrame.data.text}
+                text={currentActFrame?.text}
                 speed={20}
               />
             )}
