@@ -23,7 +23,12 @@ export const compile = (elements: Array<any>) => {
     } else {
       newNode.next = {};
       nodesEdgesOutput.forEach((edge) => {
-        newNode.next[edge.sourceHandle] = edge.target;
+        // sourceHandle is outPutId
+        const outPutId = edge.sourceHandle.slice(
+          edge.sourceHandle.lastIndexOf("-") + 1
+        );
+
+        newNode.next[outPutId] = edge.target;
       });
     }
     nodesTree.push(newNode);

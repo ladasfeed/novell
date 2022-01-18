@@ -7,10 +7,14 @@ import { Input } from "components/ui/Input";
 import { useState } from "react";
 import { Button } from "components/ui/Button";
 import { set } from "lodash";
+import { lsController } from "store/ls";
+import { useDispatch } from "react-redux";
+import { editorSlice } from "store/state/editor";
 
 export const VariablesEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle();
   const [inputValue, setInputValue] = useState("");
+  const dispatch = useDispatch();
   const [variables, setVariables] = useState<
     Array<{
       name: string;
@@ -27,6 +31,12 @@ export const VariablesEditor = () => {
       ];
     });
     setInputValue("");
+  };
+
+  const saveHandler = () => {
+    dispatch(
+      editorSlice.actions.setVariables(variables.map((item) => item.name))
+    );
   };
 
   return (
@@ -50,6 +60,7 @@ export const VariablesEditor = () => {
             <div>{item.name}</div>
           ))}
         </div>
+        <Button onClick={saveHandler}>Save</Button>
       </Popup>
     </>
   );

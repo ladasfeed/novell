@@ -1,11 +1,21 @@
 .container {
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 60px;
+}
+
+.output_editor {
+    display: grid;
     grid-gap: 20px;
 }
 
-.branches_container {
+.output_list {
     display: grid;
     grid-gap: 20px;
+}
 
+.output_editor_element {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
 }

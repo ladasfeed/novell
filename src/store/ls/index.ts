@@ -5,4 +5,5 @@ export const lsController = builders.localStorage<{
   branches: Array<string>;
   chapters: chaptersObjectType;
   characters: Array<characterType>;
+  variables: Array<string>;
 }>();

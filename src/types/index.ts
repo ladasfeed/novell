@@ -53,12 +53,26 @@ export type nodeDataType = {
   branch?: string;
   characterCases?: Array<characterCaseType>;
 
-  // splitter only
-  branches?: Array<string>;
-  branchesText?: Array<{
-    branch: string;
-    text: string;
-  }>;
+  splitterData?: {
+    variants: Array<variantType>;
+    outputs: Array<outputSplitterType>;
+  };
+};
+
+export type variantActionType = {
+  variable_name: ["+" | "-", number];
+};
+
+export type variantType = {
+  id: number;
+  text: string;
+  actions: Array<variantActionType>;
+};
+
+export type outputSplitterType = {
+  id: number;
+  branch: string;
+  variants: Array<number>;
 };
 
 export type reactFlowNodeType = Node<nodeDataType>;

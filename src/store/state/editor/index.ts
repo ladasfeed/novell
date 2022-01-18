@@ -43,10 +43,6 @@ type initialStateType = {
   characters: Array<characterType>;
 
   popupState: popupTemplates;
-  isEditingCharacter: boolean;
-  isEditingBranches: boolean;
-  isEditingAudio: boolean;
-  isEditingNodeText: boolean;
   compiled: Array<{
     name: string;
     data: Array<any>;
@@ -57,6 +53,9 @@ type initialStateType = {
 
   currentChapterName: string;
   chapters: chaptersObjectType;
+
+  // variables
+  variables: Array<string>;
 };
 
 /* Slice */
@@ -70,12 +69,7 @@ export const editorSlice = createSlice({
     },
     audio: [],
     popupState: null,
-    isEditingImage: false,
-    isEditingCharacter: false,
     previewImageMode: false,
-    isEditingBranches: false,
-    isEditingAudio: false,
-    isEditingNodeText: false,
     compiled: [],
     currentChapterName: "first",
     characters: lsController.get("characters") || [],
@@ -85,6 +79,7 @@ export const editorSlice = createSlice({
         id: "1",
       },
     },
+    variables: lsController.get("variables"),
   } as initialStateType,
   reducers: {
     /* Chapters */
@@ -133,9 +128,6 @@ export const editorSlice = createSlice({
     addNewCharacter: (state, action: PayloadAction<characterType>) => {
       state.characters = [...state.characters, action.payload];
     },
-    setEditingCharacterState: (state, action: PayloadAction<boolean>) => {
-      state.isEditingCharacter = action.payload;
-    },
     addCharacterCase: (
       state,
       action: PayloadAction<{
@@ -170,24 +162,11 @@ export const editorSlice = createSlice({
       state.branches = action.payload;
       lsController.set("branches", action.payload);
     },
-    setEditingBranches: (state, action: PayloadAction<boolean>) => {
-      state.isEditingBranches = action.payload;
-    },
 
     /* Track */
     setAudio: (state, action: PayloadAction<Array<serverAudioType>>) => {
       state.audio = action.payload;
     },
-    setIsEditingAudio: (state, action: PayloadAction<boolean>) => {
-      state.isEditingAudio = action.payload;
-    },
-
-    /* Common */
-    setIsEditingNodeText: (state, action: PayloadAction<boolean>) => {
-      state.isEditingNodeText = action.payload;
-    },
-
-    /* Remove */
 
     /* System */
     setCurrentOpenedNode: (state, action: PayloadAction<reactFlowNodeType>) => {
@@ -207,6 +186,15 @@ export const editorSlice = createSlice({
     togglePreviewImagesMode: (state) => {
       state.previewImageMode = !state.previewImageMode;
     },
+
+    // variables
+    setVariables: (
+      state,
+      { payload }: PayloadAction<initialStateType["variables"]>
+    ) => {
+      state.variables = payload;
+      lsController.set("variables", payload);
+    },
   },
 });
 
@@ -221,15 +209,12 @@ export const editorSliceSelectors = {
   getCharacterImages: (state: StateType) => state.editor.images.character,
   getAudio: (state: StateType) => state.editor.audio,
 
-  getIsEditingCharacter: (state: StateType) => state.editor.isEditingCharacter,
-  getIsEditingBranch: (state: StateType) => state.editor.isEditingBranches,
-  getIsEditingAudio: (state: StateType) => state.editor.isEditingAudio,
-  getIsEditingNodeText: (state: StateType) => state.editor.isEditingNodeText,
-
   getChapters: (state: StateType) => state.editor.chapters,
   getChapterName: (state: StateType) => state.editor.currentChapterName,
 
   getIsImagesPreviewMode: (state: StateType) => state.editor.previewImageMode,
 
   getPopupState: (state: StateType) => state.editor.popupState,
+
+  getVariables: (state: StateType) => state.editor.variables,
 };

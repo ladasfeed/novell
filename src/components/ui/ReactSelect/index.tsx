@@ -34,6 +34,7 @@ export function ReactSelect<
     <Select
       {...props}
       {...getDefaultSelectProps(props)}
+      classNamePrefix={"ReactSelect"}
       components={getDefaultSelectComponents(props)}
     />
   );

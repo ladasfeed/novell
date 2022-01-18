@@ -95,14 +95,30 @@ export const Preview = () => {
     }
   };
 
-  const splitterNext = (branch: string) => {
-    const pointer = currentFrame?.next?.[branch];
+  // TODO
+  const splitterNext = (variantId: number) => {
+    const variant = currentFrame?.data.splitterData?.variants.find(
+      (item) => item.id == variantId
+    );
 
-    if (pointer) {
-      setCurrentFrame(currentChapter.find((node: any) => pointer == node.id));
-    } else {
-      alert("End");
-    }
+    console.log(variant!.id);
+    const output = currentFrame?.data.splitterData?.outputs.find((item) => {
+      return item.variants.includes(variant!.id);
+    });
+
+    console.log(output);
+
+    const newFrame = currentChapter.find(
+      (frame) => currentFrame?.next[output!.id] == frame.id
+    );
+
+    setCurrentFrame(newFrame);
+
+    // if (pointer) {
+    //   setCurrentFrame(currentChapter.find((node: any) => pointer == node.id));
+    // } else {
+    //   alert("End");
+    // }
   };
 
   if (!currentFrame) return null;
@@ -127,10 +143,10 @@ export const Preview = () => {
     } else {
       return (
         <div className={styles.variants}>
-          {currentFrame?.data?.branchesText?.map((item: any) => (
+          {currentFrame?.data?.splitterData?.variants.map((item) => (
             <div
               className={styles.variant}
-              onClick={() => splitterNext(item.branch)}
+              onClick={() => splitterNext(item.id)}
             >
               {item.text}
             </div>

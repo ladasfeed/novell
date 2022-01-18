@@ -25,7 +25,7 @@ export const SplitterNode = memo(
 
     useEffect(() => {
       upd(nodeProps.id);
-    }, [nodeProps.data?.branches]);
+    }, [nodeProps.data?.splitterData]);
 
     return (
       <ReactFlowNode imageId={nodeProps?.data?.imgId}>
@@ -44,61 +44,24 @@ export const SplitterNode = memo(
             position: "relative",
           }}
         >
-          {nodeProps?.data?.branches?.map((item: any, index: number) => (
-            <div style={{ left: index * 50 }} className={styles.handle_wrapper}>
-              <h3 className={styles.handle_wrapper__text}>{item}</h3>
-              <ReactFlowNode.Handle
-                type="source"
-                position={Position.Bottom}
-                id={item}
-                isConnectable={isConnectable}
-              />
-            </div>
-          ))}
+          {nodeProps?.data?.splitterData?.outputs?.map(
+            (item, index: number) => (
+              <div
+                style={{ left: index * 50 }}
+                className={styles.handle_wrapper}
+              >
+                <h3 className={styles.handle_wrapper__text}>{item.branch}</h3>
+                <ReactFlowNode.Handle
+                  type="source"
+                  position={Position.Bottom}
+                  id={nodeProps.id + "-Splitter-" + String(item.id)}
+                  isConnectable={isConnectable}
+                />
+              </div>
+            )
+          )}
         </div>
       </ReactFlowNode>
-    );
-
-    return (
-      <div
-        style={
-          {
-            // backgroundImage: `url(${data.img})`,
-          }
-        }
-        className={styles.container}
-      >
-        <Handle
-          type="target"
-          position={Position.Top}
-          className={styles.handle}
-          isConnectable={isConnectable}
-        />
-        <div className={styles.dark_layer} />
-        <div className={styles.tools_layer}>
-          <div className={styles.tools__header}>
-            <div className={styles.tools__buttons}>
-              {services.map((item) => {
-                return React.createElement(item.NodeButton, {
-                  node: nodeProps,
-                });
-              })}
-            </div>
-          </div>
-        </div>
-        {nodeProps?.data?.branches?.map((item: any, index: number) => (
-          <div style={{ left: index * 150 }} className={styles.handle_wrapper}>
-            <h3 className={styles.handle_wrapper__text}>{item}</h3>
-            <Handle
-              className={styles.handle}
-              type="source"
-              position={Position.Bottom}
-              id={item}
-              isConnectable={isConnectable}
-            />
-          </div>
-        ))}
-      </div>
     );
   }
 );

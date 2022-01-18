@@ -11,7 +11,7 @@
     position: absolute;
 }
 .handle_wrapper__text {
-    color: black;
+    color: #ffffff;
     max-width: 40px;
     overflow: hidden;
     text-overflow: ellipsis;
