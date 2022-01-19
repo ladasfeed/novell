@@ -48,7 +48,7 @@ export const Editor = () => {
   });
 
   useEffect(() => {
-    setElements(currentChapter.data);
+    setElements(currentChapter?.data || []);
   }, [currentChapter]);
 
   /* Logs */

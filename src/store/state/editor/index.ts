@@ -111,6 +111,10 @@ export const editorSlice = createSlice({
     setChapterName: (state, action: PayloadAction<string>) => {
       state.currentChapterName = action.payload;
     },
+    setChapters: (state, action: PayloadAction<chaptersObjectType>) => {
+      state.chapters = action.payload;
+      lsController.set("chapters", action.payload);
+    },
 
     setPopupState: (
       state,
@@ -155,6 +159,10 @@ export const editorSlice = createSlice({
           ? action.payload.character
           : item;
       });
+    },
+    setCharacters: (state, action: PayloadAction<Array<characterType>>) => {
+      state.characters = action.payload;
+      lsController.set("characters", action.payload);
     },
 
     /* Branches */

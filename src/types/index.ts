@@ -76,3 +76,10 @@ export type outputSplitterType = {
 };
 
 export type reactFlowNodeType = Node<nodeDataType>;
+
+export type NovellType = {
+  _id?: string;
+  characters: Array<characterType>;
+  branches: Array<string>;
+  chapters: chaptersObjectType;
+};

@@ -6,4 +6,5 @@ export const lsController = builders.localStorage<{
   chapters: chaptersObjectType;
   characters: Array<characterType>;
   variables: Array<string>;
+  novellId: string;
 }>();

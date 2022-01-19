@@ -20,6 +20,7 @@ import { nodesServices } from "components/modules/editor/nodesServices";
 import { compile } from "components/modules/editor/helpers/compile";
 import { initialElements } from "components/modules/editor/index";
 import { VariablesEditor } from "components/modules/editor/services/variablesEditor";
+import { novellApi } from "api/novell";
 
 const arrayOfNodeServices = Object.entries(nodesServices).map(
   (item) => item[1]
@@ -49,11 +50,9 @@ export const Toolbar = () => {
     dispatch(editorSlice.actions.setCompiled(arrayOfChapters));
   };
 
-  const saveHandler = () => {
+  const saveHandler = async () => {
     // @ts-ignore
     const saved = instance.toObject();
-
-    console.log(saved);
 
     dispatch(
       editorSlice.actions.updateChapterElements({
@@ -61,10 +60,17 @@ export const Toolbar = () => {
         name: currentChapterName,
       })
     );
-    lsController.set(
-      "characters",
-      (store.getState() as StateType).editor.characters
-    );
+
+    const characters = (store.getState() as StateType).editor.characters;
+
+    lsController.set("characters", characters);
+
+    await novellApi.update({
+      id: lsController.get("novellId") as string,
+      characters,
+      chapters: (store.getState() as StateType).editor.chapters,
+      branches: (store.getState() as StateType).editor.branches,
+    });
   };
 
   const onDragStart = (event: any, nodeType: string) => {
