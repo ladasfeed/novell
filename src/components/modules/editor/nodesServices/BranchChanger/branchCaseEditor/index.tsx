@@ -47,6 +47,13 @@ export default () => {
     ]);
   };
 
+  // const addNewAction = (variantId: number) => {
+  //   setVariants(prev => prev.map(item => item.id == variantId ? {
+  //     ...item,
+  //     actions: [...item.actions, {variable_name: ''}]
+  //   } : item))
+  // }
+
   const saveHandler = () => {
     changeElement(node?.id as string, (prev) => {
       return {
@@ -97,17 +104,17 @@ export default () => {
           <UiElementContainer className={styles.output_editor}>
             <Title>Edit Output</Title>
             <div className={styles.output_list}>
-              {outputArray.map((item) => (
+              {outputArray.map((outPutItem) => (
                 <div className={styles.output_editor_element}>
                   <ReactSelect
                     defaultValue={{
-                      value: item.branch,
-                      label: item.branch,
+                      value: outPutItem.branch,
+                      label: outPutItem.branch,
                     }}
                     onChange={(newValue: any) => {
                       setOutputArray((prev) =>
                         prev.map((output) =>
-                          item.id != output.id
+                          outPutItem.id != output.id
                             ? output
                             : {
                                 ...output,
@@ -125,10 +132,16 @@ export default () => {
                   <ReactSelect
                     isMulti
                     placeholder={"Variants"}
+                    defaultValue={variants
+                      .filter((item) => outPutItem.variants.includes(item.id))
+                      .map((item) => ({
+                        value: item.id,
+                        label: item.id,
+                      }))}
                     onChange={(newVariants) => {
                       setOutputArray((prev) =>
                         prev.map((output) =>
-                          item.id != output.id
+                          outPutItem.id != output.id
                             ? output
                             : {
                                 ...output,

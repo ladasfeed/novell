@@ -10,6 +10,9 @@ import { useAudioTrack } from "components/modules/engine/services/audio";
 import { baseUrl } from "api";
 import useCharactersRenderer from "./services/characters";
 import { actFrameType, nodeDataType } from "types";
+import cn from "classnames";
+import { editorThunks } from "store/state/editor/thunk";
+import { audioApi } from "api/audio";
 
 export declare namespace ReaderEngineNamespace {
   export type currentFrameType = {
@@ -19,7 +22,7 @@ export declare namespace ReaderEngineNamespace {
   };
 }
 
-export const Preview = () => {
+export const Preview = (props: { large?: boolean }) => {
   const compiled = useSelector(editorSliceSelectors.getCompiled);
   const [currentChapter, setCurrentChapter] = useState(compiled[0]?.data);
   const [currentFrame, setCurrentFrame] =
@@ -36,6 +39,29 @@ export const Preview = () => {
   const { toggleAudio } = useAudioTrack({
     currentFrame: currentFrame,
   });
+
+  useEffect(() => {
+    if (compiled[0]) {
+      setCurrentChapter(compiled[0]?.data);
+    }
+  }, [compiled]);
+
+  useEffect(() => {
+    dispatch(
+      editorThunks.getImages({
+        type: "character",
+      })
+    );
+    dispatch(
+      editorThunks.getImages({
+        type: "background",
+      })
+    );
+    audioApi.get().then((res) => {
+      const audioArray = res.data;
+      dispatch(editorSlice.actions.setAudio(audioArray));
+    });
+  }, []);
 
   const renderCharacters = useCharactersRenderer({ currentFrame });
 
@@ -158,7 +184,9 @@ export const Preview = () => {
 
   return (
     <Popup
-      className={styles.popup}
+      className={cn(styles.popup, {
+        [styles["popup--large"]]: props.large,
+      })}
       isOpened={isOpened}
       setIsOpened={setIsOpened}
     >

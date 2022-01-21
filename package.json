@@ -34,6 +34,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start:prod": "REACT_APP_URL=http://92.255.111.92:4000/ react-scripts start",
+    "build:prod": "REACT_APP_URL=http://92.255.111.92:4000/ react-scripts build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

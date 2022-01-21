@@ -4,6 +4,10 @@
     padding: 0!important;
 }
 
+.popup--large {
+    height: 100vh;
+}
+
 .container {
     color: white;
     position: relative;

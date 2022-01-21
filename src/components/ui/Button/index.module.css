@@ -11,3 +11,11 @@
 .container--add-node {
     background: #553f7f;
 }
+
+.container--light {
+    padding: 5px;
+    background: #424242;
+    color: white;
+    height: 40px;
+    font-size: 15px;
+}

@@ -5,14 +5,18 @@ import { lsController } from "store/ls";
 import { NovellType } from "types";
 import { useNavigate } from "react-router-dom";
 import { routes } from "routes";
-import { useDispatch } from "react-redux";
-import { editorSlice } from "store/state/editor";
+import { useDispatch, useSelector } from "react-redux";
+import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { Icons } from "assets/icons";
+import { Button } from "components/ui/Button";
+import { compile } from "components/modules/editor/helpers/compile";
+import { Preview } from "components/modules/engine";
 
 export const ControlPanel = () => {
   const [novellArray, setNovellArray] = useState<Array<NovellType>>([]);
   const push = useNavigate();
   const dispatch = useDispatch();
+  const compiled = useSelector(editorSliceSelectors.getCompiled);
 
   const getList = async () => {
     const res = await novellApi.get();
@@ -34,7 +38,7 @@ export const ControlPanel = () => {
   };
 
   const createNovell = async () => {
-    const res = await novellApi.create({
+    await novellApi.create({
       chapters: {
         first: {
           id: "0",
@@ -46,15 +50,38 @@ export const ControlPanel = () => {
     });
   };
 
+  const readNovell = (index: number) => {
+    const novell = novellArray[index];
+    dispatch(editorSlice.actions.setBranches(novell.branches));
+    dispatch(editorSlice.actions.setChapters(novell.chapters));
+    dispatch(editorSlice.actions.setCharacters(novell.characters));
+
+    console.log(novell.chapters);
+    const arrayOfChapters = Object.entries(novell.chapters).map(
+      ([name, chapter]) => {
+        return {
+          data: compile(chapter.data),
+          name,
+        };
+      }
+    );
+
+    console.log(arrayOfChapters);
+    dispatch(editorSlice.actions.setCompiled(arrayOfChapters));
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.novell_list}>
         {novellArray?.map((item, index) => (
-          <div
-            className={styles.novell_card}
-            onClick={() => selectNovell(index)}
-          >
+          <div className={styles.novell_card}>
             {item._id}
+            <Button variant={"light"} onClick={() => selectNovell(index)}>
+              Edit novell
+            </Button>
+            <Button onClick={() => readNovell(index)} variant={"light"}>
+              Read novell
+            </Button>
           </div>
         ))}
         <div
@@ -66,6 +93,7 @@ export const ControlPanel = () => {
         >
           <Icons.ui.Plus />
         </div>
+        <Preview large />
       </div>
     </div>
   );

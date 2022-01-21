@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Editor } from "components/modules/editor";
 import { routes } from "routes";
 import { ControlPanel } from "components/modules/panel";
