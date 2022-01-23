@@ -74,6 +74,7 @@ export const Editor = () => {
                 snapGrid={[16, 16]}
                 minZoom={0.1}
                 edgeTypes={edgeTypesMap}
+                onEdgeDoubleClick={flowHandlers.deleteEdgeHandler}
                 snapToGrid
                 elements={elements}
                 onElementsRemove={flowHandlers.onElementsRemove}

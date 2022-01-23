@@ -15,6 +15,7 @@ import { UiElementContainer } from "components/ui/UiContainer";
 import { ToolButton } from "components/ui/ToolButton";
 import { Img } from "components/ui/Image";
 import { baseUrl } from "api";
+import { lsController } from "store/ls";
 
 export const CharacterEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -51,7 +52,12 @@ export const CharacterEditor = () => {
   };
 
   useEffect(() => {
-    dispatch(editorThunks.getImages({ type: "character" }));
+    dispatch(
+      editorThunks.getImages({
+        type: "character",
+        novell_id: String(lsController.get("novellId")),
+      })
+    );
   }, []);
 
   const addImageToCase = useCallback(

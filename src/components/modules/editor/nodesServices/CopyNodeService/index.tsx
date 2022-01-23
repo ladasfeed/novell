@@ -3,10 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { editorSlice, editorSliceSelectors } from "store/state/editor";
 import { useFlowContext } from "components/modules/editor/flow context";
 import { Button } from "components/ui/Button";
-import { useState } from "react";
-import { Input } from "components/ui/Input";
-import { nodeTypesMap } from "components/modules/editor/constants";
 import { addEdgeHandler } from "components/modules/editor/helpers/addEdgeHandler";
+import { generateUuidNode } from "components/modules/editor/helpers/generateUuidNode";
 
 export default nodeServiceFactory({
   Service: () => {
@@ -15,17 +13,9 @@ export default nodeServiceFactory({
     const dispatch = useDispatch();
 
     const copy = () => {
+      const newId = generateUuidNode(elements);
+
       if (setElements) {
-        let newId: string;
-
-        const nodesTypes = Object.keys(nodeTypesMap);
-        for (let i = elements.length - 1; i >= 0; i--) {
-          if (nodesTypes.includes(elements[i].type || "")) {
-            newId = String(Number(elements[i].id) + 1);
-            break;
-          }
-        }
-
         setElements((prev) => [
           ...prev,
           {

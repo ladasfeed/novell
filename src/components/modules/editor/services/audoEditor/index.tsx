@@ -13,25 +13,40 @@ import { useSelector } from "react-redux";
 import { Track } from "components/ui/Track";
 import { UiElementContainer } from "components/ui/UiContainer";
 import { baseUrl } from "api";
+import { lsController } from "store/ls";
+import { Title } from "components/ui/Title";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export const AudioEditor = () => {
   const [opened, toggle] = RSKHooks.useToggle(false);
   const dispatch = useAppDispatch();
   const audioTracks = useSelector(editorSliceSelectors.getAudio);
 
+  const getAudio = async () => {
+    audioApi
+      .get({
+        novell_id: String(lsController.get("novellId")),
+      })
+      .then((res) => {
+        const audioArray = res.data;
+        dispatch(editorSlice.actions.setAudio(audioArray));
+      });
+  };
+
   const upload = (e: any) => {
     dispatch(
       editorThunks.uploadAudio({
         event: e,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        getAudio();
+      });
   };
 
   useEffect(() => {
-    audioApi.get().then((res) => {
-      const audioArray = res.data;
-      dispatch(editorSlice.actions.setAudio(audioArray));
-    });
+    getAudio();
   }, []);
 
   return (
@@ -40,10 +55,17 @@ export const AudioEditor = () => {
       <Popup title="Audio storage" isOpened={opened} setIsOpened={toggle}>
         <label className={styles.upload}>
           <input onChange={upload} type={"file"} className={styles.input} />
-          <Button>Upload audiotrack</Button>
+          <UiElementContainer
+            style={{
+              cursor: "pointer",
+              width: "200px",
+            }}
+          >
+            Upload audiotrack
+          </UiElementContainer>
         </label>
         <UiElementContainer className={styles.track_list}>
-          <h2>Track list</h2>
+          <Title>Track list</Title>
           {audioTracks?.map((item) => (
             <Track name={"Wow"} src={`${baseUrl}${item.path}`} />
           ))}

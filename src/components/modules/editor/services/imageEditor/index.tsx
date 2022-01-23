@@ -14,6 +14,7 @@ import { ToolButton } from "components/ui/ToolButton";
 import { Icons } from "assets/icons";
 import { Img } from "components/ui/Image";
 import { baseUrl } from "api";
+import { lsController } from "store/ls";
 
 export const ImageEditor = () => {
   const [isOpened, toggleOpen] = RSKHooks.useToggle(false);
@@ -24,6 +25,7 @@ export const ImageEditor = () => {
     dispatch(
       editorThunks.getImages({
         type: "background",
+        novell_id: String(lsController.get("novellId")),
       })
     );
   };

@@ -3,11 +3,13 @@ import { mainApi } from "api/index";
 import { ImageApiDTO } from "api/image/types";
 
 export const imageApi = {
-  createImage: builders.api((body: ImageApiDTO.createImage) => {
-    return mainApi.post("/image", body);
-  }),
-  getImages: builders.api((query: ImageApiDTO.getImages) => {
-    return mainApi.get(`/image?type=${query.type}`);
+  createImage: builders.api(
+    ({ novell_id, ...body }: ImageApiDTO.createImage) => {
+      return mainApi.post(`/image/${novell_id}`, body);
+    }
+  ),
+  getImages: builders.api(({ novell_id, type }: ImageApiDTO.getImages) => {
+    return mainApi.get(`/image/${novell_id}?type=${type}`);
   }),
   deleteAll: builders.api(() => {
     return mainApi.delete("/image");

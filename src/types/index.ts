@@ -79,6 +79,7 @@ export type reactFlowNodeType = Node<nodeDataType>;
 
 export type NovellType = {
   _id?: string;
+  name: string;
   characters: Array<characterType>;
   branches: Array<string>;
   chapters: chaptersObjectType;

@@ -13,6 +13,7 @@ import { actFrameType, nodeDataType } from "types";
 import cn from "classnames";
 import { editorThunks } from "store/state/editor/thunk";
 import { audioApi } from "api/audio";
+import { lsController } from "store/ls";
 
 export declare namespace ReaderEngineNamespace {
   export type currentFrameType = {
@@ -41,27 +42,36 @@ export const Preview = (props: { large?: boolean }) => {
   });
 
   useEffect(() => {
-    if (compiled[0]) {
+    if (compiled.length) {
+      setIsOpened(true);
       setCurrentChapter(compiled[0]?.data);
     }
   }, [compiled]);
 
   useEffect(() => {
+    if (!compiled.length) return;
+
     dispatch(
       editorThunks.getImages({
         type: "character",
+        novell_id: String(lsController.get("novellId")),
       })
     );
     dispatch(
       editorThunks.getImages({
         type: "background",
+        novell_id: String(lsController.get("novellId")),
       })
     );
-    audioApi.get().then((res) => {
-      const audioArray = res.data;
-      dispatch(editorSlice.actions.setAudio(audioArray));
-    });
-  }, []);
+    audioApi
+      .get({
+        novell_id: String(lsController.get("novellId")),
+      })
+      .then((res) => {
+        const audioArray = res.data;
+        dispatch(editorSlice.actions.setAudio(audioArray));
+      });
+  }, [compiled]);
 
   const renderCharacters = useCharactersRenderer({ currentFrame });
 
@@ -72,6 +82,12 @@ export const Preview = (props: { large?: boolean }) => {
   useEffect(() => {
     setIsOpened(true);
   }, []);
+
+  useEffect(() => {
+    if (!isOpened) {
+      dispatch(editorSlice.actions.setCompiled([]));
+    }
+  }, [isOpened]);
 
   useEffect(() => {
     setCurrentFrame(currentChapter?.find((node) => node?.data?.isRootNode));

@@ -1,6 +1,7 @@
 import {
   addEdge,
   ArrowHeadType,
+  Edge,
   Elements,
   FlowElement,
   removeElements,
@@ -43,6 +44,10 @@ export const useFlowInit = ({
     );
   };
 
+  const deleteEdgeHandler = (event: any, edge: Edge) => {
+    setElements((prev) => prev.filter((el) => el.id != edge.id));
+  };
+
   const onLoad = useCallback(
     (rfi) => {
       if (!reactFlowInstance) {
@@ -68,5 +73,6 @@ export const useFlowInit = ({
     onConnect,
     onLoad,
     changeElementHandler,
+    deleteEdgeHandler,
   };
 };

@@ -5,6 +5,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { StateType } from "store/state/index";
 import { audioApi } from "api/audio";
 import { ImageApiDTO } from "api/image/types";
+import { lsController } from "store/ls";
 
 export const editorThunks = {
   uploadImage: createAsyncThunk(
@@ -29,6 +30,7 @@ export const editorThunks = {
       const response = await imageApi.createImage({
         ...fileReady,
         type,
+        novell_id: String(lsController.get("novellId")),
       });
       dispatch(
         editorSlice.actions.setImages({
@@ -73,7 +75,10 @@ export const editorThunks = {
         name: "test",
       };
 
-      const response = await audioApi.create(fileReady);
+      const response = await audioApi.create({
+        ...fileReady,
+        novell_id: String(lsController.get("novellId")),
+      });
       return response?.data.id as string;
     }
   ),

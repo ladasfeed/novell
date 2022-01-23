@@ -4,8 +4,10 @@ export declare namespace ImageApiDTO {
     value: string;
     name: string;
     type: imageType;
+    novell_id: string;
   };
   type getImages = {
     type: imageType;
+    novell_id: string;
   };
 }

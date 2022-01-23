@@ -1,7 +1,8 @@
 import React, { useCallback } from "react";
-import { FlowElement } from "react-flow-renderer";
+import { FlowElement, isNode } from "react-flow-renderer";
 import { useSelector } from "react-redux";
 import { editorSliceSelectors } from "store/state/editor";
+import { generateUuidNode } from "components/modules/editor/helpers/generateUuidNode";
 
 export const useDragFlow = ({
   setElements,
@@ -26,8 +27,9 @@ export const useDragFlow = ({
         x: event.clientX - reactFlowBounds!.left,
         y: event.clientY - reactFlowBounds!.top,
       });
+
       const newNode = {
-        id: String(elements.length + 1),
+        id: generateUuidNode(elements),
         type,
         position,
         data: {

@@ -145,8 +145,8 @@ export const Toolbar = () => {
           <ToolButton onClick={saveHandler} icon={<Icons.ui.Save />} />
         </ToolsGroup>
 
-        <Button onDoubleClick={lsController.clearAll}>Reset LS</Button>
-        <Button onDoubleClick={deleteAll}>Delete images</Button>
+        {/*<Button onDoubleClick={lsController.clearAll}>Reset LS</Button>*/}
+        {/*<Button onDoubleClick={deleteAll}>Delete images</Button>*/}
       </div>
     </>
   );
