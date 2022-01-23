@@ -97,7 +97,6 @@ export const Editor = () => {
           </FlowProvider.Provider>
         </ReactFlowProvider>
       </div>
-      {Boolean(compiled.length) && <Preview />}
     </>
   );
 };
